@@ -54,7 +54,7 @@ export default function BatchDetails({ id }: BatchDetailsProps) {
       setDeleteDialog(false)
       navigate.push('/produccion')
     } catch (error) {
-      console.error('Error al eliminar:', error)
+      console.warn('Error al eliminar:', error)
     }
   }
 

@@ -21,7 +21,7 @@ const VerifyUser = () => {
           await mutateAsync(token)
         }
       } catch (err) {
-        console.error(err)
+        console.warn(err)
       }
     }
     checkToken()

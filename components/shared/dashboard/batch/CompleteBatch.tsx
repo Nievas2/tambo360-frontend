@@ -36,7 +36,7 @@ const CompleteBatch = ({
       refetch()
       setFinished(true)
     } catch (err) {
-      console.error('Error al completar el lote:', err)
+      console.warn('Error al completar el lote:', err)
     }
   }
 

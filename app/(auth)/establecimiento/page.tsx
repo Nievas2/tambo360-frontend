@@ -79,7 +79,7 @@ const Establishment = () => {
       setUser({ ...user!, establecimientos: [response.data] })
       navigate.push('/analisis')
     } catch (err) {
-      console.error('Error al crear establecimiento:', err)
+      console.warn('Error al crear establecimiento:', err)
     }
   })
 

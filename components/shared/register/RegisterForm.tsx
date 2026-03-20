@@ -48,7 +48,7 @@ const RegisterForm = () => {
       await mutateAsyncResend(email)
       setSecondsLeft(180)
     } catch (e) {
-      console.error(e)
+      console.warn(e)
     } finally {
       setIsResending(false)
     }
@@ -88,7 +88,7 @@ const RegisterForm = () => {
       handleAddEmail(data.correo)
       handleNextStep()
     } catch (err) {
-      console.error('Error al registrarse:', err)
+      console.warn('Error al registrarse:', err)
     }
   })
 

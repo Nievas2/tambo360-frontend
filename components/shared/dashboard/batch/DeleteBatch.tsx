@@ -28,7 +28,7 @@ const DeleteBatch = ({ batch, onSuccess }: DeleteBatchProps) => {
       setShowDialog(false)
       onSuccess?.()
     } catch (error) {
-      console.error('Error al eliminar:', error)
+      console.warn('Error al eliminar:', error)
     }
   }
 

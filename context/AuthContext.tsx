@@ -68,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       await mutateAsync()
       Cookies.remove('token')
     } catch (error) {
-      console.error(error)
+      console.warn(error)
     }
   }
 

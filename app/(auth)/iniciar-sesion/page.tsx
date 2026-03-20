@@ -54,7 +54,7 @@ const Login: React.FC = () => {
       login({ token: response.data.token, user: response.data.user })
       navigate.push('/analisis')
     } catch (err) {
-      console.error('Error al iniciar sesión:', err)
+      console.warn('Error al iniciar sesión:', err)
     }
   })
 
