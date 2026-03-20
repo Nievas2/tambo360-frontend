@@ -16,9 +16,7 @@ export default function PublicLayout({
   useEffect(() => {
     if (loading) return
 
-    // Si ya hay usuario, mándalo adentro
     if (user) {
-      // Si no tiene establecimientos, a la selección
       if (user.establecimientos?.length === 0) {
         router.replace('/establecimiento')
       } else {
@@ -29,7 +27,6 @@ export default function PublicLayout({
 
   if (loading) return <Loading />
 
-  // Si hay usuario, no renderizamos el formulario de login para evitar saltos
   if (user) return <Loading />
 
   return <>{children}</>
