@@ -2,7 +2,7 @@ interface RobotProps {
   className: string
   size: number
 }
-const Robot = ({ className, size }) => {
+const Robot = ({ className, size }: RobotProps) => {
   return (
     <svg
       width={size}

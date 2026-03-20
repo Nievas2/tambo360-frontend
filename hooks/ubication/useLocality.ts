@@ -8,9 +8,9 @@ interface LocalityProp {
 }
 export function useLocality({ id, search }: LocalityProp) {
   return useQuery({
-    queryKey: queryKeys.locality.search(id, search),
+    queryKey: queryKeys.locality.search(id!, search),
     queryFn: async () => {
-      const { data } = await getLocalities(id, search)
+      const { data } = await getLocalities(id!, search)
       return data
     },
     staleTime: 5 * 60 * 1000,

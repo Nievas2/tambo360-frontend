@@ -3,7 +3,7 @@ import { registerUser } from '@/utils/api/auth.api'
 import { RegisterData } from '@/types/register'
 import { queryKeys } from '@/utils/queryKeys'
 import { AxiosError } from 'axios'
-import { User } from '@/types'
+import { User } from '@/types/types'
 
 export function useRegister() {
   const queryClient = useQueryClient()

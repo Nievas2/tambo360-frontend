@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { ArrowRight, EyeOff, EyeIcon } from 'lucide-react'
 import { useRegister } from '@/hooks/auth/useRegister'
 import { Button } from '@/components/ui/button'

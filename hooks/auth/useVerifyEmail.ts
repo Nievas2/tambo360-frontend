@@ -1,4 +1,4 @@
-import { User } from '@/types'
+import { User } from '@/types/types'
 import { verifyEmail } from '@/utils/api/auth.api'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError, AxiosResponse } from 'axios'

@@ -8,7 +8,7 @@ export enum Concept {
   refrigeracion = 'refrigeracion',
 }
 
-export const CONCEPTO_LABELS = {
+export const CONCEPTO_LABELS: Record<string, string> = {
   insumos_basicos: 'Insumos',
   leche_cruda: 'Leche Cruda',
   cuajo_y_fermentos: 'Cuajo y Fermentos',

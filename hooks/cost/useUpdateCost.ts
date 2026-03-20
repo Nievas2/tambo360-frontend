@@ -28,13 +28,6 @@ export function useUpdateCost() {
       return { previous }
     },
 
-    onError: (error, _, context: { previous: unknown } | undefined) => {
-      if (context?.previous) {
-        queryClient.setQueryData(queryKeys.cost.lists(), context.previous)
-      }
-      throw error
-    },
-
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.cost.lists() })
       queryClient.invalidateQueries({

@@ -36,9 +36,9 @@ export const useConnectionError = (
             await submitFn(data)
             setShowConnectionError(false)
             pendingRetryRef.current = null
-          } catch (err) {
+          } catch (err: any) {
             const serverMessage =
-              err?.response?.data?.message || 'Error inesperado'
+              err?.response!.data?.message || 'Error inesperado'
 
             if (!navigator.onLine) {
               options?.closeParentDialog?.()
