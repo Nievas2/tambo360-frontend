@@ -1,3 +1,7 @@
+interface RobotProps {
+  className: string
+  size: number
+}
 const Robot = ({ className, size }) => {
   return (
     <svg
