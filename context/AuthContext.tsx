@@ -12,6 +12,7 @@ import { api } from '@/services/api'
 import { useLogout } from '@/hooks/auth/useLogout'
 import { AuthState, User } from '@/types/types'
 import Loading from '@/components/layout/Loading'
+import { useRouter } from 'next/navigation'
 
 interface AuthContextType extends AuthState {
   setToken: (token: string | null) => void
@@ -32,6 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { mutateAsync } = useLogout()
+  const navigate = useRouter()
 
   const isAuthenticated = !!user
 
@@ -55,9 +57,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [])
 
   const login = async ({ user, token }: { user: User; token: string }) => {
+    console.log(user)
+    setLoading(true)
     setUser(user)
     setToken(token)
     setError(null)
+    navigate.push('/analisis')
+    setLoading(false)
   }
 
   const logout = async () => {

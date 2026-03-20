@@ -52,7 +52,6 @@ const Login: React.FC = () => {
     try {
       const response = await mutateAsync(data)
       login({ token: response.data.token, user: response.data.user })
-      navigate.push('/analisis')
     } catch (err) {
       console.warn('Error al iniciar sesión:', err)
     }

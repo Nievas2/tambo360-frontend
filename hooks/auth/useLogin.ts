@@ -12,7 +12,10 @@ export function useLogin() {
     AxiosError<{ message: string }>,
     LoginData
   >({
-    mutationFn: async (values: LoginData) => loginUser(values),
+    mutationFn: async (values: LoginData) => {
+      const { data } = await loginUser(values)
+      return data
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.auth.currentUser })

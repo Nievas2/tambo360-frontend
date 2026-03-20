@@ -11,32 +11,26 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   const { user, loading } = useAuth()
-  const pathname = usePathname()
   const router = useRouter()
 
   useEffect(() => {
     if (loading) return
-    if (
-      !loading &&
-      user &&
-      pathname !== '/verficar' &&
-      pathname !== '/establecimiento'
-    ) {
-      router.push('/analisis')
-    }
 
-    if (
-      user &&
-      user.establecimientos.length > 0 &&
-      pathname === '/establecimiento'
-    ) {
-      router.push('/analisis')
+    // Si ya hay usuario, mándalo adentro
+    if (user) {
+      // Si no tiene establecimientos, a la selección
+      if (user.establecimientos?.length === 0) {
+        router.replace('/establecimiento')
+      } else {
+        router.replace('/analisis')
+      }
     }
   }, [user, loading, router])
 
-  if (loading) {
-    return <Loading />
-  }
+  if (loading) return <Loading />
+
+  // Si hay usuario, no renderizamos el formulario de login para evitar saltos
+  if (user) return <Loading />
 
   return <>{children}</>
 }
