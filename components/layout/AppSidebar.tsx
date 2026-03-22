@@ -99,12 +99,11 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
                         className={`font-semibold flex justify-between w-full ${isActive ? 'text-[#669213]' : 'text-gray-400'}`}
                       >
                         {item.title}{' '}
-                        {item.url === '/tambo-engine' &&
-                          data?.data.cantidad > 0 && (
-                            <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
-                              {data.data.cantidad}
-                            </span>
-                          )}
+                        {item.url === '/alertas' && data?.data.cantidad > 0 && (
+                          <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
+                            {data.data.cantidad}
+                          </span>
+                        )}
                       </span>
                     )}
                   </Link>
