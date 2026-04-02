@@ -39,7 +39,7 @@ const Nosotros = () => {
           {/* Shadow card behind image */}
           <div className="absolute bottom-0 right-0 w-[92%] h-[92%] bg-gray-200 rounded-2xl" />
           <img
-            src="/cow.jpg"
+            src="/vacas_2.webp"
             alt="Vaca lechera en el campo"
             className="relative z-10 w-full rounded-2xl object-cover shadow-sm"
           />
