@@ -1,4 +1,8 @@
 import Linkedin from '@/components/shared/icons/Linkedin'
+import Instagram from '@/components/shared/icons/Instagram'
+import Facebook from '@/components/shared/icons/Facebook'
+import X from '@/components/shared/icons/XIcon'
+import TikTok from '@/components/shared/icons/TikTok'
 import Link from 'next/link'
 
 const Footer = () => {
@@ -50,6 +54,42 @@ const Footer = () => {
           >
             <Linkedin className="size-6 text-foreground group-hover:text-blue-700 transition-colors" />
             LinkedIn
+          </Link>
+          <Link
+            href="https://www.instagram.com/tambo360.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-foreground hover:text-blue-700 transition-colors group"
+          >
+            <Instagram className="size-6 text-foreground group-hover:text-blue-700 transition-colors" />
+            Instagram
+          </Link>
+          <Link
+            href="https://www.facebook.com/profile.php?id=61577674540376"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-foreground hover:text-blue-700 transition-colors group"
+          >
+            <Facebook className="size-6 text-foreground group-hover:text-blue-700 transition-colors" />
+            Facebook
+          </Link>
+          <Link
+            href="https://x.com/Tambo360App"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-foreground hover:text-blue-700 transition-colors group"
+          >
+            <X className="size-6 text-foreground group-hover:text-blue-700 transition-colors" />
+            X(Ex-Twitter)
+          </Link>
+          <Link
+            href="https://www.tiktok.com/@tambo3601"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-foreground hover:text-blue-700 transition-colors group"
+          >
+            <TikTok className="size-6 text-foreground group-hover:text-blue-700 transition-colors" />
+            Tik-Tok
           </Link>
         </div>
       </div>
