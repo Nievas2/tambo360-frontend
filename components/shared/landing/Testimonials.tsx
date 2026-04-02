@@ -1,104 +1,96 @@
 'use client'
-import CountUp from '@/utils/CountUp'
-import { Percent, Plus } from 'lucide-react'
-import { motion, useInView } from 'motion/react'
-import { useRef, useEffect, useState } from 'react'
+import { motion } from 'motion/react'
+import { useState } from 'react'
 
 const testimonials = [
   {
     quote:
+      'La app offline es el diferencial clave para el registro directo en el lote sin internet. No más papeles perdidos.',
+    author: 'Elena G.',
+    avatar: 'https://i.pravatar.cc/150?img=47',
+  },
+  {
+    quote:
+      'Los reportes automáticos me ahorran horas de trabajo administrativo cada semana. Excelente herramienta.',
+    author: 'Pablo S.',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+  },
+  {
+    quote:
+      'La IA me avisó de un desvío en el lote 4 antes de que se convirtiera en una pérdida real. Imprescindible.',
+    author: 'Sofía R.',
+    avatar: 'https://i.pravatar.cc/150?img=29',
+  },
+  {
+    quote:
       'Antes no sabíamos cuánto perdíamos por mermas. Ahora lo vemos en tiempo real y podemos actuar.',
     author: 'Carlos M.',
-    role: 'Productor, Santa Fe',
-  },
-  {
-    quote:
-      'La carga diaria no lleva más de un minuto. Es lo más simple que probamos para gestionar el tambo.',
-    author: 'María L.',
-    role: 'Encargada de tambo, Córdoba',
-  },
-  {
-    quote:
-      'Los indicadores económicos nos ayudaron a tomar mejores decisiones de inversión en el tambo.',
-    author: 'Jorge R.',
-    role: 'Dueño de tambo, Buenos Aires',
+    avatar: 'https://i.pravatar.cc/150?img=53',
   },
 ]
 
-const Testimonials = () => {
-  return (
-    <section className="py-20 px-6 bg-tables/30">
-      <div className="max-w-6xl mx-auto">
-        {/* Counters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-wrap justify-center gap-16 mb-16"
-        >
-          <div className="text-center">
-            <div className="flex items-center justify-center">
-              <CountUp
-                from={0}
-                to={50}
-                separator=","
-                direction="up"
-                duration={1}
-                className="text-4xl font-bold text-[#669213]"
-              />
-              <Plus size={24} />
-            </div>
-            <p className="text-sm text-foreground mt-1">Tambos interesados</p>
-          </div>
-          <div className="text-center">
-            <CountUp
-              from={0}
-              to={3}
-              separator=","
-              direction="up"
-              duration={1}
-              className="text-4xl font-bold text-[#669213]"
-            />
-            <p className="text-sm text-foreground mt-1">
-              Provincias alcanzadas
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center">
-              <CountUp
-                from={0}
-                to={100}
-                separator=","
-                direction="up"
-                duration={1}
-                className="text-4xl font-bold text-[#669213]"
-              />
-              <Percent size={24} />
-            </div>
-            <p className="text-sm text-foreground mt-1">
-              Satisfacción en pruebas
-            </p>
-          </div>
-        </motion.div>
+const CARDS_PER_PAGE = 3
 
-        {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <motion.blockquote
+const Testimonials = () => {
+  const [page, setPage] = useState(0)
+  const totalPages = Math.ceil(testimonials.length / CARDS_PER_PAGE)
+  const visible = testimonials.slice(
+    page * CARDS_PER_PAGE,
+    page * CARDS_PER_PAGE + CARDS_PER_PAGE
+  )
+
+  return (
+    <section className="w-full bg-white py-20 px-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
+            Testimonios
+          </h2>
+          <p className="text-gray-600 text-lg">
+            Más de 50 tambos transformando sus datos en rentabilidad.
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          {visible.map((t, i) => (
+            <motion.div
               key={t.author}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 * i }}
-              className="bg-background border border-muted rounded-lg p-6"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: i * 0.08 }}
+              className="border border-gray-200 rounded-2xl p-6 flex flex-col justify-between gap-6"
             >
-              <p className="text-sm text-foreground leading-relaxed mb-4 italic">
+              <p className="text-gray-500 text-sm leading-relaxed italic">
                 "{t.quote}"
               </p>
-              <footer>
-                <p className="text-sm font-semibold">{t.author}</p>
-                <p className="text-xs text-foreground">{t.role}</p>
-              </footer>
-            </motion.blockquote>
+              <div className="flex items-center gap-3">
+                <img
+                  src={t.avatar}
+                  alt={t.author}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="text-[#3a7d1e] font-semibold text-sm">
+                  {t.author}
+                </span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Pagination dots */}
+        <div className="flex justify-center gap-2">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i)}
+              className={`rounded-full transition-all duration-200 ${
+                i === page
+                  ? 'w-8 h-3 bg-[#3a7d1e]'
+                  : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+              }`}
+            />
           ))}
         </div>
       </div>

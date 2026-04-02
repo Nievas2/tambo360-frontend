@@ -1,4 +1,5 @@
-const page = () => {
-  return <div>page</div>
+import Nosotros from '@/components/shared/landing/Nosotros'
+
+export default function NosotrosPage() {
+  return <Nosotros />
 }
-export default page

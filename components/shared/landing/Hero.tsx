@@ -13,18 +13,14 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="max-w-2xl flex flex-col items-center justify-center"
         >
-          <span className="inline-block text-xs font-semibold tracking-widest uppercase text-red-main bg-dialogs px-3 py-1 rounded-full mb-6">
-            SaaS B2B Lácteo
-          </span>
-
           <h1 className="text-4xl md:text-5xl text-center font-extrabold text-white leading-tight mb-5">
-            Simplicidad operativa <span className="">desde el tambo.</span>
+            Simplicidad operativa <span className="">para tu tambo.</span>
           </h1>
 
           <p className="text-white text-lg leading-relaxed mb-8 max-w-xl text-center">
             Digitaliza el registro de producción, controla mermas y visualiza
-            los costos reales de tu tambo. Todo en una plataforma simple,
-            pensada para el campo.
+            los costos reales de tu tambo mediante ingeniería orientada al
+            campo.
           </p>
 
           <div className="flex flex-wrap gap-4">

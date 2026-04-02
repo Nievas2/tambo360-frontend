@@ -2,105 +2,110 @@
 import { Check } from 'lucide-react'
 import { motion } from 'motion/react'
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useState } from 'react'
 
 const plans = [
   {
-    name: 'Gratuito',
-    price: '$0',
-    period: '/mes',
-    description: 'Para comenzar a digitalizar tu tambo.',
+    name: 'Gratis Core',
     features: [
-      'Registro de producción básico',
-      'Hasta 2 lotes',
-      'Dashboard simplificado',
-      'Soporte por email',
+      'Registro de 1 Establecimiento',
+      '1 Usuario Administrador',
+      'Reportes Ejecutivos Base',
+      'Acceso Web Ilimitado',
     ],
-    cta: 'Comenzar gratis',
+    cta: 'Empezar Ahora',
+    href: '/contacto',
     highlighted: false,
   },
   {
-    name: 'Pro',
-    price: '$15',
-    period: 'USD/mes',
-    description: 'Control total con inteligencia artificial.',
+    name: 'Pase 3 Meses',
     features: [
-      'Lotes ilimitados',
-      'Control de mermas avanzado',
-      'Indicadores económicos completos',
-      'Alertas automáticas con IA',
-      'Reportes exportables',
-      'Soporte prioritario',
+      'Multi-lote ilimitado',
+      'Modo Offline Completo',
+      'Alertas de Mermas Inteligentes',
+      'Exportación PDF / Excel',
     ],
-    cta: 'Solicitar Demo',
+    cta: 'Prueba 90 Días $0',
+    href: '/contacto',
     highlighted: true,
+  },
+  {
+    name: 'Plan Profesional',
+    features: [
+      'Todo lo anterior',
+      'Asistente IA de Anomalías',
+      'Soporte VIP Prioritario',
+      'Dashboard Financiero / ROI',
+    ],
+    cta: 'Solicitar Presupuesto',
+    href: '/contacto',
+    highlighted: false,
   },
 ]
 
 const Pricing = () => {
+  const [annual, setAnnual] = useState(true)
+
   return (
-    <section id="pricing" className="py-20 px-6">
-      <div className="max-w-4xl mx-auto">
+    <section id="pricing" className="py-20 px-6 bg-[#f0f4ef]">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
-          <h2 className="text-3xl font-bold mb-3">Planes accesibles</h2>
-          <p className="text-foreground">
-            Pensados para tambos de cualquier escala.
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#3a7d1e] mb-3">
+            Comienza tu plan gratuito hoy
+          </h2>
+          <p className="text-gray-600 text-lg">
+            Actualiza cuando estés listo. Es gratis.{' '}
+            <span className="text-[#3a7d1e] font-bold">Es Gratis.</span>
           </p>
         </motion.div>
 
-        <div className="flex flex-wrap items-center justify-around gap-6">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 * i }}
-              className={`rounded-lg p-8 px-14 border-2 ${
+              className={`rounded-2xl p-8 flex flex-col justify-between gap-8 ${
                 plan.highlighted
-                  ? 'border-secondary bg-dialogs/30'
-                  : 'border-muted bg-background'
-              } h-100 flex-col`}
+                  ? 'border-2 border-[#3a7d1e] bg-white'
+                  : 'border border-gray-200 bg-white'
+              }`}
             >
-              <div className="flex flex-col h-full justify-between">
-                <div>
-                  <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
-                  <p className="text-foreground text-sm">{plan.description}</p>
-                  <div className="">
-                    <span className="text-3xl font-extrabold">
-                      {plan.price}
-                    </span>
-                    <span className="text-foreground text-sm ml-1">
-                      {plan.period}
-                    </span>
-                  </div>
-                  <ul className="space-y-2">
-                    {plan.features.map((f) => (
-                      <li
-                        key={f}
-                        className="text-sm text-black flex items-start gap-2"
-                      >
-                        <Check className="text-green-main w-4" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Link
-                  href="/contacto"
-                  className={`block text-center font-semibold py-2.5 rounded-md transition-opacity hover:opacity-90 ${
-                    plan.highlighted
-                      ? 'bg-secondary text-secondary-foreground'
-                      : 'bg-muted text-foreground'
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-6">
+                  {plan.name}
+                </h3>
+                <ul className="space-y-3">
+                  {plan.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-center gap-3 text-gray-700 text-sm"
+                    >
+                      <Check className="text-[#3a7d1e] w-4 h-4 flex-shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
               </div>
+
+              <Link
+                href={plan.href}
+                className={`block text-center text-sm font-bold tracking-widest uppercase py-3 px-4 rounded-lg transition-opacity hover:opacity-90 ${
+                  plan.highlighted
+                    ? 'bg-[#3a7d1e] text-white'
+                    : 'border-2 border-[#3a7d1e] text-[#3a7d1e] bg-white'
+                }`}
+              >
+                {plan.cta}
+              </Link>
             </motion.div>
           ))}
         </div>

@@ -2,91 +2,67 @@
 import { BadgeCheck, ShieldAlert } from 'lucide-react'
 import { motion } from 'motion/react'
 
+const problems = [
+  {
+    title: 'Registros en papel:',
+    description:
+      'Planillas dispersas sin trazabilidad que se pierden o se vuelven ilegibles por el trabajo diario.',
+  },
+  {
+    title: 'Mermas invisibles:',
+    description:
+      'Pérdidas productivas que no se cuantifican ni se detectan a tiempo para corregirlas de inmediato.',
+  },
+  {
+    title: 'Ceguera de datos:',
+    description:
+      'Falta de indicadores económicos claros para tomar decisiones críticas de inversión y reinversión.',
+  },
+  {
+    title: 'Erosión de rentabilidad:',
+    description:
+      'Pérdidas económicas silenciosas que afectan directamente el margen de su establecimiento.',
+  },
+]
+
 const ProblemSolution = () => {
   return (
-    <section id="producto" className="py-20 px-6">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{ duration: 0.5 }}
-          className="mb-12"
-        >
-          <h2 className="text-3xl font-bold mb-3">¿Por qué Tambo360?</h2>
-          <p className="text-foreground max-w-xl">
-            La gestión analógica del tambo genera pérdidas invisibles. Tambo360
-            las hace visibles y controlables.
+    <section className="w-full bg-[#f5f0e8] py-20 px-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-extrabold text-[#7a3b00] uppercase tracking-wide mb-3">
+            El Problema
+          </h2>
+          <div className="w-16 h-1 bg-[#7a3b00] mx-auto mb-6 rounded-full" />
+          <p className="text-[#7a3b00] font-semibold text-lg">
+            Entendemos el desgaste de una gestión analógica y fragmentada.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Problema */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-alert-bg rounded-lg p-8 shadow-md"
-          >
-            <span className="text-xs flex items-center gap-2 font-semibold uppercase tracking-widest text-primary mb-4 ">
-              <ShieldAlert className="text-red-main" /> El problema
-            </span>
-            <h3 className="text-xl font-bold mb-4">
-              Gestión analógica y fragmentada
-            </h3>
-            <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-              <li>
-                Registros en papel o planillas dispersas sin trazabilidad.
-              </li>
-              <li>
-                Mermas productivas que no se cuantifican ni se detectan a
-                tiempo.
-              </li>
-              <li>
-                Falta de indicadores económicos claros para la toma de
-                decisiones.
-              </li>
-              <li>
-                Pérdidas económicas silenciosas que erosionan la rentabilidad
-                del tambo.
-              </li>
-            </ul>
-          </motion.div>
+        {/* Problems Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 mb-14">
+          {problems.map((problem, index) => (
+            <div key={index} className="flex items-start gap-4">
+              {/* Warning Icon */}
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#e69b00] flex items-center justify-center mt-0.5">
+                <span className="text-white font-bold text-sm">!</span>
+              </div>
+              <p className="text-gray-800 text-base leading-relaxed">
+                <span className="font-bold">{problem.title}</span>{' '}
+                {problem.description}
+              </p>
+            </div>
+          ))}
+        </div>
 
-          {/* Solución */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-dialogs rounded-lg p-8 shadow-md"
-          >
-            <span className="text-xs flex items-center gap-2 font-semibold uppercase tracking-widest text-black mb-4 ">
-              <BadgeCheck className="text-green-main" /> La solución
-            </span>
-            <h3 className="text-xl font-bold mb-4">
-              Datos centralizados con asistencia IA
-            </h3>
-            <ul className="space-y-3 text-foreground text-sm leading-relaxed">
-              <li>
-                Registro digital rápido de producción por lote desde cualquier
-                dispositivo.
-              </li>
-              <li>
-                Control automatizado de mermas con alertas inteligentes ante
-                desvíos.
-              </li>
-              <li>
-                Dashboard con indicadores económicos y productivos en tiempo
-                real.
-              </li>
-              <li>
-                Asistente IA que analiza patrones y sugiere acciones
-                preventivas.
-              </li>
-            </ul>
-          </motion.div>
+        {/* CTA */}
+        <div className="text-center">
+          <p className="text-[#3a7d1e] font-semibold italic text-lg">
+            Por eso creamos{' '}
+            <span className="font-extrabold not-italic">Tambo360:</span> para
+            devolverle el control total de su operación.
+          </p>
         </div>
       </div>
     </section>
