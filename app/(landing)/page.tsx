@@ -14,7 +14,7 @@ export default function Home() {
       <Nosotros />
       <Equipo />
       <Testimonials />
-      <Pricing />
+      {/*<Pricing />*/}
       <ContactForm />
     </div>
   )

@@ -2,17 +2,17 @@ const team = [
   {
     name: 'Lorena P. Sartori',
     role: 'Project Manager',
-    avatar: 'https://i.pravatar.cc/150?img=47',
+    avatar: '/lorenasartori.webp',
   },
   {
     name: 'Gabriel Nievas',
     role: 'Frontend Developer',
-    avatar: 'https://i.pravatar.cc/150?img=12',
+    avatar: '/gabrielnievas.webp',
   },
   {
     name: 'Ornella Meolans',
     role: 'Frontend Developer',
-    avatar: 'https://i.pravatar.cc/150?img=29',
+    avatar: '/ornellameolans.webp',
   },
   {
     name: 'Cintia Duarte',
@@ -32,27 +32,27 @@ const team = [
   {
     name: 'Nicolas De Bella',
     role: 'Backend Developer',
-    avatar: 'https://i.pravatar.cc/150?img=25',
+    avatar: '/nicolasdebella.webp',
   },
   {
-    name: 'Tomas Ferrer',
+    name: 'Juan Ignacio Meza Wakahayashi',
     role: 'Backend Developer',
-    avatar: 'https://i.pravatar.cc/150?img=15',
+    avatar: '/juanmeza.webp',
   },
   {
     name: 'Nicolas Pavon',
     role: 'QA Engineer',
-    avatar: 'https://i.pravatar.cc/150?img=45',
+    avatar: '/nicolaspavon.webp',
   },
   {
     name: 'Tatiana Tablada',
     role: 'QA Engineer',
-    avatar: 'https://i.pravatar.cc/150?img=49',
+    avatar: '/tatianatablada.webp',
   },
   {
     name: 'Eliana Proserpio',
     role: 'QA Engineer',
-    avatar: 'https://i.pravatar.cc/150?img=55',
+    avatar: '/elianaproserpio.webp',
   },
 ]
 
