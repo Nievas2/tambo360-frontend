@@ -2,57 +2,57 @@ const team = [
   {
     name: 'Lorena P. Sartori',
     role: 'Project Manager',
-    avatar: '/lorenasartori.webp',
+    avatar: '/team/lorenasartori.webp',
   },
   {
     name: 'Gabriel Nievas',
     role: 'Frontend Developer',
-    avatar: '/gabrielnievas.webp',
+    avatar: '/team/gabrielnievas.webp',
   },
   {
     name: 'Ornella Meolans',
     role: 'Frontend Developer',
-    avatar: '/ornellameolans.webp',
+    avatar: '/team/ornellameolans.webp',
   },
   {
     name: 'Cintia Duarte',
     role: 'Diseñadora UX/UI',
-    avatar: 'https://i.pravatar.cc/150?img=52',
+    avatar: '/team/cintiaduarte.webp',
   },
   {
     name: 'Nicolas Mansilla',
     role: 'Diseñador UX/UI',
-    avatar: 'https://i.pravatar.cc/150?img=53',
+    avatar: '/team/nicolasmansilla.webp',
   },
   {
     name: 'Facundo Fernandez',
     role: 'Backend Developer',
-    avatar: 'https://i.pravatar.cc/150?img=35',
+    avatar: '/team/facundofernandez.webp',
   },
   {
     name: 'Nicolas De Bella',
     role: 'Backend Developer',
-    avatar: '/nicolasdebella.webp',
+    avatar: '/team/nicolasdebella.webp',
   },
   {
     name: 'Juan Ignacio Meza Wakahayashi',
     role: 'Backend Developer',
-    avatar: '/juanmeza.webp',
+    avatar: '/team/juanmeza.webp',
   },
   {
     name: 'Nicolas Pavon',
     role: 'QA Engineer',
-    avatar: '/nicolaspavon.webp',
+    avatar: '/team/nicolaspavon.webp',
   },
   {
     name: 'Tatiana Tablada',
     role: 'QA Engineer',
-    avatar: '/tatianatablada.webp',
+    avatar: '/team/tatianatablada.webp',
   },
   {
     name: 'Eliana Proserpio',
     role: 'QA Engineer',
-    avatar: '/elianaproserpio.webp',
+    avatar: '/team/elianaproserpio.webp',
   },
 ]
 
@@ -72,7 +72,7 @@ const Equipo = () => {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 justify-center">
           {team.map((member, index) => (
             <div
               key={index}
