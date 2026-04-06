@@ -1,6 +1,5 @@
 import Linkedin from '@/components/shared/icons/Linkedin'
 import Instagram from '@/components/shared/icons/Instagram'
-import Facebook from '@/components/shared/icons/Facebook'
 import X from '@/components/shared/icons/XIcon'
 import TikTok from '@/components/shared/icons/TikTok'
 import Link from 'next/link'
@@ -16,11 +15,11 @@ const socials = [
     icon: Instagram,
     label: 'Instagram',
   },
-  {
-    href: 'https://www.facebook.com/profile.php?id=61577674540376',
-    icon: Facebook,
-    label: 'Facebook',
-  },
+  /*  {
+     href: 'https://www.facebook.com/profile.php?id=61577674540376',
+     icon: Facebook,
+     label: 'Facebook',
+   }, */
   {
     href: 'https://x.com/Tambo360App',
     icon: X,
