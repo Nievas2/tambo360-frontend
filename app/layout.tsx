@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import Providers from '@/utils/Providers'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -16,11 +17,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID
   return (
     <html
       lang="en"
       className={cn('h-full', 'antialiased', 'font-sans', inter.variable)}
+      suppressHydrationWarning
     >
+      {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
       </body>

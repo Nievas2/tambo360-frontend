@@ -12,7 +12,7 @@ import { api } from '@/services/api'
 import { useLogout } from '@/hooks/auth/useLogout'
 import { AuthState, User } from '@/types/types'
 import Loading from '@/components/layout/Loading'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface AuthContextType extends AuthState {
   setToken: (token: string | null) => void
@@ -32,13 +32,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const pathname = usePathname()
   const { mutateAsync } = useLogout()
   const navigate = useRouter()
 
   const isAuthenticated = !!user
 
   const fetchSession = async () => {
-    setLoading(true)
+    if (
+      pathname === '/' ||
+      pathname === '' ||
+      pathname === '/contacto' ||
+      pathname === '/precios' ||
+      pathname === '/producto' ||
+      pathname === '/nosotros' ||
+      pathname === '/equipo' ||
+      pathname === '/testimonios'
+    )
+      setLoading(false)
+    else setLoading(true)
     try {
       const res = await api.get('/auth/me')
       if (res?.data.data) {

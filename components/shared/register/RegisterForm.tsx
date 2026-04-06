@@ -96,8 +96,8 @@ const RegisterForm = () => {
     <CardContent className="space-y-8">
       <div className="flex flex-col items-center text-center space-y-4">
         <div className="w-auto flex items-start gap-2">
-          <img src="/isotipo_tambo 1.svg" alt="logo" className="h-12" />
-          <img src="/logotipo 1.svg" alt="tambo" className="h-6" />
+          <img src="/isotipo_tambo 1.png" alt="logo" className="h-12" />
+          <img src="/logotipo 1.png" alt="tambo" className="h-6" />
         </div>
         {step === 1 && (
           <div className="space-y-2">
