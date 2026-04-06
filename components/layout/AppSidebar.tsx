@@ -54,7 +54,7 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center">
             <img
-              src="/isotipo_tambo 1.png"
+              src="/logos/isotipo_tambo 1.png"
               alt="Isotipo"
               className="h-full w-full object-contain"
             />
