@@ -62,7 +62,7 @@ const Equipo = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
             Nuestro equipo interdisciplinario
           </h2>
           <p className="text-gray-500 text-base">
