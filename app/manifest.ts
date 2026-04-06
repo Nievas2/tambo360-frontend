@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
+    id: '/',
     name: 'Tambo360',
     short_name: 'Tambo',
     description:
@@ -22,6 +23,19 @@ export default function manifest(): MetadataRoute.Manifest {
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
+      },
+    ],
+    screenshots: [
+      {
+        src: '/screenshots/mobile.jpeg',
+        sizes: '720x1448',
+        type: 'image/jpeg',
+      },
+      {
+        src: '/screenshots/desktop.jpg',
+        sizes: '1345x768',
+        type: 'image/jpg',
+        form_factor: 'wide',
       },
     ],
   }
