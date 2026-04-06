@@ -2,7 +2,6 @@
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
@@ -40,7 +39,7 @@ const Navbar = () => {
             <NavigationMenuList className="gap-2">
               {links.map((link) => (
                 <NavigationMenuItem key={link.href}>
-                  <NavigationMenuLink
+                  <Link
                     href={link.href}
                     className={cn(
                       'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200',
@@ -53,7 +52,7 @@ const Navbar = () => {
                     )}
                   >
                     {link.label}
-                  </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>

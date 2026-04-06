@@ -45,9 +45,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       pathname === '/contacto' ||
       pathname === '/precios' ||
       pathname === '/producto' ||
-      pathname === '/nosotros'
+      pathname === '/nosotros' ||
+      pathname === '/equipo' ||
+      pathname === '/testimonios'
     )
-      return setLoading(false)
+      setLoading(false)
     else setLoading(true)
     try {
       const res = await api.get('/auth/me')
