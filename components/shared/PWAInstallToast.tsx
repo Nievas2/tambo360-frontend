@@ -19,7 +19,7 @@ export function PWAInstallToast() {
       toast.custom(
         (t) => (
           <div className="flex items-center gap-4 bg-background border rounded-lg p-4 shadow-lg w-full max-w-90">
-            {/* Logo de Tambo360 */}
+            {/* Logo */}
             <div className="shrink-0 relative size-16">
               <img
                 src="/logos/isotipo_512x512.png"
@@ -42,26 +42,48 @@ export function PWAInstallToast() {
                       toast.dismiss(t)
                     }
                   }}
-                  className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-md font-medium"
+                  className="text-xs bg-primary text-primary-foreground px-4 py-1.5 rounded-md font-medium flex-1"
                 >
                   Instalar
                 </button>
                 <button
                   onClick={() => {
-                    // Guardamos la decisión para no molestar por 7 días o permanentemente
                     localStorage.setItem('pwa-install-decision', 'dismissed')
                     toast.dismiss(t)
                   }}
-                  className="text-xs bg-secondary text-secondary-foreground px-3 py-1.5 rounded-md font-medium"
+                  className="text-xs bg-secondary text-secondary-foreground px-4 py-1.5 rounded-md font-medium flex-1"
                 >
-                  Luego
+                  Ahora no
                 </button>
               </div>
             </div>
+
+            {/* Botón X */}
+            <button
+              onClick={() => {
+                localStorage.setItem('pwa-install-decision', 'installed')
+                toast.dismiss(t)
+              }}
+              className="shrink-0 text-muted-foreground hover:text-foreground"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
         ),
         {
-          duration: Infinity, // No se cierra solo hasta que el usuario decida
+          duration: Infinity,
           position: 'bottom-right',
         }
       )
