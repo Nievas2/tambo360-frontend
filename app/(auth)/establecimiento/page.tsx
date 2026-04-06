@@ -92,7 +92,11 @@ const Establishment = () => {
           <CardContent className="space-y-8">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="h-12 lg:h-20 w-auto flex items-start gap-2">
-                <img src="/isotipo_tambo 1.png" alt="logo" className="h-12" />
+                <img
+                  src="/logos/isotipo_tambo 1.png"
+                  alt="logo"
+                  className="h-12"
+                />
                 <img src="/logotipo 1.png" alt="tambo" className="h-6 mt-1" />
               </div>
               <div className="space-y-4 w-full">
