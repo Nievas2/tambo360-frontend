@@ -4,6 +4,7 @@ import './globals.css'
 import { cn } from '@/lib/utils'
 import Providers from '@/utils/Providers'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { PWAInstallToast } from '@/components/shared/PWAInstallToast'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -26,7 +27,10 @@ export default function RootLayout({
     >
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <PWAInstallToast />
+        </Providers>
       </body>
     </html>
   )
