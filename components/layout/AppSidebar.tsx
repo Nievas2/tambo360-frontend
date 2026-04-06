@@ -54,7 +54,7 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center">
             <img
-              src="/isotipo_tambo 1.svg"
+              src="/isotipo_tambo 1.png"
               alt="Isotipo"
               className="h-full w-full object-contain"
             />
@@ -62,7 +62,7 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
           {!isCollapsed && (
             <div className="flex items-center animate-in fade-in duration-300">
               <img
-                src="/logotipo 1.svg"
+                src="/logotipo 1.png"
                 alt="Tambo360"
                 className="h-6 w-auto"
               />

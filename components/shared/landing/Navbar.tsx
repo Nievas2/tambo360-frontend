@@ -30,7 +30,7 @@ const Navbar = () => {
           href="/"
           className="flex items-center text-xl font-bold tracking-tight"
         >
-          <img src="/isotipo_tambo 1.svg" alt="Logo" className="size-12" />
+          <img src="/isotipo_tambo 1.png" alt="Logo" className="size-12" />
           Tambo<span className="text-[#669213]">360</span>
         </Link>
 
@@ -87,7 +87,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 text-xl font-bold tracking-tight mb-4"
               >
                 <img
-                  src="/isotipo_tambo 1.svg"
+                  src="/isotipo_tambo 1.png"
                   alt="Logo"
                   className="size-10"
                 />
