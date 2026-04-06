@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       'Tambo360 es un sistema de gestión de producción para la industria del leche y la queso.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#000000',
+    background_color: '#fce8e5',
+    theme_color: '#fce8e5',
     icons: [
       {
         src: '/logos/isotipo_192x192.png',
