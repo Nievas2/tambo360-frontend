@@ -44,7 +44,7 @@ const Testimonials = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-14">
-          <h2 className="text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
+          <h2 className="text-4xl font-extrabold tracking-wide mb-4">
             Testimonios
           </h2>
           <p className="text-gray-600 text-lg">
