@@ -3,6 +3,7 @@ const team = [
     name: 'Lorena P. Sartori',
     role: 'Project Manager',
     avatar: '/team/lorenasartori.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
   },
   {
     name: 'Gabriel Nievas',
@@ -33,6 +34,7 @@ const team = [
     name: 'Nicolas De Bella',
     role: 'Backend Developer',
     avatar: '/team/nicolasdebella.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
   },
   {
     name: 'Juan Ignacio Meza Wakahayashi',
@@ -81,7 +83,7 @@ const Equipo = () => {
               <img
                 src={member.avatar}
                 alt={member.name}
-                className="w-24 h-24 rounded-full object-cover grayscale"
+                className={`${member.className || 'w-24 h-24 rounded-full object-cover object-center grayscale'}`}
               />
               <div>
                 <p className="font-bold text-gray-900 text-sm">{member.name}</p>
