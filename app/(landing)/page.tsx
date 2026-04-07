@@ -5,12 +5,14 @@ import Pricing from '@/components/shared/landing/Pricing'
 import Hero from '@/components/shared/landing/Hero'
 import Nosotros from '@/components/shared/landing/Nosotros'
 import Equipo from '@/components/shared/landing/Equipo'
+import TamboEngineSection from '@/components/shared/landing/TamboEngineSection'
 
 export default function Home() {
   return (
     <div className="min-h-screen w-full">
       <Hero />
       <Features />
+      <TamboEngineSection />
       <Nosotros />
       <Equipo />
       <Testimonials />

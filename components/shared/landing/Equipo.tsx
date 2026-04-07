@@ -3,6 +3,7 @@ const team = [
     name: 'Lorena P. Sartori',
     role: 'Project Manager',
     avatar: '/team/lorenasartori.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
   },
   {
     name: 'Gabriel Nievas',
@@ -33,6 +34,7 @@ const team = [
     name: 'Nicolas De Bella',
     role: 'Backend Developer',
     avatar: '/team/nicolasdebella.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
   },
   {
     name: 'Juan Ignacio Meza Wakahayashi',
@@ -62,7 +64,7 @@ const Equipo = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-wide mb-4">
             Nuestro equipo interdisciplinario
           </h2>
           <p className="text-gray-500 text-base">
@@ -81,7 +83,7 @@ const Equipo = () => {
               <img
                 src={member.avatar}
                 alt={member.name}
-                className="w-24 h-24 rounded-full object-cover grayscale"
+                className={`${member.className || 'w-24 h-24 rounded-full object-cover object-center grayscale'}`}
               />
               <div>
                 <p className="font-bold text-gray-900 text-sm">{member.name}</p>
