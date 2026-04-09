@@ -15,8 +15,8 @@ export default function Home() {
       <TamboEngineSection />
       <Nosotros />
       <Equipo />
-      <Testimonials />
-      {/*<Pricing />*/}
+      {/*<Testimonials />
+      <Pricing />*/}
       <ContactForm />
     </div>
   )

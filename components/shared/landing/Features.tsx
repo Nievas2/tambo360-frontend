@@ -18,27 +18,27 @@ const techBadges = [
 const features = [
   {
     icon: SmartphoneIcon,
-    title: 'Registro de Producción',
+    title: 'Control de Producción Lechera',
     description:
-      'Carga diaria de litros por lote en segundos desde el celular, sin planillas ni papeles.',
+      'Carga diaria de litros por lote en segundos desde el celular, sin planillas ni papeles. Tu Dashboard de gestión agropecuaria en la palma de la mano.',
   },
   {
     icon: BellIcon,
-    title: 'Control de Mermas',
+    title: 'Eficiencia Productiva y Mermas',
     description:
-      'Identifica pérdidas y visualiza tendencias antes de que impacter en la rentabilidad.',
+      'Identifica pérdidas ocultas y mejora la rentabilidad de tu establecimiento tomando decisiones a tiempo, antes de que impacten en tu bolsillo.',
   },
   {
     icon: TrendingUpIcon,
-    title: 'Indicadores Económicos',
+    title: 'Costos Reales e Indicadores',
     description:
-      'Costos por litro y rentabilidad por lote en tiempo real para decisiones informadas.',
+      'Visualiza indicadores de producción y márgenes precisos en tiempo real para decisiones de negocio informadas.',
   },
   {
     icon: BotIcon,
-    title: 'Alertas con IA',
+    title: 'Alertas con Inteligencia Artificial',
     description:
-      'El asistente inteligente monitoria tus datos y te avisa ante cualquier desvío normal.',
+      'El asistente inteligente supervisa las tu produccion y te envía alertas inmediatas ante cualquier desvío.',
   },
 ]
 

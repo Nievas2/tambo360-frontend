@@ -6,7 +6,9 @@ const Nosotros = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         {/* Left: Text */}
         <div className="flex flex-col gap-5">
-          <h2 className="text-4xl font-bold text-gray-900">Quienes Somos</h2>
+          <h2 className="text-4xl font-bold text-gray-900">
+            Liderando la Digitalización del Agro
+          </h2>
           <p className="text-gray-600 text-base leading-relaxed">
             Tambo360 nació con un objetivo claro: devolver el control total de
             la gestión a quienes trabajan en el campo. Detectamos el desgaste de
