@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useLogin } from '@/hooks/auth/useLogin'
 import { useAuth } from '@/context/AuthContext'
-import { EyeIcon, ArrowRight, EyeOff } from 'lucide-react'
+import { EyeIcon, ChevronLeft, EyeOff, ArrowRight } from 'lucide-react'
 import { LoginSchema } from '@/types/login'
 import { useForm } from 'react-hook-form'
 import React, { useState, useEffect } from 'react'
@@ -59,6 +59,15 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-[#F2F1EC] relative font-inter bg-[url('/vacas_1.webp')] bg-cover bg-center bg-no-repeat">
+      <Button
+        variant="secondary"
+        size="icon"
+        className="absolute top-4 left-4 z-10 rounded-full"
+      >
+        <Link href="/">
+          <ChevronLeft className="size-6" />
+        </Link>
+      </Button>
       <div className="absolute inset-0 bg-black/10 z-0" />
       <div className="hidden md:flex md:w-1/3 xl:w-1/2" />
 
