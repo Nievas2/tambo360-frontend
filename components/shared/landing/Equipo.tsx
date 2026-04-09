@@ -99,7 +99,7 @@ const Equipo = () => {
                 alt={member.name}
                 className={`${member.className || 'w-24 h-24 rounded-full object-cover object-center grayscale'}`}
               />
-              <div>
+              <div className="flex flex-col items-center gap-1">
                 <p className="font-bold text-gray-900 text-sm">{member.name}</p>
                 <p className="text-green-main font-bold text-sm">
                   {member.role}
