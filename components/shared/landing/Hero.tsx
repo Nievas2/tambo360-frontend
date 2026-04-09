@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const Hero = () => {
   return (
-    <section className="pt-28 pb-20 px-6 bg-[url('/vacas_1.webp')] bg-center bg-cover bg-no-repeat flex items-center min-h-[85vh]">
+    <section className="pt-28 pb-20 px-6 bg-[url('/landing/hero.webp')] bg-center bg-cover bg-no-repeat flex items-center min-h-[85vh]">
       <div className="max-w-6xl flex md:px-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -13,7 +13,7 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="max-w-2xl flex flex-col items-center"
         >
-          <h1 className="text-[40px] font-extrabold text-white leading-tight mb-5 text-center md:text-start">
+          <h1 className="text-[40px] font-extrabold text-white leading-tight mb-5 text-center md:text-start text-shadow-lg">
             Tu tambo bajo control, en tiempo real
           </h1>
 

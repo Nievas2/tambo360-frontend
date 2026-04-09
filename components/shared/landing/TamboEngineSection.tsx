@@ -5,20 +5,21 @@ const TamboEngineSection = () => {
         <div className="flex flex-col-reverse md:flex-row gap-8">
           <div className="w-full md:w-1/2">
             <img
-              src="/tambo-engine.webp"
-              alt="Logo de Tambo360"
+              src="/landing/tambo-engine.webp"
+              alt="TamboEngine Dashboard"
               className="w-full rounded-xl"
             />
           </div>
           <div className="flex flex-col items-start w-full md:w-1/2">
             <h2 className="text-3xl font-bold text-[#0B1001] mb-4">
-              TamboEngine: Inteligencia que se anticipa al problema
+              TamboEngine: Inteligencia Artificial que se anticipa al problema
             </h2>
             <p className="text-lg text-[#475569]">
-              TamboEngine supervisa tu producción en tiempo real para detectar
-              desvíos antes de que sean un problema. Transforma datos complejos
-              en alertas simples, permitiéndote actuar a tiempo y evitar que una
-              pequeña merma afecte tu rentabilidad.
+              TamboEngine supervisa tu producción láctea en tiempo real para
+              detectar desvíos antes de que sean un problema. Transforma datos
+              complejos en alertas simples mediante IA, permitiéndote optimizar
+              la gestión operativa, asegurar el bienestar animal y evitar que
+              una pequeña merma afecte tu rentabilidad.
             </p>
           </div>
         </div>
