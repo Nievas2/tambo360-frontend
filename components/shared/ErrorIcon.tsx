@@ -14,7 +14,7 @@ const ErrorIcon = () => {
         height="96"
         rx="48"
         fill="#E51E00"
-        fill-opacity="0.1"
+        fillOpacity="0.1"
       />
       <rect x="28" y="20" width="80" height="80" rx="40" fill="#E51E00" />
       <path
@@ -29,8 +29,8 @@ const ErrorIcon = () => {
           height="80"
           rx="40"
           fill="#E51E00"
-          fill-opacity="0.01"
-          shape-rendering="crispEdges"
+          fillOpacity="0.01"
+          shapeRendering="crispEdges"
         />
       </g>
       <g filter="url(#filter1_f_1948_882)">
@@ -41,7 +41,7 @@ const ErrorIcon = () => {
           height="24"
           rx="12"
           fill="#E51E00"
-          fill-opacity="0.2"
+          fillOpacity="0.2"
         />
       </g>
       <g filter="url(#filter2_f_1948_882)">
@@ -52,7 +52,7 @@ const ErrorIcon = () => {
           height="32"
           rx="16"
           fill="#E51E00"
-          fill-opacity="0.1"
+          fillOpacity="0.1"
         />
       </g>
       <defs>
@@ -63,9 +63,9 @@ const ErrorIcon = () => {
           width="104"
           height="104"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -128,9 +128,9 @@ const ErrorIcon = () => {
           width="32"
           height="32"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -149,9 +149,9 @@ const ErrorIcon = () => {
           width="56"
           height="56"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"

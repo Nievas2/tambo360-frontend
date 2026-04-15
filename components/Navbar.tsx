@@ -24,6 +24,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
     hour12: true,
   }).format(new Date())
 
+  //detección del estado de la conexión a internet
+  const [isOnline, setIsOnline] = React.useState(navigator.onLine)
+  React.useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
+
   return (
     <nav className="sticky top-0 z-30 flex h-20 w-full items-center justify-between px-4 sm:px-8">
       <div className="flex items-center gap-4">
@@ -54,10 +67,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
           </span>
         </div>
         <div className="items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 hidden sm:flex">
-          <Clock className="h-4 w-4 text-black" />
-          <span className="text-xs font-semibold text-gray-700">
-            {dateStr} | {timeStr}
-          </span>
+          {isOnline ? (
+            <>
+              <div className="h-4 w-4 bg-green-500 rounded-full animate-pulse" />
+              <span className="text-xs font-semibold text-gray-700">
+                Conectado
+              </span>
+            </>
+          ) : (
+            <>
+              <div className="h-4 w-4 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-xs font-semibold text-gray-700">
+                Sin conexión
+              </span>
+            </>
+          )}
         </div>
       </div>
     </nav>
