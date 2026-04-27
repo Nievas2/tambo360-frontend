@@ -22,6 +22,7 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         landing: 'bg-[#80B718] text-white hover:bg-[#80B718]/90',
         landingSecondary: 'bg-[#E9FACA] text-[#44620C] hover:bg-[#E9FACA]/90',
+        darkGreen: 'bg-[#29845A] text-white hover:bg-[#29845A]/90',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

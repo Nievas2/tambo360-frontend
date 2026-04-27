@@ -17,10 +17,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       router.replace('/iniciar-sesion')
       return
     }
-
-    if (user.establecimientos && user.establecimientos.length === 0) {
-      router.replace('/establecimiento')
-    }
   }, [user, loading, router])
 
   if (loading || !user) {
