@@ -12,25 +12,25 @@ const team = [
     avatar: '/team/gabrielnievas.webp',
     description: '"Traduzco tus datos en gráficos para tomar decisiones."',
   },
-  {
+  /*   {
     name: 'Ornella Meolans',
     role: 'Frontend Developer',
     avatar: '/team/ornellameolans.webp',
     description: '"Optimizo la app para que registres tus lotes al instante."',
-  },
+  }, */
   {
     name: 'Cintia Duarte',
     role: 'Diseñadora UX/UI',
     avatar: '/team/cintiaduarte.webp',
     description: '"Simplifico el software para que sea útil en tu día a día."',
   },
-  {
+  /*   {
     name: 'Nicolas Mansilla',
     role: 'Diseñador UX/UI',
     avatar: '/team/nicolasmansilla.webp',
     description:
       '"Ordeno la información para que encuentres todo sin vueltas." ',
-  },
+  }, */
   {
     name: 'Facundo Fernandez',
     role: 'Backend Developer',
@@ -57,7 +57,7 @@ const team = [
     avatar: '/team/nicolaspavon.webp',
     description: '"Pruebo cada función para que la app sea siempre confiable."',
   },
-  {
+  /*   {
     name: 'Tatiana Tablada',
     role: 'QA Engineer',
     avatar: '/team/tatianatablada.webp',
@@ -69,7 +69,7 @@ const team = [
     avatar: '/team/elianaproserpio.webp',
     description:
       '"Valido que las alertas funcionen como vos necesitás en el campo."',
-  },
+  }, */
 ]
 
 const Equipo = () => {
