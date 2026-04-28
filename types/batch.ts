@@ -1,3 +1,4 @@
+import { Alert } from '@/types/alerts'
 import { CostosDirecto } from '@/types/cost'
 import { Merma } from '@/types/decrease'
 import { Unidad } from '@/types/enums'
@@ -66,12 +67,12 @@ export type BatchDto = BatchData & { id: string }
 export interface Lote {
   idLote: string
   numeroLote: number
-  fechaProduccion: Date
+  fechaProduccion: string
 
   idProducto: string
   producto?: Product
 
-  cantidad: number // o string si querés precisión tipo Decimal
+  cantidad: string
   unidad: Unidad
 
   idEstablecimiento: string
@@ -80,6 +81,7 @@ export interface Lote {
 
   mermas?: Merma[]
   costosDirectos?: CostosDirecto[]
+  alertas?: Alert[]
 }
 
 export interface BatchFilters {

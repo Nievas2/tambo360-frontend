@@ -41,8 +41,8 @@ const DeleteBatch = ({ batch, onSuccess }: DeleteBatchProps) => {
         }}
         disabled={
           isPending ||
-          batch.costosDirectos.length > 0 ||
-          batch.mermas.length > 0 ||
+          batch.costosDirectos != undefined ||
+          batch.mermas != undefined ||
           batch.estado
         }
       >

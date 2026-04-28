@@ -40,5 +40,5 @@ export interface OrganizacionUsuario {
   estado: boolean
   fechaCreacion: Date
 
-  establecimientoOrganiacionUsuarios?: Establecimiento_OrganiacionUsuario[]
+  establecimientoOrganizacionUsuarios?: Establecimiento_OrganiacionUsuario[]
 }

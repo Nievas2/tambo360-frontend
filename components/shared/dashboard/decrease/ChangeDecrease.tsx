@@ -78,7 +78,7 @@ const ChangeDecrease = ({
   useEffect(() => {
     if (decrease) {
       reset({
-        cantidad: decrease.cantidad,
+        cantidad: decrease.cantidad.toString(),
         observacion: decrease.observacion,
         tipo: decrease.tipo,
       })

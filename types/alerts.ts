@@ -4,6 +4,7 @@ export interface Alert {
   id: string
   idEstablecimiento: string
   idLote: string
+  numeroLote: number
 
   producto: string
   categoria: Categoria

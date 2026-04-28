@@ -28,7 +28,7 @@ import { ConfirmDeleteDialog } from '@/components/shared/dashboard/batch/DeleteB
 import ChangeCost from '@/components/shared/dashboard/cost/ChangeCost'
 import { useDeleteCost } from '@/hooks/cost/useDeleteCost'
 import { Lote } from '@/types/batch'
-import { CONCEPTO_LABELS, Costo } from '@/types/cost'
+import { CONCEPTO_LABELS, CostosDirecto } from '@/types/cost'
 import { Ellipsis, Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 
@@ -41,7 +41,7 @@ interface CostTableProps {
 const CostTable = ({ batch, changeCost, isPending }: CostTableProps) => {
   const [open, setOpen] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
-  const [cost, setCost] = useState<Costo | undefined>(undefined)
+  const [cost, setCost] = useState<CostosDirecto | undefined>(undefined)
   const [idDelete, setIdDelete] = useState('')
   const { mutateAsync, error } = useDeleteCost({ idBatch: batch.idLote })
 
@@ -52,7 +52,7 @@ const CostTable = ({ batch, changeCost, isPending }: CostTableProps) => {
 
   return (
     <CardContent className="p-0">
-      {batch.costosDirectos.length === 0 ? (
+      {batch?.costosDirectos && batch.costosDirectos.length === 0 ? (
         <Empty className="w-full gap-4">
           <EmptyHeader>
             <EmptyTitle className="font-bold">
@@ -111,8 +111,9 @@ const CostTable = ({ batch, changeCost, isPending }: CostTableProps) => {
                     </TableCell>
                   </TableRow>
                 ))
-              : batch.costosDirectos.length > 0 &&
-                batch.costosDirectos.map((cost: Costo) => (
+              : batch.costosDirectos &&
+                batch.costosDirectos.length > 0 &&
+                batch.costosDirectos.map((cost: CostosDirecto) => (
                   <TableRow key={cost.idLote}>
                     <TableCell suppressHydrationWarning>
                       {cost.fechaCreacion

@@ -19,12 +19,14 @@ interface CreateOrganizationProps {
   onClose: () => void
   onOpen?: () => void
   nextStep: () => void
+  setOrganizationId: (id: string) => void
 }
 
 const CreateOrganization = ({
   open,
   onClose,
   nextStep,
+  setOrganizationId,
 }: CreateOrganizationProps) => {
   const { mutate, isPending, error, isSuccess } = useCreateOrganization()
 
@@ -41,7 +43,11 @@ const CreateOrganization = ({
   })
 
   const onSubmit = handleSubmit((data) => {
-    mutate(data.name)
+    mutate(data.name, {
+      onSuccess: (data) => {
+        setOrganizationId(data.data.idOrganizacion)
+      },
+    })
   })
 
   return (

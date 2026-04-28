@@ -22,7 +22,7 @@ import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { useCreateCost } from '@/hooks/cost/useCreateCost'
 import { useUpdateCost } from '@/hooks/cost/useUpdateCost'
 import { useErrorMessage } from '@/hooks/useErrorMessage'
-import { Concept, Costo, UpdateCostSchema } from '@/types/cost'
+import { Concept, CostosDirecto, UpdateCostSchema } from '@/types/cost'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
@@ -32,7 +32,7 @@ interface ChangeCostProps {
   open: boolean
   onClose: () => void
   onOpen?: () => void
-  cost?: Costo
+  cost?: CostosDirecto
   loteId?: string
 }
 

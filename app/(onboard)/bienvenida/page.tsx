@@ -11,6 +11,7 @@ const Page = () => {
   const [open, setOpen] = useState(false)
   const [openEstablishment, setOpenEstablishment] = useState(false)
   const [step, setStep] = useState<'welcome' | 'createOrganization'>('welcome')
+  const [organizationId, setOrganizationId] = useState('')
   const navigate = useRouter()
 
   return (
@@ -81,12 +82,14 @@ const Page = () => {
             )}
 
             <CreateEstablishment
+              organizationId={organizationId}
               open={openEstablishment}
               onClose={() => setOpenEstablishment(false)}
             />
 
             <CreateOrganization
               open={open}
+              setOrganizationId={(id: string) => setOrganizationId(id)}
               onClose={() => setOpen(false)}
               nextStep={() => setStep('createOrganization')}
             />

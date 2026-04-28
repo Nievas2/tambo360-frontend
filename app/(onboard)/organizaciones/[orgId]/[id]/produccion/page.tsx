@@ -246,7 +246,9 @@ const Produccion: React.FC = () => {
                         <TableCell>
                           <Link href={`/produccion/lote/${batch.idLote}`}>
                             <HighlightMatch
-                              text={batch.producto.nombre}
+                              text={
+                                batch.producto?.nombre || 'Producto desconocido'
+                              }
                               query={highlightQuery}
                             />
                           </Link>
@@ -298,8 +300,8 @@ const Produccion: React.FC = () => {
                           <Link
                             href={`/produccion/lote/${batch.idLote}/#costos`}
                           >
-                            {(batch.costosDirectos.length > 0 &&
-                              batch.costosDirectos[0].moneda) ||
+                            {(batch.costosDirectos &&
+                              batch.costosDirectos.length > 0) ||
                               '$'}{' '}
                             {batch.costosDirectos
                               ?.reduce((total, m) => {
@@ -346,11 +348,7 @@ const Produccion: React.FC = () => {
                                     setSelectedBatch(batch)
                                     setIsChangeBatchOpen(true)
                                   }}
-                                  disabled={
-                                    batch.costosDirectos.length > 0 ||
-                                    batch.mermas.length > 0 ||
-                                    batch.estado
-                                  }
+                                  disabled={batch.estado}
                                 >
                                   <Pencil /> Editar
                                 </DropdownMenuItem>
@@ -505,7 +503,7 @@ const Produccion: React.FC = () => {
           setIsCompleteBatchOpen(false)
           setSelectedBatch(null)
         }}
-        batchId={selectedBatch?.idLote!}
+        batchId={selectedBatch?.idLote}
         refetch={refetch}
       />
     </div>

@@ -80,7 +80,7 @@ const DailyProductionLog = () => {
                     <TableCell suppressHydrationWarning>
                       {batch.fechaProduccion.split('T')[1].slice(0, 5)}
                     </TableCell>
-                    <TableCell>{batch.producto.nombre}</TableCell>
+                    <TableCell>{batch.producto?.nombre}</TableCell>
                     <TableCell>
                       {batch.cantidad} {batch.unidad}
                     </TableCell>
@@ -94,8 +94,8 @@ const DailyProductionLog = () => {
                       }, 0)}
                     </TableCell>
                     <TableCell>
-                      {(batch.costosDirectos.length > 0 &&
-                        batch.costosDirectos[0].moneda) ||
+                      {(batch.costosDirectos &&
+                        batch.costosDirectos.length > 0) ||
                         '$'}{' '}
                       {batch.costosDirectos?.reduce((total, m) => {
                         const qty =

@@ -16,7 +16,7 @@ import ChangeBatch from '@/components/shared/dashboard/batch/ChangeBatch'
 interface CompleteBatchProps {
   open: boolean
   onClose: () => void
-  batchId: string
+  batchId?: string
   refetch: () => void
 }
 
@@ -32,7 +32,7 @@ const CompleteBatch = ({
 
   const handleComplete = async () => {
     try {
-      await mutateAsync(batchId)
+      await mutateAsync(batchId!)
       refetch()
       setFinished(true)
     } catch (err) {

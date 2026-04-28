@@ -69,7 +69,7 @@ const TamboEngineCard = ({ alert }: TamboEngineCardProps) => {
               <div className="flex items-start gap-1.5 text-sm text-slate-500">
                 <Clock className="h-4 w-4" />
                 <span className="capitalize">
-                  {new Date(alert.creado_en).toLocaleString('es-ES', {
+                  {new Date(alert.creadoEn).toLocaleString('es-ES', {
                     month: 'long',
                     year: 'numeric',
                   })}

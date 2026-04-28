@@ -23,9 +23,9 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
       {organization.organizacion?.nombre}
 
       <div className="flex flex-wrap gap-4">
-        {organization.establecimientoOrganiacionUsuarios &&
-          organization.establecimientoOrganiacionUsuarios.length > 0 &&
-          organization.establecimientoOrganiacionUsuarios.map((estOrg) => (
+        {organization.establecimientoOrganizacionUsuarios &&
+          organization.establecimientoOrganizacionUsuarios.length > 0 &&
+          organization.establecimientoOrganizacionUsuarios.map((estOrg) => (
             <Card
               key={estOrg.idEstablecimiento}
               className="size-52 bg-white rounded-md shadow"

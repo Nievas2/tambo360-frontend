@@ -10,17 +10,21 @@ import {
 } from '@/components/ui/select'
 import TamboEngineCardSkeleton from '@/components/shared/dashboard/tambo engine/skeletons/TamboEngineCardSkeleton'
 import TamboEngineCard from '@/components/shared/dashboard/tambo engine/TamboEngineCard'
-import { useAuth } from '@/context/AuthContext'
 import { useAlerts } from '@/hooks/alerts/useAlerts'
 import { Alert } from '@/types/alerts'
 import { Bot, RotateCw } from 'lucide-react'
 import React, { useCallback, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEstablishment } from '@/hooks/establishment/useEstablishment'
 
 const TamboEngine: React.FC = () => {
   const [range, setRange] = useState<'7' | '14' | '30'>('7')
-  const { user } = useAuth()
+  const pathname = usePathname()
+  const { data: establishment } = useEstablishment({
+    id: pathname.split('/')[3],
+  })
   const { data, isPending, refetch, isFetching } = useAlerts({
-    id: user!.establecimientos[0].idEstablecimiento,
+    id: establishment?.data.establecimiento?.idEstablecimiento,
     range: range,
   })
 

@@ -4,11 +4,15 @@ import DailyProductionLog from '@/components/shared/dashboard/DailyProductionLog
 import AlertsSection from '@/components/shared/dashboard/AlertsSection'
 import { useCurrentMonth } from '@/hooks/dashboard/useCurrentMonth'
 import { StatCard } from '@/components/shared/StatCard'
-import { useAuth } from '@/context/AuthContext'
+import { useEstablishment } from '@/hooks/establishment/useEstablishment'
+import { usePathname } from 'next/navigation'
 
 const Dashboard = () => {
-  const { user } = useAuth()
   const { data, isPending } = useCurrentMonth()
+  const pathname = usePathname()
+  const { data: establishment } = useEstablishment({
+    id: pathname.split('/')[3],
+  })
   const totalProduccion =
     (data?.data.actual.quesos || 0) + (data?.data.actual.leches || 0)
 
@@ -22,7 +26,8 @@ const Dashboard = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6">
         <div>
           <p className="text-muted-foreground text-xs sm:text-sm">
-            Dashboard / {user!.establecimientos[0].nombre}
+            Dashboard /{' '}
+            {establishment?.data.establecimiento?.nombre || 'Establecimiento'}
           </p>
           <h1 className="text-2xl sm:text-3xl font-bold text-[#252525] tracking-tight">
             Reporte Mensual

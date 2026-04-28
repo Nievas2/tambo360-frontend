@@ -40,7 +40,7 @@ export interface Establecimiento {
   organizacion?: Organizacion
 
   loteProducciones?: Lote[]
-  establecimientoOrganiacionUsuarios?: Establecimiento_OrganiacionUsuario[]
+  establecimientoOrganizacionUsuarios?: Establecimiento_OrganiacionUsuario[]
   configuracions?: Configuracion[]
   establecimientoRazas?: EstablecimientoRaza[]
 }

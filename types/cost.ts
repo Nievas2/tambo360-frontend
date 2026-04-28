@@ -53,7 +53,7 @@ export interface CostosDirecto {
   concepto: ConceptoCosto
   monto: number
   observaciones?: string
-  fechaCreacion: Date
+  fechaCreacion: string
 
   idLote: string
   lote?: Lote

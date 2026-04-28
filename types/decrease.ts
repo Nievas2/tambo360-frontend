@@ -45,7 +45,7 @@ export interface Merma {
   tipo: TipoMerma
   observacion?: string
   cantidad: number
-  fechaCreacion: Date
+  fechaCreacion: string
 
   idLote: string
   lote?: Lote

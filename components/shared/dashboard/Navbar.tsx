@@ -12,7 +12,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const { user } = useAuth()
   const pathname = usePathname()
   const { data } = useEstablishment({ id: pathname.split('/')[3] })
-  console.log(data)
 
   //detección del estado de la conexión a internet
   const [isOnline, setIsOnline] = React.useState(navigator.onLine)
