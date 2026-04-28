@@ -10,3 +10,6 @@ export const createEstablishment = (dto: EstablishmentData) =>
 
 export const updateEstablishmentName = (dto: EstablishmentName) =>
   api.patch(`/establecimiento`, dto)
+
+export const getEstablishment = (id: string) =>
+  api.get(`/establecimiento/${id}`)

@@ -2,6 +2,7 @@ import React from 'react'
 import { MapPin, Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import { useEstablishment } from '@/hooks/establishment/useEstablishment'
 
 interface NavbarProps {
   onMenuClick: () => void
@@ -10,18 +11,8 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
   const { user } = useAuth()
   const pathname = usePathname()
-
-  const dateStr = new Intl.DateTimeFormat('es-ES', {
-    month: '2-digit',
-    day: '2-digit',
-    year: '2-digit',
-  }).format(new Date())
-
-  const timeStr = new Intl.DateTimeFormat('es-ES', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  }).format(new Date())
+  const { data } = useEstablishment({ id: pathname.split('/')[3] })
+  console.log(data)
 
   //detección del estado de la conexión a internet
   const [isOnline, setIsOnline] = React.useState(navigator.onLine)
@@ -52,21 +43,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
             </h3>
           ) : (
             <h3 className="text-[16px] font-bold text-[#959595] truncate">
-              {user?.establecimientos[0].nombre}
+              {data?.data.establecimiento?.nombre || 'Establecimiento'}
             </h3>
           )}
         </div>
       </div>
 
       <div className="flex items-center gap-2 sm:gap-4">
-        <div className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5">
-          <MapPin className="h-4 w-4 text-black" />
-          <span className="text-xs font-semibold text-gray-700">
-            {user?.establecimientos[0].provincia +
-              ', ' +
-              user?.establecimientos[0].localidad}
-          </span>
-        </div>
+        {data?.data.establecimiento?.provincia &&
+          data?.data.establecimiento?.localidad && (
+            <div className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5">
+              <MapPin className="h-4 w-4 text-black" />
+              <span className="text-xs font-semibold text-gray-700">
+                {data?.data.establecimiento?.provincia +
+                  ', ' +
+                  data?.data.establecimiento?.localidad}
+              </span>
+            </div>
+          )}
         <div className="items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 flex">
           {isOnline ? (
             <>

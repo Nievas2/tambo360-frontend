@@ -2,7 +2,15 @@
 
 import CreateEstablishment from '@/components/shared/dashboard/establishment/CreateEstablishment'
 import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardTitle,
+} from '@/components/ui/card'
 import { OrganizacionUsuario } from '@/types/organization'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface OrganizationCardProps {
@@ -11,32 +19,43 @@ interface OrganizationCardProps {
 const OrganizationCard = ({ organization }: OrganizationCardProps) => {
   const [showCreateEstablishment, setShowCreateEstablishment] = useState(false)
   return (
-    <div className="flex flex-col p-4 bg-gray-100 rounded-md shadow-2xl w-64">
+    <div className="flex flex-col p-8 w-full">
       {organization.organizacion?.nombre}
 
-      {organization.establecimientoOrganiacionUsuarios &&
-        organization.establecimientoOrganiacionUsuarios.length > 0 &&
-        organization.establecimientoOrganiacionUsuarios.map((estOrg) => (
-          <div
-            key={estOrg.idEstablecimiento}
-            className="mt-2 p-2 bg-white rounded-md shadow"
+      <div className="flex flex-wrap gap-4">
+        {organization.establecimientoOrganiacionUsuarios &&
+          organization.establecimientoOrganiacionUsuarios.length > 0 &&
+          organization.establecimientoOrganiacionUsuarios.map((estOrg) => (
+            <Card
+              key={estOrg.idEstablecimiento}
+              className="size-52 bg-white rounded-md shadow"
+            >
+              <CardContent className="justify-between h-full">
+                <CardTitle>{estOrg.establecimiento?.nombre}</CardTitle>
+                <CardDescription>{estOrg.rol}</CardDescription>
+                <CardFooter>
+                  <Button variant="darkGreen" size="sm" className=" w-full">
+                    <Link
+                      href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/produccion`}
+                    >
+                      Ingresar
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </CardContent>
+            </Card>
+          ))}
+        <div className="size-52 bg-white rounded-md shadow flex flex-col items-center justify-center gap-2">
+          <span>Nuevo establecimiento</span>
+
+          <Button
+            variant="outline"
+            onClick={() => setShowCreateEstablishment(true)}
           >
-            {estOrg.establecimiento?.nombre}
-          </div>
-        ))}
-      <Button
-        variant="outline"
-        size="sm"
-        className=" w-full"
-        onClick={() => setShowCreateEstablishment(true)}
-      >
-        {/* <Link
-          href={`/organizaciones/${organization.idOrganizacion}/establecimientos`}
-        >
-          Ingresar
-        </Link> */}
-        test
-      </Button>
+            Crear
+          </Button>
+        </div>
+      </div>
 
       <CreateEstablishment
         open={showCreateEstablishment}

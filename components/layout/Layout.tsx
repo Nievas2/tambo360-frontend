@@ -1,7 +1,7 @@
 'use client'
 
 import { AppSidebar } from '@/components/layout/AppSidebar'
-import { Navbar } from '@/components/Navbar'
+import { Navbar } from '@/components/shared/dashboard/Navbar'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { api } from '@/services/api'
 import { useState, useEffect } from 'react'
@@ -9,9 +9,14 @@ import { useState, useEffect } from 'react'
 interface LayoutContentProps {
   children: React.ReactNode
   establishmentId: string
+  organizationId: string
 }
 
-const LayoutContent = ({ children, establishmentId }: LayoutContentProps) => {
+const LayoutContent = ({
+  children,
+  establishmentId,
+  organizationId,
+}: LayoutContentProps) => {
   const [isMobile, setIsMobile] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -19,8 +24,9 @@ const LayoutContent = ({ children, establishmentId }: LayoutContentProps) => {
   useEffect(() => {
     if (establishmentId) {
       api.defaults.headers.common['x-establecimiento-id'] = establishmentId
+      api.defaults.headers.common['x-organizacion-id'] = organizationId
     }
-  }, [establishmentId])
+  }, [establishmentId, organizationId])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -77,13 +83,18 @@ const LayoutContent = ({ children, establishmentId }: LayoutContentProps) => {
 export default function DashboardLayout({
   children,
   establishmentId,
+  organizationId,
 }: {
   children: React.ReactNode
   establishmentId: string
+  organizationId: string
 }) {
   return (
     <SidebarProvider>
-      <LayoutContent establishmentId={establishmentId}>
+      <LayoutContent
+        establishmentId={establishmentId}
+        organizationId={organizationId}
+      >
         {children}
       </LayoutContent>
     </SidebarProvider>

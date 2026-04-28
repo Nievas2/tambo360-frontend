@@ -1,7 +1,5 @@
 'use client'
 import { LayoutDashboard, Milk, Cpu, User } from 'lucide-react'
-import { useNoViewedAlerts } from '@/hooks/alerts/useNoViewedAlerts'
-import { useAuth } from '@/context/AuthContext'
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +10,8 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEstablishment } from '@/hooks/establishment/useEstablishment'
+import { useNoViewedAlerts } from '@/hooks/alerts/useNoViewedAlerts'
 
 interface AppSidebarProps {
   forcedCollapsed?: boolean
@@ -19,9 +19,9 @@ interface AppSidebarProps {
 
 export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
   const pathname = usePathname()
-  const { user } = useAuth()
-  const { data } = useNoViewedAlerts({
-    id: user!.establecimientos[0].idEstablecimiento,
+  const { data } = useEstablishment({ id: pathname.split('/')[3] })
+  const { data: noViewedAlerts } = useNoViewedAlerts({
+    id: data?.data.establecimiento?.idEstablecimiento,
   })
   const isCollapsed = forcedCollapsed
 
@@ -75,9 +75,7 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
         <SidebarMenu>
           {mainMenuItems.map((item) => {
             const isActive =
-              item.url === '/'
-                ? pathname === '/'
-                : pathname.startsWith(item.url)
+              item.url === '/' ? pathname === '/' : pathname.includes(item.url)
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -99,11 +97,12 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
                         className={`font-semibold flex justify-between w-full ${isActive ? 'text-[#669213]' : 'text-gray-400'}`}
                       >
                         {item.title}{' '}
-                        {item.url === '/alertas' && data?.data.cantidad > 0 && (
-                          <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
-                            {data.data.cantidad}
-                          </span>
-                        )}
+                        {item.url === '/alertas' &&
+                          noViewedAlerts?.data.cantidad > 0 && (
+                            <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
+                              {noViewedAlerts.data.cantidad}
+                            </span>
+                          )}
                       </span>
                     )}
                   </Link>
