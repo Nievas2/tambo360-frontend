@@ -13,6 +13,7 @@ export const baseKeys = {
   alert: ['alert'] as const,
   organization: ['organization'] as const,
   establishment: ['establishment'] as const,
+  invitation: ['invitation'] as const,
 } as const
 
 export const authKeys = {
@@ -93,6 +94,12 @@ export const establishmentKeys = {
   detail: (id: string) => [...baseKeys.establishment, id] as const,
 }
 
+export const invitationsKeys = {
+  all: baseKeys.invitation,
+  lists: () => [...baseKeys.invitation, 'list'] as const,
+  detail: (id: string) => [...baseKeys.invitation, id] as const,
+}
+
 export const queryKeys = {
   auth: authKeys,
   batch: batchKeys,
@@ -105,4 +112,5 @@ export const queryKeys = {
   dashboard: dashboardKeys,
   organization: organizationKeys,
   establishment: establishmentKeys,
+  invitation: invitationsKeys,
 } as const
