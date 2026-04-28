@@ -8,25 +8,28 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useCreateOrganization } from '@/hooks/organization/useCreateOrganization'
-import { createOrganization } from '@/types/organization'
+import { useCreateEstablishment } from '@/hooks/establishment/useCreateEstablishment'
+import { EstablishmentSchema } from '@/types/establishment'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
-interface CreateOrganizationProps {
+interface CreateEstablishmentProps {
   open: boolean
   onClose: () => void
   onOpen?: () => void
-  nextStep: () => void
+  organizationId: string
 }
 
-const CreateOrganization = ({
+const CreateEstablishment = ({
   open,
   onClose,
-  nextStep,
-}: CreateOrganizationProps) => {
-  const { mutate, isPending, error, isSuccess } = useCreateOrganization()
+  organizationId,
+}: CreateEstablishmentProps) => {
+  const { mutate, isPending, error, isSuccess } = useCreateEstablishment()
+  const navigate = useRouter()
+  const pathname = usePathname()
 
   const {
     register,
@@ -35,13 +38,13 @@ const CreateOrganization = ({
     reset,
   } = useForm({
     defaultValues: {
-      name: '',
+      nombre: '',
     },
-    resolver: zodResolver(createOrganization),
+    resolver: zodResolver(EstablishmentSchema),
   })
 
   const onSubmit = handleSubmit((data) => {
-    mutate(data.name)
+    mutate({ nombre: data.nombre, organizacionId: organizationId })
   })
 
   return (
@@ -60,21 +63,24 @@ const CreateOrganization = ({
           <div className="flex flex-col items-center justify-center gap-6">
             <img src="/successIcon.svg" alt="success" className="w-20 h-20" />
             <h2 className="text-4xl font-bold tracking-tight text-[#0B1001]">
-              Organización creada correctamente
+              Establecimiento creado correctamente
             </h2>
             <p className="text-sm text-body-text text-center">
-              La organización ha sido creada exitosamente.
+              El establecimiento ha sido creado exitosamente.
             </p>
             <Button
-              className="w-full h-14 bg-[#0B1001] text-white rounded-lg flex items-center justify-center gap-2"
+              variant="darkGreen"
               onClick={() => {
-                nextStep()
-                onClose()
-                reset()
+                navigate.push('/organizaciones')
               }}
-              data-testid="create-establishment-button"
             >
-              Crear establecimiento <ArrowRight className="size-5" />
+              {pathname == '/organizaciones' ? (
+                'Cerrar'
+              ) : (
+                <>
+                  Ir al panel <ArrowRight className="size-5" />
+                </>
+              )}
             </Button>
           </div>
         ) : (
@@ -83,12 +89,12 @@ const CreateOrganization = ({
               <Label>Nombre de la organización</Label>
               <Input
                 placeholder="Ingrese el nombre de la organización"
-                {...register('name')}
+                {...register('nombre')}
                 disabled={isPending}
               />
 
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
+              {errors.nombre && (
+                <p className="text-sm text-red-500">{errors.nombre.message}</p>
               )}
             </div>
 
@@ -115,4 +121,4 @@ const CreateOrganization = ({
     </Dialog>
   )
 }
-export default CreateOrganization
+export default CreateEstablishment

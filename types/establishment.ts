@@ -1,3 +1,6 @@
+import { Lote } from '@/types/batch'
+import { RolEstablecimiento, TipoOrdenie, VentaLeche } from '@/types/enums'
+import { Organizacion, OrganizacionUsuario } from '@/types/organization'
 import z from 'zod'
 
 export const EstablishmentSchema = z.object({
@@ -8,14 +11,6 @@ export const EstablishmentSchema = z.object({
       100,
       'El nombre del establecimiento no puede tener más de 100 caracteres'
     ),
-  localidad: z
-    .string()
-    .min(4, 'La localidad debe tener al menos 4 caracteres')
-    .max(50, 'La localidad no puede tener más de 50 caracteres'),
-  provincia: z
-    .string()
-    .min(4, 'La provincia debe tener al menos 4 caracteres')
-    .max(50, 'La provincia no puede tener más de 50 caracteres'),
 })
 
 export const UpdateEstablishmentSchema = z.object({
@@ -31,5 +26,69 @@ export const UpdateEstablishmentSchema = z.object({
 export type EstablishmentName = z.infer<typeof UpdateEstablishmentSchema>
 
 export type EstablishmentData = z.infer<typeof EstablishmentSchema> & {
-  fechaCreacion: string
+  organizacionId: string
+}
+
+export interface Establecimiento {
+  idEstablecimiento: string
+  nombre: string
+  localidad?: string
+  provincia?: string
+  fechaCreacion: Date
+
+  idOrganizacion: string
+  organizacion?: Organizacion
+
+  loteProducciones?: Lote[]
+  establecimientoOrganiacionUsuarios?: Establecimiento_OrganiacionUsuario[]
+  configuracions?: Configuracion[]
+  establecimientoRazas?: EstablecimientoRaza[]
+}
+
+export interface Establecimiento_OrganiacionUsuario {
+  idEstablecimientoOrganizacionUsuario: string
+
+  idEstablecimiento: string
+  establecimiento?: Establecimiento
+
+  idOrganizacionUsuario: string
+  organizacionUsuario?: OrganizacionUsuario
+
+  rol: RolEstablecimiento
+  estado: boolean
+  fechaCreacion: Date
+}
+
+export interface Configuracion {
+  idConfiguracion: string
+
+  idEstablecimiento: string
+  establecimiento?: Establecimiento
+
+  cantVacas?: number
+  cantOrdenies?: number
+  promLitros?: number
+  tipoOrdenie?: TipoOrdenie
+  ventaLeche?: VentaLeche
+  empleados?: boolean
+  cantEmpleados?: number
+
+  modificadoEn?: Date
+}
+
+export interface EstablecimientoRaza {
+  idEstablecimientoRaza: string
+
+  idEstablecimiento: string
+  establecimiento?: Establecimiento
+
+  idRaza: string
+  raza?: Raza
+}
+
+export interface Raza {
+  idRaza: string
+  nombre: string
+
+  establecimientoRazas?: EstablecimientoRaza[]
 }

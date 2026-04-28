@@ -1,6 +1,7 @@
-import { Alert } from '@/types/alerts'
-import { Cost } from '@/types/cost'
-import { Decrease } from '@/types/decrease'
+import { CostosDirecto } from '@/types/cost'
+import { Merma } from '@/types/decrease'
+import { Unidad } from '@/types/enums'
+import { Establecimiento } from '@/types/establishment'
 import { Product } from '@/types/product'
 import z from 'zod'
 
@@ -62,19 +63,23 @@ export type BatchData = z.infer<typeof BatchSchema>
 
 export type BatchDto = BatchData & { id: string }
 
-export interface Batch {
+export interface Lote {
   idLote: string
-  fechaProduccion: string
+  numeroLote: number
+  fechaProduccion: Date
+
   idProducto: string
-  cantidad: string
-  unidad: string
+  producto?: Product
+
+  cantidad: number // o string si querés precisión tipo Decimal
+  unidad: Unidad
+
   idEstablecimiento: string
   estado: boolean
-  producto: Product
-  mermas: Decrease[]
-  costosDirectos: Cost[]
-  alertas?: Alert[]
-  numeroLote: number
+  establecimiento?: Establecimiento
+
+  mermas?: Merma[]
+  costosDirectos?: CostosDirecto[]
 }
 
 export interface BatchFilters {

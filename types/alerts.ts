@@ -1,12 +1,15 @@
+import { Categoria, NivelAlerta } from '@/types/enums'
+
 export interface Alert {
   id: string
   idEstablecimiento: string
   idLote: string
+
   producto: string
-  categoria: string
-  nivel: string
+  categoria: Categoria
+  nivel: NivelAlerta
+
   descripcion: string
-  creado_en: string
+  creadoEn: Date
   visto: boolean
-  numeroLote: string
 }

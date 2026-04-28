@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { useState } from 'react'
 import ChangeBatch from '@/components/shared/dashboard/batch/ChangeBatch'
-import { Batch } from '@/types/batch'
+import { Lote } from '@/types/batch'
 import { useBatchesDay } from '@/hooks/batch/useBatchesDay'
 
 const DailyProductionLog = () => {
@@ -71,7 +71,7 @@ const DailyProductionLog = () => {
             </TableHeader>
             <TableBody>
               {data?.data?.length > 0 &&
-                data?.data?.map((batch: Batch) => (
+                data?.data?.map((batch: Lote) => (
                   <TableRow key={batch.idLote}>
                     <TableCell>
                       #{String(batch.numeroLote).padStart(3, '0')}

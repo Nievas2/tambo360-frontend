@@ -11,6 +11,7 @@ export const baseKeys = {
   decrease: ['decrease'] as const,
   dashboard: ['dashboard'] as const,
   alert: ['alert'] as const,
+  organization: ['organization'] as const,
 } as const
 
 export const authKeys = {
@@ -79,6 +80,12 @@ export const dashboardKeys = {
   current: () => [...baseKeys.dashboard, 'current'] as const,
 }
 
+export const organizationKeys = {
+  all: baseKeys.organization,
+  lists: () => [...baseKeys.organization, 'list'] as const,
+  detail: (id: string) => [...baseKeys.organization, id] as const,
+}
+
 export const queryKeys = {
   auth: authKeys,
   batch: batchKeys,
@@ -89,4 +96,5 @@ export const queryKeys = {
   decrease: decreaseKeys,
   alert: alertKeys,
   dashboard: dashboardKeys,
+  organization: organizationKeys,
 } as const

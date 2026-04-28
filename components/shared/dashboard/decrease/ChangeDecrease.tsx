@@ -22,7 +22,7 @@ import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { useCreateDecrease } from '@/hooks/decrease/useCreateDecrease'
 import { useUpdateDecrease } from '@/hooks/decrease/useUpdateDecrease'
 import { useErrorMessage } from '@/hooks/useErrorMessage'
-import { Decrease, DecreaseSchema, TipoMerma } from '@/types/decrease'
+import { Merma, DecreaseSchema, TipoMerma } from '@/types/decrease'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
@@ -33,7 +33,7 @@ interface ChangeDecreaseProps {
   onClose: () => void
   onOpen?: () => void
   idBatch?: string
-  decrease?: Decrease
+  decrease?: Merma
 }
 
 const ChangeDecrease = ({

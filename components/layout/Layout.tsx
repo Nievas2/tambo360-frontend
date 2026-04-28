@@ -3,16 +3,24 @@
 import { AppSidebar } from '@/components/layout/AppSidebar'
 import { Navbar } from '@/components/Navbar'
 import { SidebarProvider } from '@/components/ui/sidebar'
+import { api } from '@/services/api'
 import { useState, useEffect } from 'react'
 
 interface LayoutContentProps {
   children: React.ReactNode
+  establishmentId: string
 }
 
-const LayoutContent = ({ children }: LayoutContentProps) => {
+const LayoutContent = ({ children, establishmentId }: LayoutContentProps) => {
   const [isMobile, setIsMobile] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
+
+  useEffect(() => {
+    if (establishmentId) {
+      api.defaults.headers.common['x-establecimiento-id'] = establishmentId
+    }
+  }, [establishmentId])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -68,12 +76,16 @@ const LayoutContent = ({ children }: LayoutContentProps) => {
 
 export default function DashboardLayout({
   children,
+  establishmentId,
 }: {
   children: React.ReactNode
+  establishmentId: string
 }) {
   return (
     <SidebarProvider>
-      <LayoutContent>{children}</LayoutContent>
+      <LayoutContent establishmentId={establishmentId}>
+        {children}
+      </LayoutContent>
     </SidebarProvider>
   )
 }

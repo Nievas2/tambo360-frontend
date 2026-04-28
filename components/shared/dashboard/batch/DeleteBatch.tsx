@@ -11,10 +11,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Batch } from '@/types/batch'
+import { Lote } from '@/types/batch'
 
 interface DeleteBatchProps {
-  batch: Batch
+  batch: Lote
   onSuccess?: () => void
 }
 

@@ -2,9 +2,12 @@ import Layout from '@/components/layout/Layout'
 
 const layout = ({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode
-}>) => {
-  return <Layout>{children}</Layout>
+  params: { id: string }
+}) => {
+  return <Layout establishmentId={params.id}>{children}</Layout>
 }
+
 export default layout

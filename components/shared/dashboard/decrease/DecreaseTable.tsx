@@ -27,18 +27,18 @@ import {
 import { ConfirmDeleteDialog } from '@/components/shared/dashboard/batch/DeleteBatch'
 import ChangeDecrease from '@/components/shared/dashboard/decrease/ChangeDecrease'
 import { useDeleteDecrease } from '@/hooks/decrease/useDeleteDecrease'
-import { Batch } from '@/types/batch'
-import { Decrease, TIPO_MERMA_LABELS } from '@/types/decrease'
+import { Lote } from '@/types/batch'
+import { Merma, TIPO_MERMA_LABELS } from '@/types/decrease'
 import { Ellipsis, Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 
 interface DecreaseTableProps {
-  batch: Batch
+  batch: Lote
   isPending: boolean
 }
 const DecreaseTable = ({ batch, isPending }: DecreaseTableProps) => {
   const [open, setOpen] = useState(false)
-  const [decrease, setDecrease] = useState<Decrease>()
+  const [decrease, setDecrease] = useState<Merma>()
   const [idDelete, setIdDelete] = useState('')
   const [openDelete, setOpenDelete] = useState(false)
   const { mutateAsync, error } = useDeleteDecrease({ idLote: batch.idLote })
@@ -110,7 +110,7 @@ const DecreaseTable = ({ batch, isPending }: DecreaseTableProps) => {
                   </TableRow>
                 ))
               : batch.mermas.length > 0 &&
-                batch.mermas.map((decrease: Decrease) => (
+                batch.mermas.map((decrease: Merma) => (
                   <TableRow key={decrease.idLote}>
                     <TableCell suppressHydrationWarning>
                       {decrease.fechaCreacion

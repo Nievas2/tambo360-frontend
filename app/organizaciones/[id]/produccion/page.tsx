@@ -46,7 +46,7 @@ import ChangeDecrease from '@/components/shared/dashboard/decrease/ChangeDecreas
 import ChangeCost from '@/components/shared/dashboard/cost/ChangeCost'
 import ChangeBatch from '@/components/shared/dashboard/batch/ChangeBatch'
 import { Badge } from '@/components/ui/badge'
-import { Batch } from '@/types/batch'
+import { Lote } from '@/types/batch'
 import { useBatches } from '@/hooks/batch/useBatches'
 import DeleteBatch from '@/components/shared/dashboard/batch/DeleteBatch'
 import { useDebounce } from 'use-debounce'
@@ -58,7 +58,7 @@ const Produccion: React.FC = () => {
   const [isChangeDecreaseOpen, setIsChangeDecreaseOpen] = useState(false)
   const [isChangeCostOpen, setIsChangeCostOpen] = useState(false)
   const [isChangeBatchOpen, setIsChangeBatchOpen] = useState(false)
-  const [selectedBatch, setSelectedBatch] = useState<Batch | null>(null)
+  const [selectedBatch, setSelectedBatch] = useState<Lote | null>(null)
   const [isCompleteBatchOpen, setIsCompleteBatchOpen] = useState(false)
   const [loteId, setLoteId] = useState('')
 
@@ -225,7 +225,7 @@ const Produccion: React.FC = () => {
                   ))
                 : data?.data.lotes.length > 0 &&
                   !error &&
-                  data?.data?.lotes.map((batch: Batch) => {
+                  data?.data?.lotes.map((batch: Lote) => {
                     const loteDisplay = `#${String(batch.numeroLote).padStart(3, '0')}`
 
                     return (

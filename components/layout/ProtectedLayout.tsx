@@ -2,12 +2,13 @@
 
 import Loading from '@/components/layout/Loading'
 import { useAuth } from '@/context/AuthContext'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (loading) return
@@ -17,7 +18,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       router.replace('/iniciar-sesion')
       return
     }
-  }, [user, loading, router])
+
+    if (
+      user.organizaciones != undefined &&
+      user.organizaciones?.length > 0 &&
+      pathname === '/bienvenida'
+    ) {
+      router.replace('/organizaciones')
+    }
+  }, [user, loading, router, pathname])
 
   if (loading || !user) {
     return <Loading />

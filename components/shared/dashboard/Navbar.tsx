@@ -1,7 +1,7 @@
 import React from 'react'
-import { MapPin, Clock, Menu } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { MapPin, Menu } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 
 interface NavbarProps {
   onMenuClick: () => void
