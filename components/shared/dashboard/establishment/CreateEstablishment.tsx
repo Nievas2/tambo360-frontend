@@ -57,7 +57,7 @@ const CreateEstablishment = ({
     >
       <DialogContent className="bg-[#FFFBF1]">
         <DialogHeader>
-          <DialogTitle>Crear organización</DialogTitle>
+          <DialogTitle>Crear establecimiento</DialogTitle>
         </DialogHeader>
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center gap-6">
@@ -86,9 +86,9 @@ const CreateEstablishment = ({
         ) : (
           <form className="space-y-8 my-8" onSubmit={onSubmit}>
             <div className="space-y-2">
-              <Label>Nombre de la organización</Label>
+              <Label>Nombre del establecimiento</Label>
               <Input
-                placeholder="Ingrese el nombre de la organización"
+                placeholder="Ingrese el nombre de la establecimiento"
                 {...register('nombre')}
                 disabled={isPending}
               />
@@ -101,7 +101,7 @@ const CreateEstablishment = ({
             {error?.response?.data.message && (
               <p className="text-sm text-red-500">
                 {error.response.data.message ||
-                  'Ocurrió un error al crear la organización. Por favor, inténtelo de nuevo.'}
+                  'Ocurrió un error al crear el establecimiento. Por favor, inténtelo de nuevo.'}
               </p>
             )}
 

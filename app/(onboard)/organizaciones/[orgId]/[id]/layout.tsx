@@ -1,4 +1,4 @@
-import Layout from '@/components/layout/Layout'
+import HeaderIds from '@/components/layout/HeaderIds'
 
 const layout = async ({
   children,
@@ -10,9 +10,9 @@ const layout = async ({
   const { id, orgId } = await params
 
   return (
-    <Layout establishmentId={id} organizationId={orgId}>
+    <HeaderIds establishmentId={id} organizationId={orgId}>
       {children}
-    </Layout>
+    </HeaderIds>
   )
 }
 

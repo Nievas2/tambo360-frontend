@@ -33,12 +33,20 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
               <CardContent className="justify-between h-full">
                 <CardTitle>{estOrg.establecimiento?.nombre}</CardTitle>
                 <CardDescription>{estOrg.rol}</CardDescription>
-                <CardFooter>
-                  <Button variant="darkGreen" size="sm" className=" w-full">
+                <CardFooter className="px-0">
+                  <Button variant="landing">
                     <Link
                       href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/produccion`}
                     >
                       Ingresar
+                    </Link>
+                  </Button>
+
+                  <Button variant="darkGreen">
+                    <Link
+                      href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/invitar`}
+                    >
+                      Invitar
                     </Link>
                   </Button>
                 </CardFooter>

@@ -103,7 +103,7 @@ const VerifyUser = () => {
                       onClick={() => navigate.push('/bienvenida')}
                       data-testid="create-establishment-button"
                     >
-                      Crear establecimiento <ArrowRight className="size-5" />
+                      Continuar <ArrowRight className="size-5" />
                     </Button>
                   </div>
                 )}

@@ -14,12 +14,33 @@ const Invitations = () => {
       </section>
 
       <section className="flex flex-col gap-4">
-        {data?.data.length === 0 ? (
+        <div>
+          <h3 className="text-lg font-bold text-[#095B35]">Establecimientos</h3>
+        </div>
+        {data?.data.invitaciones_establecimiento.length === 0 ? (
           <div>No hay invitaciones</div>
         ) : isLoading ? (
           <div>Cargando invitaciones...</div>
         ) : (
-          data?.data.map((invitation: Invitacion) => (
+          data?.data.invitaciones_establecimiento.map(
+            (invitation: Invitacion) => (
+              <InvitationCard
+                invitation={invitation}
+                key={invitation.idInvitacion}
+              />
+            )
+          )
+        )}
+
+        <div>
+          <h3 className="text-lg font-bold text-[#095B35]">Organizaciones</h3>
+        </div>
+        {data?.data.invitaciones_organizacion.length === 0 ? (
+          <div>No hay invitaciones</div>
+        ) : isLoading ? (
+          <div>Cargando invitaciones...</div>
+        ) : (
+          data?.data.invitaciones_organizacion.map((invitation: Invitacion) => (
             <InvitationCard
               invitation={invitation}
               key={invitation.idInvitacion}

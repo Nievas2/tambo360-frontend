@@ -1,3 +1,3 @@
 import { api } from '@/services/api'
 
-export const getInvitations = () => api.get('/invitaciones')
+export const getInvitations = () => api.get('/perfil/invitaciones')
