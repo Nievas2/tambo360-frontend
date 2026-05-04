@@ -3,7 +3,7 @@ import Organizations from '@/components/shared/dashboard/organization/Organizati
 
 const Page = () => {
   return (
-    <main className="flex flex-col w-full bg-tables">
+    <main className="flex flex-col gap-8 w-full bg-tables">
       <OrganizationNavbar />
       <Organizations />
     </main>

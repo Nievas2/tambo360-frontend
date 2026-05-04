@@ -14,13 +14,14 @@ export type ConceptoCosto =
   | 'cuajo_y_fermentos'
   | 'refrigeracion'
 
-export type RolOrganizacion =
-  | 'cooperativa'
-  | 'duenio'
-  | 'administrador'
-  | 'empleado'
+export type RolOrganizacion = 'ORG_OWNER' | 'ORG_ADMIN' | 'MEMBER'
 
-export type RolEstablecimiento = 'duenio' | 'administrador' | 'empleado'
+export type RolEstablecimiento = 'OWNER' | 'ADMIN' | 'EMPLOYEE'
+
+export enum InvitationRole {
+  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'ADMIN',
+}
 
 export type EstadoInvitacion = 'pendiente' | 'aceptada' | 'rechazada'
 

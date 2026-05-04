@@ -1,6 +1,7 @@
 'use client'
 
 import CreateEstablishment from '@/components/shared/dashboard/establishment/CreateEstablishment'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,8 +20,10 @@ interface OrganizationCardProps {
 const OrganizationCard = ({ organization }: OrganizationCardProps) => {
   const [showCreateEstablishment, setShowCreateEstablishment] = useState(false)
   return (
-    <div className="flex flex-col p-8 w-full">
-      {organization.organizacion?.nombre}
+    <div className="flex flex-col gap-2 w-full">
+      <h2 className="font-bold text-2xl">
+        {organization.organizacion?.nombre}
+      </h2>
 
       <div className="flex flex-wrap gap-4">
         {organization.establecimientoOrganizacionUsuarios &&
@@ -28,13 +31,21 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
           organization.establecimientoOrganizacionUsuarios.map((estOrg) => (
             <Card
               key={estOrg.idEstablecimiento}
-              className="size-52 bg-white rounded-md shadow"
+              className="h-52 w-64 bg-white rounded-md shadow"
             >
-              <CardContent className="justify-between h-full">
+              <CardContent className="flex flex-col gap-5 justify-between h-full">
                 <CardTitle>{estOrg.establecimiento?.nombre}</CardTitle>
-                <CardDescription>{estOrg.rol}</CardDescription>
-                <CardFooter className="px-0">
-                  <Button variant="landing">
+                <CardDescription className="h-full">
+                  <Badge variant="role">
+                    {estOrg.rol == 'ADMIN'
+                      ? 'Administrador'
+                      : estOrg.rol == 'OWNER'
+                        ? 'Propietario'
+                        : 'Empleado'}
+                  </Badge>
+                </CardDescription>
+                <CardFooter className="flex justify-between w-full px-0 pt-0">
+                  <Button variant="landing" asChild>
                     <Link
                       href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/produccion`}
                     >
@@ -42,7 +53,7 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
                     </Link>
                   </Button>
 
-                  <Button variant="darkGreen">
+                  <Button variant="darkGreen" asChild>
                     <Link
                       href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/invitar`}
                     >
@@ -53,7 +64,7 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
               </CardContent>
             </Card>
           ))}
-        <div className="size-52 bg-white rounded-md shadow flex flex-col items-center justify-center gap-2">
+        <div className="h-52 w-64 bg-white rounded-md shadow flex flex-col items-center justify-center gap-2">
           <span>Nuevo establecimiento</span>
 
           <Button
