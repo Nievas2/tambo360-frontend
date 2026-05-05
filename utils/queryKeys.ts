@@ -92,6 +92,7 @@ export const establishmentKeys = {
   all: baseKeys.establishment,
   lists: () => [...baseKeys.establishment, 'list'] as const,
   detail: (id: string) => [...baseKeys.establishment, id] as const,
+  configuration: () => [...baseKeys.establishment, 'configuration'] as const,
 }
 
 export const invitationsKeys = {

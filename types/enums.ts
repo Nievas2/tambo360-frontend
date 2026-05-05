@@ -25,14 +25,20 @@ export enum InvitationRole {
 
 export type EstadoInvitacion = 'pendiente' | 'aceptada' | 'rechazada'
 
-export type TipoOrdenie =
-  | 'balde'
-  | 'linea'
-  | 'espina_de_pescado'
-  | 'rotativo'
-  | 'manual'
-  | 'otro'
+export enum TipoOrdenie {
+  BALDE = 'balde',
+  LINEA = 'linea',
+  ESPINA_DE_PESCADO = 'espina_de_pescado',
+  ROTATIVO = 'rotativo',
+  MANUAL = 'manual',
+  OTRO = 'otro',
+}
 
-export type VentaLeche = 'usina' | 'fabrica_propia' | 'cooperativa' | 'varios'
+export enum VentaLeche {
+  USINA = 'usina',
+  FABRICA_PROPIA = 'fabrica_propia',
+  COOPERATIVA = 'cooperativa',
+  VARIOS = 'varios',
+}
 
 export type NivelAlerta = 'bajo' | 'medio' | 'alto'
