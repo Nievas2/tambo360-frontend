@@ -1,9 +1,4 @@
-import {
-  EstadoInvitacion,
-  RolOrganizacion,
-  InvitationRole,
-} from '@/types/enums'
-import { Organizacion } from '@/types/organization'
+import { EstadoInvitacion, InvitationRole } from '@/types/enums'
 import { User } from '@/types/types'
 import z from 'zod'
 
@@ -12,20 +7,34 @@ export const sendInviteSchema = z.object({
   rol: z.enum(InvitationRole, 'Rol inválido'),
 })
 
-export interface Invitacion {
-  idInvitacion: string
+export const responseInviteSchema = z.object({
+  idInvitacion: z.uuidv4(),
+  accion: z.enum(['aceptada', 'rechazada'], 'Acción inválida'),
+  rol: z.enum(InvitationRole, 'Rol inválido'),
+})
 
-  idOrganizacion: string
-  idInvitador: string
-  idEstablecimiento?: string
+export type ResponseInvite = z.infer<typeof responseInviteSchema>
+
+export interface Invitacion {
+  id: string
 
   correo: string
   codigo: string
   estado: EstadoInvitacion
   expiraEn: Date
-  rol: RolOrganizacion
+  rol: {
+    rol: InvitationRole
+    nombre: string
+  }
+  establecimiento: {
+    id: string
+    nombre: string
+  }
 
-  organizacion?: Organizacion
+  organizacion: {
+    id: string
+    nombre: string
+  }
   usuario?: User
 
   creadoEn: Date

@@ -6,6 +6,7 @@ import { Invitacion } from '@/types/invite'
 
 const Invitations = () => {
   const { data, isLoading } = useInvitations()
+
   return (
     <main className="flex flex-col gap-12 w-full bg-tables p-8">
       <section className="flex flex-col gap-4">
@@ -13,7 +14,7 @@ const Invitations = () => {
         <p>Gestiona tus accesos a nuevos establecimientos lecheros</p>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-8">
         <div>
           <h3 className="text-lg font-bold text-[#095B35]">Establecimientos</h3>
         </div>
@@ -22,16 +23,15 @@ const Invitations = () => {
         ) : isLoading ? (
           <div>Cargando invitaciones...</div>
         ) : (
-          data?.data.invitaciones_establecimiento.map(
-            (invitation: Invitacion) => (
-              <InvitationCard
-                invitation={invitation}
-                key={invitation.idInvitacion}
-              />
-            )
-          )
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data?.data.invitaciones_establecimiento.map(
+              (invitation: Invitacion) => (
+                <InvitationCard invitation={invitation} key={invitation.id} />
+              )
+            )}
+          </div>
         )}
-
+        {/* 
         <div>
           <h3 className="text-lg font-bold text-[#095B35]">Organizaciones</h3>
         </div>
@@ -46,7 +46,7 @@ const Invitations = () => {
               key={invitation.idInvitacion}
             />
           ))
-        )}
+        )} */}
       </section>
     </main>
   )

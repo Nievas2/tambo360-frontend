@@ -1,4 +1,5 @@
 import { api } from '@/services/api'
+import { InvitationRole } from '@/types/enums'
 
 export const getInvitations = () => api.get('/perfil/invitaciones')
 
@@ -12,8 +13,8 @@ export const sendOrganizationInvitation = (data: {
   role: string
 }) => api.post('/organizacion/invitacion', data)
 
-export const acceptInvitation = (invitationId: string) =>
-  api.post(`/perfil/invitaciones/${invitationId}/aceptar`)
-
-export const rejectInvitation = (invitationId: string) =>
-  api.post(`/perfil/invitaciones/${invitationId}/rechazar`)
+export const responseInvitation = (data: {
+  idInvitacion: string
+  accion: 'aceptada' | 'rechazada'
+  rol: InvitationRole
+}) => api.post('/perfil/invitaciones/est', data)

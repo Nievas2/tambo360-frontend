@@ -6,13 +6,16 @@ import { Plus, SendHorizonal } from 'lucide-react'
 import { useState } from 'react'
 import CreateOrganization from '@/components/shared/dashboard/organization/CreateOrganization'
 import CreateEstablishment from '@/components/shared/dashboard/establishment/CreateEstablishment'
+import { useInvitations } from '@/hooks/invitation/useInvitations'
 
 const Page = () => {
-  const [open, setOpen] = useState(false)
-  const [openEstablishment, setOpenEstablishment] = useState(false)
   const [step, setStep] = useState<'welcome' | 'createOrganization'>('welcome')
+  const [openEstablishment, setOpenEstablishment] = useState(false)
   const [organizationId, setOrganizationId] = useState('')
+  const [open, setOpen] = useState(false)
   const navigate = useRouter()
+  const { data: invitations } = useInvitations()
+  console.log(invitations)
 
   return (
     <div
@@ -47,16 +50,24 @@ const Page = () => {
                     Crear Organización
                   </Button>
 
-                  <Button
-                    variant="darkGreen"
-                    className="flex items-center gap-2 w-full h-12 max-w-48"
-                    onClick={() => {
-                      navigate.push('/invitaciones')
-                    }}
-                  >
-                    <SendHorizonal className="" />
-                    Invitaciones
-                  </Button>
+                  {(invitations?.data.invitaciones_establecimiento !=
+                    undefined &&
+                    invitations?.data.invitaciones_establecimiento.length >
+                      0) ||
+                  (invitations?.data.invitaciones_organizacion != undefined &&
+                    invitations?.data.invitaciones_organizacion.length > 0) ? (
+                    <Button
+                      variant="darkGreen"
+                      className="flex items-center gap-2 w-full h-12 max-w-48 relative"
+                      onClick={() => {
+                        navigate.push('/invitaciones')
+                      }}
+                    >
+                      <div className="size-4 absolute top-2 right-2 bg-red-500" />
+                      <SendHorizonal className="" />
+                      Invitaciones
+                    </Button>
+                  ) : null}
                 </section>
               </div>
             ) : (

@@ -30,6 +30,13 @@ export function useLogout() {
       queryClient.invalidateQueries({
         queryKey: [...baseKeys.dashboard, 'graph'],
       })
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.establishment.lists(),
+      })
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.organization.lists(),
+      })
+      queryClient.invalidateQueries({ queryKey: queryKeys.organization.all })
     },
   })
 }
