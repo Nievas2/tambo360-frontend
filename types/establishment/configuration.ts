@@ -5,7 +5,7 @@ export const configurationSchema = z.object({
   cantidadVacas: z.number().int().positive(),
   Razas: z.array(
     z.object({
-      idRaza: z.uuid('El ID de la raza debe ser un UUID válido'),
+      idRaza: z.uuid('El ID de la raza debe ser un UUID válido').optional(),
       nombre: z.string('El nombre de la raza debe ser una cadena de texto'),
     })
   ),

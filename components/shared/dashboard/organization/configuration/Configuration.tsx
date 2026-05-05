@@ -7,7 +7,7 @@ import { TipoOrdenie, VentaLeche } from '@/types/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight, Minus, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useProvince } from '@/hooks/ubication/useProvince'
 import { useLocality } from '@/hooks/ubication/useLocality'
@@ -24,6 +24,8 @@ import { useDebounce } from 'use-debounce'
 import { useUpdateConfiguration } from '@/hooks/establishment/useUpdateConfiguration'
 import { usePathname } from 'next/navigation'
 import { useConfiguration } from '@/hooks/establishment/useConfiguration'
+import { useBreeds } from '@/hooks/establishment/breeds/useBreeds'
+import { Breed } from '@/types/establishment/breed'
 
 const TIPO_ORDENIE_OPTIONS: { value: TipoOrdenie; Label: string }[] = [
   { value: TipoOrdenie.BALDE, Label: 'Balde' },
@@ -34,12 +36,11 @@ const TIPO_ORDENIE_OPTIONS: { value: TipoOrdenie; Label: string }[] = [
   { value: TipoOrdenie.OTRO, Label: 'Otro' },
 ]
 
-const RAZAS_OPTIONS = ['Holando', 'Jersey', 'Cruza', 'Pardo Suizo', 'Guernsey']
-
 const Configuration = () => {
   const [searchProvince, setSearchProvince] = useState('')
   const [idProvince, setIdProvince] = useState<string | undefined>('')
   const [searchLocality, setSearchLocality] = useState('')
+  const [newRazaName, setNewRazaName] = useState('')
   const [selectedProvinceName, setSelectedProvinceName] = useState('')
   const [selectedLocalityName, setSelectedLocalityName] = useState('')
   const [searchP] = useDebounce(searchProvince, 300)
@@ -48,6 +49,7 @@ const Configuration = () => {
 
   const { data: province } = useProvince({ name: searchP })
   const { data: locality } = useLocality({ id: idProvince, search: searchL })
+  const { data: breeds } = useBreeds()
 
   const {
     mutateAsync: sendConfiguration,
@@ -56,33 +58,100 @@ const Configuration = () => {
   } = useUpdateConfiguration()
   const { data: config } = useConfiguration()
 
-  const defaultValues = {
-    cantidadVacas: config?.cantidadVacas ?? 100,
-    Razas: config?.Razas ?? [],
-    cantOrdenie: config?.cantOrdenie ?? 2,
-    tipoOrdenie: config?.tipoOrdenie,
-    promLitros: config?.promLitros,
-    empleados: config?.empleados ?? false,
-    cantEmpleados: config?.cantEmpleados ?? 1,
-    ubicacion: {
-      provincia: config?.ubicacion != null ? config?.ubicacion.provincia : '',
-      localidad: config?.ubicacion != null ? config?.ubicacion.localidad : '',
-    },
-  }
-
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ConfigurationData>({
-    defaultValues,
+    defaultValues: {
+      cantidadVacas: 100,
+      Razas: [],
+      cantOrdenie: 2,
+      tipoOrdenie: undefined,
+      promLitros: undefined,
+      empleados: false,
+      cantEmpleados: 1,
+      ubicacion: {
+        provincia: '',
+        localidad: '',
+      },
+    },
     resolver: zodResolver(configurationSchema),
   })
 
+  useEffect(() => {
+    if (!config?.data || !breeds?.data?.data) return
+
+    const data = config.data
+
+    reset({
+      cantidadVacas: data.cantidad_vacas ?? 100,
+      Razas:
+        data.razas?.map((r: any) => ({
+          id: r.id,
+          nombre: r.nombre,
+        })) ?? [],
+      cantOrdenie: data.ordeñe_por_dia ?? 2,
+      tipoOrdenie: data.tipo_ordeñe,
+      ventaLeche: data.venta_leche,
+      promLitros: data.litros_por_dia,
+      empleados: data.empleados ?? false,
+      cantEmpleados:
+        data.cantidad_empleados !== undefined ? data.cantidad_empleados : 1,
+      ubicacion: {
+        provincia: data.provincia ?? '',
+        localidad: data.localidad ?? '',
+      },
+    })
+
+    setSearchProvince(data.provincia ?? '')
+    setSelectedProvinceName(data.provincia ?? '')
+
+    setSearchLocality(data.localidad ?? '')
+    setSelectedLocalityName(data.localidad ?? '')
+
+    const breedsFromApi = breeds.data.data
+
+    const normalizedRazas =
+      config.data.razas?.map((r: any) => {
+        const match = breedsFromApi.find(
+          (b: Breed) => b.nombre.toLowerCase() === r.nombre.toLowerCase()
+        )
+        if (match) {
+          return {
+            idRaza: match.idRaza,
+            nombre: match.nombre,
+          }
+        }
+
+        return {
+          nombre: r.nombre,
+        }
+      }) ?? []
+
+    reset((prev) => ({
+      ...prev,
+      Razas: normalizedRazas,
+    }))
+  }, [config, reset])
+
+  useEffect(() => {
+    if (!config?.data || !province?.provincias) return
+
+    const match = province.provincias.find(
+      (p) => p.nombre.toLowerCase() === config.data.provincia?.toLowerCase()
+    )
+
+    if (match) {
+      setIdProvince(match.id)
+    }
+  }, [config, province])
+
   const cantidadVacas = watch('cantidadVacas')
-  const cantEmpleados = watch('cantEmpleados')
+  const cantEmpleados = watch('cantEmpleados') ?? 1
   const razasSeleccionadas = watch('Razas')
   const tipoOrdenie = watch('tipoOrdenie')
   const cantOrdenie = watch('cantOrdenie')
@@ -94,10 +163,10 @@ const Configuration = () => {
     sendConfiguration(data)
   }
 
-  // Helper: toggle raza
-  const toggleRaza = (nombre: string) => {
+  const toggleRaza = (nombre: string, id?: string) => {
     const current = razasSeleccionadas ?? []
     const exists = current.find((r) => r.nombre === nombre)
+
     if (exists) {
       setValue(
         'Razas',
@@ -105,7 +174,9 @@ const Configuration = () => {
         { shouldValidate: true }
       )
     } else {
-      setValue('Razas', [...current, { idRaza: crypto.randomUUID(), nombre }], {
+      const newRaza = id ? { idRaza: id, nombre } : { nombre }
+
+      setValue('Razas', [...current, newRaza as any], {
         shouldValidate: true,
       })
     }
@@ -113,7 +184,7 @@ const Configuration = () => {
 
   return (
     <div
-      className={`flex flex-col gap-10 ${pathname.includes('cuestionario') ? 'p-8 w-full' : ''}`}
+      className={`flex flex-col gap-10 w-full ${pathname.includes('cuestionario') ? 'p-8' : ''}`}
     >
       {/* Encabezado */}
       <header className="flex flex-col gap-2">
@@ -177,47 +248,78 @@ const Configuration = () => {
             </p>
           )}
         </section>
-
         {/* 2. Raza Predominante */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
             2. ¿Qué raza predominante manejás?
           </Label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {RAZAS_OPTIONS.map((raza) => {
-              const isSelected = razasSeleccionadas?.some(
-                (r) => r.nombre === raza
-              )
-              return (
+            {/* Razas desde la API */}
+            {breeds?.data.data.map((breed: Breed) => (
+              <button
+                key={breed.idRaza}
+                type="button"
+                onClick={() => toggleRaza(breed.nombre, breed.idRaza)}
+                className={cn(
+                  'p-4 rounded-xl border font-medium transition-all',
+                  razasSeleccionadas?.find((r) => r.nombre === breed.nombre)
+                    ? 'bg-emerald-200 border-emerald-300 text-emerald-900'
+                    : 'bg-white border-slate-200 text-slate-500 shadow-sm'
+                )}
+              >
+                {breed.nombre}
+              </button>
+            ))}
+
+            {razasSeleccionadas
+              ?.filter((r) => !r.idRaza)
+              .map((r) => (
                 <button
-                  key={raza}
+                  key={crypto.randomUUID()}
                   type="button"
-                  onClick={() => toggleRaza(raza)}
-                  className={cn(
-                    'p-4 rounded-xl border-2 text-center font-medium transition-all',
-                    isSelected
-                      ? 'border-lime-500 bg-white shadow-sm text-slate-800'
-                      : 'border-slate-100 bg-slate-50 text-slate-500'
-                  )}
+                  className="p-4 rounded-xl border font-medium transition-all bg-emerald-200 border-emerald-300 text-emerald-900"
+                  onClick={() => toggleRaza(r.nombre)}
                 >
-                  {raza}
+                  {r.nombre}
                 </button>
-              )
-            })}
-            <button
-              type="button"
-              className="p-4 rounded-xl border-2 border-emerald-100 flex items-center justify-center text-emerald-600 hover:bg-emerald-50"
-            >
-              <Plus size={24} />
-            </button>
+              ))}
+
+            <div className="flex gap-2 p-2 rounded-xl border-2 bg-white border-slate-200 text-slate-500 shadow-sm">
+              <input
+                type="text"
+                placeholder="Otra raza..."
+                value={newRazaName}
+                onChange={(e) => setNewRazaName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newRazaName.trim()) {
+                    e.preventDefault()
+                    toggleRaza(newRazaName.trim())
+                    setNewRazaName('')
+                  }
+                }}
+                className="w-full bg-transparent outline-none px-2 text-sm text-emerald-900 placeholder:text-emerald-400"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (newRazaName.trim()) {
+                    toggleRaza(newRazaName.trim())
+                    setNewRazaName('')
+                  }
+                }}
+                className="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+              >
+                <Plus size={18} />
+              </button>
+            </div>
           </div>
+
           {errors.Razas && (
             <p className="text-xs text-red-500">
               {errors.Razas.message ?? 'Seleccioná al menos una raza'}
             </p>
           )}
         </section>
-
         {/* 3. Frecuencia de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
@@ -246,7 +348,6 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.cantOrdenie.message}</p>
           )}
         </section>
-
         {/* 4. Tipo de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
@@ -275,7 +376,6 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.tipoOrdenie.message}</p>
           )}
         </section>
-
         {/* 5. Producción Diaria */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
@@ -302,7 +402,6 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.promLitros.message}</p>
           )}
         </section>
-
         {/* 6. Frecuencia de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
@@ -336,7 +435,6 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.ventaLeche.message}</p>
           )}
         </section>
-
         {/* 7. Empleados y Plan */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
           <div className="flex flex-col gap-4">
@@ -443,7 +541,6 @@ const Configuration = () => {
             )}
           </div>
         </section>
-
         {/* 8. Ubicación */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
@@ -462,25 +559,30 @@ const Configuration = () => {
                   const selectedProv = province?.provincias.find(
                     (p) => p.id === id
                   )
-                  if (selectedProv) {
-                    setIdProvince(id)
-                    setSelectedProvinceName(selectedProv.nombre)
-                    setSearchProvince(selectedProv.nombre)
-                    setValue('ubicacion.provincia', selectedProv.nombre)
-                    setSelectedLocalityName('')
-                    setSearchLocality('')
-                    setValue('ubicacion.localidad', '')
-                  }
+
+                  if (!selectedProv) return
+
+                  setIdProvince(id)
+
+                  setSelectedProvinceName(selectedProv.nombre)
+                  setSearchProvince(selectedProv.nombre)
+
+                  setValue('ubicacion.provincia', selectedProv.nombre)
+
+                  setSelectedLocalityName('')
+                  setSearchLocality('')
+                  setValue('ubicacion.localidad', '')
                 }}
               >
                 <ComboboxInput
                   className={`h-14 w-full ${errors.ubicacion?.provincia ? 'border-[#F87171] bg-[#FCE8E5]/30' : 'bg-[#F9F9F7] border-[#D1CFCA]'}`}
                   placeholder="Seleccione una provincia"
                   value={searchProvince}
-                  onChange={(e: { target: { value: any } }) => {
+                  onChange={(e) => {
                     const val = e.target.value
                     setSearchProvince(val)
-                    if (val !== selectedProvinceName) {
+
+                    if (val === '') {
                       setIdProvince('')
                       setSelectedProvinceName('')
                       setValue('ubicacion.provincia', '')
@@ -528,11 +630,13 @@ const Configuration = () => {
                   const selectedLoc = locality?.municipios.find(
                     (l) => l.id === id
                   )
-                  if (selectedLoc) {
-                    setSelectedLocalityName(selectedLoc.nombre)
-                    setSearchLocality(selectedLoc.nombre)
-                    setValue('ubicacion.localidad', selectedLoc.nombre)
-                  }
+
+                  if (!selectedLoc) return
+
+                  setSelectedLocalityName(selectedLoc.nombre)
+                  setSearchLocality(selectedLoc.nombre)
+
+                  setValue('ubicacion.localidad', selectedLoc.nombre)
                 }}
               >
                 <ComboboxInput
@@ -583,13 +687,11 @@ const Configuration = () => {
             </div>
           </div>
         </section>
-
         {error?.response?.data?.message && (
           <p className="text-xs text-red-500 text-center">
             {error.response.data.message}
           </p>
         )}
-
         {/* Footer de Navegación */}
         <footer className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-slate-100">
           <div className="flex gap-4">

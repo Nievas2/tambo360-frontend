@@ -19,13 +19,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
-    /*  if (
+    if (
       user.organizaciones != undefined &&
       user.organizaciones?.length > 0 &&
       pathname === '/bienvenida'
     ) {
       router.replace('/organizaciones')
-    } */
+    }
   }, [user, loading, router, pathname])
 
   if (loading || !user) {
