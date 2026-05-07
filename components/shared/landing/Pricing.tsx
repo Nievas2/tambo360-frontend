@@ -1,113 +1,203 @@
 'use client'
-import { Check } from 'lucide-react'
-import { motion } from 'motion/react'
+import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
+
+type Period = 'Mensual' | 'Semestral' | 'Anual'
+
+const PERIODS: Period[] = ['Mensual', 'Semestral', 'Anual']
 
 const plans = [
   {
-    name: 'Gratis Core',
+    name: 'Trial',
+    /*  prices: { Mensual: '$0', Semestral: '$0', Anual: '$0' }, */
+    currency: 'ARS',
     features: [
       'Registro de 1 Establecimiento',
-      '1 Usuario Administrador',
-      'Reportes Ejecutivos Base',
-      'Acceso Web Ilimitado',
+      '1 Usuario',
+      '3–5 alertas /mes',
     ],
     cta: 'Empezar Ahora',
     href: '/contacto',
     highlighted: false,
+    badge: null,
   },
   {
-    name: 'Pase 3 Meses',
-    features: [
-      'Multi-lote ilimitado',
-      'Modo Offline Completo',
-      'Alertas de Mermas Inteligentes',
-      'Exportación PDF / Excel',
-    ],
-    cta: 'Prueba 90 Días $0',
-    href: '/contacto',
-    highlighted: true,
-  },
-  {
-    name: 'Plan Profesional',
-    features: [
-      'Todo lo anterior',
-      'Asistente IA de Anomalías',
-      'Soporte VIP Prioritario',
-      'Dashboard Financiero / ROI',
-    ],
-    cta: 'Solicitar Presupuesto',
+    name: 'Individual' /* 
+    prices: { Mensual: '$15.000', Semestral: '$75.000', Anual: '$130.000' }, */,
+    currency: 'ARS',
+    features: ['Registro de 1 Establecimiento', '1 Usuario', '50 alertas /mes'],
+    cta: 'Empezar Ahora',
     href: '/contacto',
     highlighted: false,
+    badge: null,
+  },
+  {
+    name: 'Equipo' /* 
+    prices: { Mensual: '$45.000', Semestral: '$230.000', Anual: '$390.000' }, */,
+    currency: 'ARS',
+    features: [
+      'Registro de 1 Establecimiento',
+      'Dueño + 5 usuarios',
+      '100 alertas /mes',
+    ],
+    cta: 'Prueba 90 días a $0 USD',
+    href: '/contacto',
+    highlighted: true,
+    badge: 'Recomendado',
+  },
+  {
+    name: 'Multi' /* 
+    prices: { Mensual: '$85.000', Semestral: '$430.000', Anual: '$720.000' }, */,
+    currency: 'ARS',
+    features: [
+      'Registro de 5 establecimientos',
+      '20 usuarios',
+      '300 alertas /mes',
+    ],
+    cta: 'Empezar ahora',
+    href: '/contacto',
+    highlighted: false,
+    badge: null,
   },
 ]
 
+type Plan = (typeof plans)[number]
+
+// ─── Card ────────────────────────────────────────────────────────────────────
+
+const PricingCard = ({
+  plan,
+  period,
+  delay,
+}: {
+  plan: Plan
+  period: Period
+  delay: number
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.35, delay }}
+    viewport={{ once: true }}
+    className={`relative rounded-2xl p-6 flex flex-col gap-6 h-full transition-transform hover:-translate-y-1 ${
+      plan.highlighted
+        ? 'bg-linear-to-br from-[#d8f0c6] to-[#c2e8a8] border-2 border-[#80B718]'
+        : 'bg-white border border-[#e0e8dc]'
+    }`}
+  >
+    {plan.badge && (
+      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#80B718] text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-full whitespace-nowrap">
+        {plan.badge}
+      </span>
+    )}
+
+    <div>
+      <p className="text-sm font-bold text-gray-800" /*  mb-3 */>{plan.name}</p>
+      {/* <AnimatePresence mode="wait">
+        <motion.div
+          key={period}
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 6 }}
+          transition={{ duration: 0.18 }}
+          className="text-3xl font-black text-gray-900 leading-none"
+        >
+          {plan.prices[period]}{' '}
+          <span className="text-sm font-medium text-gray-500">
+            {plan.currency}
+          </span>
+        </motion.div>
+      </AnimatePresence> */}
+    </div>
+
+    <ul className="flex flex-col gap-3 flex-1 mb-40">
+      {plan.features.map((f) => (
+        <li key={f} className="flex items-center gap-2.5 text-sm text-gray-600">
+          <span
+            className={`mt-0.5 shrink-0 w-4 h-4 rounded-full flex items-center justify-center`}
+          >
+            <Check className="w-2.5 h-2.5 text-[#80B718]" strokeWidth={3} />
+          </span>
+          {f}
+        </li>
+      ))}
+    </ul>
+
+    <Link
+      href={plan.href}
+      className={`block text-center text-xs font-bold tracking-widest uppercase py-3 px-4 rounded-xl transition-all hover:opacity-90 active:scale-95 ${
+        plan.highlighted
+          ? 'bg-[#80B718] text-white'
+          : 'border-2 border-[#80B718] text-[#80B718] bg-white hover:bg-[#80B718] hover:text-white'
+      }`}
+    >
+      {plan.cta}
+    </Link>
+  </motion.div>
+)
+
 const Pricing = () => {
-  const [annual, setAnnual] = useState(true)
+  const [period, setPeriod] = useState<Period>('Mensual')
+  const [activeIndex, setActiveIndex] = useState(2)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
-    <section id="pricing" className="py-20 px-6 bg-[#f0f4ef]">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#3a7d1e] mb-3">
-            Comienza tu plan gratuito hoy
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Actualiza cuando estés listo. Es gratis.{' '}
-            <span className="text-[#3a7d1e] font-bold">Es Gratis.</span>
-          </p>
-        </motion.div>
+    <section id="pricing" className="py-16 px-6 lg:px-12 bg-[#F7FFE6]">
+      <div className="mx-auto">
+        <h2 className="text-2xl sm:text-4xl font-extrabold tracking-wide text-center mb-10">
+          Gestiona tu plan
+        </h2>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {plans.map((plan, i) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 * i }}
-              className={`rounded-2xl p-8 flex flex-col justify-between gap-8 ${
-                plan.highlighted
-                  ? 'border-2 border-[#3a7d1e] bg-white'
-                  : 'border border-gray-200 bg-white'
-              }`}
-            >
-              <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-6">
-                  {plan.name}
-                </h3>
-                <ul className="space-y-3">
-                  {plan.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-center gap-3 text-gray-700 text-sm"
-                    >
-                      <Check className="text-[#3a7d1e] w-4 h-4 flex-shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Link
-                href={plan.href}
-                className={`block text-center text-sm font-bold tracking-widest uppercase py-3 px-4 rounded-lg transition-opacity hover:opacity-90 ${
-                  plan.highlighted
-                    ? 'bg-[#3a7d1e] text-white'
-                    : 'border-2 border-[#3a7d1e] text-[#3a7d1e] bg-white'
+        <div className="flex justify-center mb-10">
+          <div className="flex items-center bg-white border border-[#d4e4cf] rounded-full p-1 gap-1 shadow-sm">
+            {PERIODS.map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  period === p
+                    ? 'bg-[#80B718] text-white shadow'
+                    : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
-                {plan.cta}
-              </Link>
-            </motion.div>
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop grid */}
+        <div className="hidden lg:grid lg:grid-cols-4 gap-4 items-stretch">
+          {plans.map((plan, i) => (
+            <PricingCard
+              key={plan.name}
+              plan={plan}
+              period={period}
+              delay={i * 0.08}
+            />
           ))}
+        </div>
+
+        {/* Mobile carousel */}
+        <div className="lg:hidden">
+          <div className="overflow-hidden">
+            <div
+              ref={scrollRef}
+              className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-5 px-6 -mx-6"
+              style={{ scrollbarWidth: 'none' }}
+            >
+              {plans.map((plan) => (
+                <div
+                  key={plan.name}
+                  className="snap-center shrink-0 w-[85vw] max-w-[320px]"
+                >
+                  <PricingCard plan={plan} period={period} delay={0} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
