@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useAuth } from '@/context/AuthContext'
 import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, ChevronLeft } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -32,6 +33,15 @@ const VerifyUser = () => {
       className="min-h-screen w-full flex flex-col md:flex-row bg-[#F2F1EC] relative font-inter bg-[url('/vacas_4.webp')] bg-cover bg-center bg-no-repeat"
       data-testid="verify-user-page"
     >
+      <Button
+        variant="secondary"
+        size="icon"
+        className="absolute top-4 left-4 z-10 rounded-full"
+      >
+        <Link href="/">
+          <ChevronLeft className="size-6" />
+        </Link>
+      </Button>
       <div className="absolute inset-0 bg-black/10 z-0" />
       <div className="hidden md:flex md:w-1/3 xl:w-1/2" />
       <div className="w-full md:w-2/3 xl:w-1/2 flex items-center justify-center md:justify-end p-4 md:p-8 z-10">

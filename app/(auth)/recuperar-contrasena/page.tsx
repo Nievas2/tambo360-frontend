@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, ChevronLeft } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -122,6 +122,15 @@ const ResetPassword: React.FC = () => {
       className="min-h-screen w-full flex flex-col md:flex-row bg-[#F2F1EC] relative font-inter bg-cover bg-center bg-no-repeat transition-all duration-700"
       style={{ backgroundImage }}
     >
+      <Button
+        variant="secondary"
+        size="icon"
+        className="absolute top-4 left-4 z-10 rounded-full"
+      >
+        <Link href="/">
+          <ChevronLeft className="size-6" />
+        </Link>
+      </Button>
       <div className="absolute inset-0 bg-black/10 z-0" />
       <div className="hidden md:flex md:w-1/3 xl:w-1/2" />
 
