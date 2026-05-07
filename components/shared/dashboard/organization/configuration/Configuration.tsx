@@ -26,6 +26,7 @@ import { usePathname } from 'next/navigation'
 import { useConfiguration } from '@/hooks/establishment/useConfiguration'
 import { useBreeds } from '@/hooks/establishment/breeds/useBreeds'
 import { Breed } from '@/types/establishment/breed'
+import Link from 'next/link'
 
 const TIPO_ORDENIE_OPTIONS: { value: TipoOrdenie; Label: string }[] = [
   { value: TipoOrdenie.BALDE, Label: 'Balde' },
@@ -182,11 +183,14 @@ const Configuration = () => {
     }
   }
 
+  const omitUrl =
+    pathname.includes('cuestionario') &&
+    pathname.replace('cuestionario', 'configuracion')
+
   return (
     <div
       className={`flex flex-col gap-10 w-full ${pathname.includes('cuestionario') ? 'p-8' : ''}`}
     >
-      {/* Encabezado */}
       <header className="flex flex-col gap-2">
         <div className="flex justify-between items-start">
           <h1 className="text-4xl font-bold text-slate-900">
@@ -692,31 +696,32 @@ const Configuration = () => {
             {error.response.data.message}
           </p>
         )}
+
         {/* Footer de Navegación */}
         <footer className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-slate-100">
+          {pathname.includes('cuestionario') && (
+            <div className="flex gap-4">
+              <button
+                type="button"
+                className="px-12 py-4 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-all"
+              >
+                Atrás
+              </button>
+              <button
+                type="button"
+                className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all"
+              >
+                <Link href={omitUrl.toString()}>Omitir</Link>
+              </button>
+            </div>
+          )}
+
           <div className="flex gap-4">
-            <button
-              type="button"
-              className="px-12 py-4 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-all"
-            >
-              Atrás
-            </button>
-            <button
-              type="button"
-              className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all"
-            >
-              Omitir
-            </button>
-          </div>
-          <div className="flex gap-4">
-            <button
-              type="button"
-              className="px-12 py-4 bg-white border-2 border-lime-600 text-lime-700 font-bold rounded-xl hover:bg-lime-50 transition-all"
-            >
+            <button className="px-12 py-4 bg-white border-2 border-lime-600 text-lime-700 font-bold rounded-xl hover:bg-lime-50 transition-all">
               Aceptar
             </button>
             <button
-              type="submit"
+              type="button"
               disabled={isPending}
               className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
