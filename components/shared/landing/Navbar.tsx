@@ -19,7 +19,7 @@ const Navbar = () => {
     { label: 'Nosotros', href: '/nosotros' },
     { label: 'Equipo', href: '/equipo' },
     { label: 'Testimonios', href: '/testimonios' },
-    //{ label: 'Precios', href: '/precios' },
+    { label: 'Precios', href: '/precios' },
     { label: 'Contacto', href: '/contacto' },
   ]
 

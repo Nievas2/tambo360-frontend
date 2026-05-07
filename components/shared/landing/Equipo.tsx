@@ -3,57 +3,79 @@ const team = [
     name: 'Lorena P. Sartori',
     role: 'Project Manager',
     avatar: '/team/lorenasartori.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
+    description: '"Simplifico el software para que sea útil en tu día a día."',
   },
   {
     name: 'Gabriel Nievas',
     role: 'Frontend Developer',
     avatar: '/team/gabrielnievas.webp',
+    description: '"Traduzco tus datos en gráficos para tomar decisiones."',
   },
-  {
+  /*   {
     name: 'Ornella Meolans',
     role: 'Frontend Developer',
     avatar: '/team/ornellameolans.webp',
-  },
+    description: '"Optimizo la app para que registres tus lotes al instante."',
+  }, */
   {
     name: 'Cintia Duarte',
     role: 'Diseñadora UX/UI',
     avatar: '/team/cintiaduarte.webp',
+    description: '"Simplifico el software para que sea útil en tu día a día."',
   },
   {
+    name: 'Veronica Mariela Stanislavsky',
+    role: 'Diseñadora UX/UI',
+    avatar: '/team/vero.webp',
+    description: '"Simplifico el software para que sea útil en tu día a día."',
+  },
+  /*   {
     name: 'Nicolas Mansilla',
     role: 'Diseñador UX/UI',
     avatar: '/team/nicolasmansilla.webp',
-  },
+    description:
+      '"Ordeno la información para que encuentres todo sin vueltas." ',
+  }, */
   {
     name: 'Facundo Fernandez',
     role: 'Backend Developer',
     avatar: '/team/facundofernandez.webp',
+    description:
+      '"Desarrollo la IA que analiza tus mermas y te envía alertas."',
   },
   {
     name: 'Nicolas De Bella',
     role: 'Backend Developer',
     avatar: '/team/nicolasdebella.webp',
+    className: 'w-24 h-24 rounded-full object-cover object-top grayscale',
+    description: '"Programo el motor que anticipa problemas en tiempo real."',
   },
   {
     name: 'Juan Ignacio Meza Wakahayashi',
     role: 'Backend Developer',
     avatar: '/team/juanmeza.webp',
+    description: '"Aseguro que tu Modo Offline funcione siempre sin señal."',
   },
   {
     name: 'Nicolas Pavon',
     role: 'QA Engineer',
     avatar: '/team/nicolaspavon.webp',
+    description: '"Pruebo cada función para que la app sea siempre confiable."',
   },
-  {
+  /*   {
     name: 'Tatiana Tablada',
     role: 'QA Engineer',
     avatar: '/team/tatianatablada.webp',
+    description: '"Verifico que tus cálculos de costos y mermas sean exactos."',
   },
   {
     name: 'Eliana Proserpio',
     role: 'QA Engineer',
     avatar: '/team/elianaproserpio.webp',
-  },
+    description:
+      '"Valido que las alertas funcionen como vos necesitás en el campo."',
+  }, */
 ]
 
 const Equipo = () => {
@@ -62,12 +84,12 @@ const Equipo = () => {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-[#3a7d1e] uppercase tracking-wide mb-4">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-wide mb-4">
             Nuestro equipo interdisciplinario
           </h2>
           <p className="text-gray-500 text-base">
-            Ofrecemos Ingeniería de software con visión de negocio aplicada al
-            agro.
+            Ofrecemos Software de Gestión Agrícola (SaaS) con visión de negocio.
+            Un equipo online desarrollando tecnología para el campo.
           </p>
         </div>
 
@@ -81,11 +103,14 @@ const Equipo = () => {
               <img
                 src={member.avatar}
                 alt={member.name}
-                className="w-24 h-24 rounded-full object-cover grayscale"
+                className={`${member.className || 'w-24 h-24 rounded-full object-cover object-center grayscale'}`}
               />
-              <div>
+              <div className="flex flex-col items-center gap-1">
                 <p className="font-bold text-gray-900 text-sm">{member.name}</p>
-                <p className="text-gray-500 text-sm">{member.role}</p>
+                <p className="text-green-main font-bold text-sm">
+                  {member.role}
+                </p>
+                <p className="text-body-text text-xs">{member.description}</p>
               </div>
             </div>
           ))}
