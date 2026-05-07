@@ -10,25 +10,26 @@ const team = [
     name: 'Gabriel Nievas',
     role: 'Frontend Developer',
     avatar: '/team/gabrielnievas.webp',
-    description: '"Traduzco tus datos en gráficos para tomar decisiones."',
+    description: '"Optimizo la app para que registres tus lotes al instante."',
   },
   /*   {
     name: 'Ornella Meolans',
     role: 'Frontend Developer',
     avatar: '/team/ornellameolans.webp',
-    description: '"Optimizo la app para que registres tus lotes al instante."',
+    description: '"Traduzco tus datos en gráficos para tomar decisiones."',
   }, */
   {
     name: 'Cintia Duarte',
     role: 'Diseñadora UX/UI',
     avatar: '/team/cintiaduarte.webp',
-    description: '"Simplifico el software para que sea útil en tu día a día."',
+    description: '"Diseño pantallas para que cargues tus datos rapidamente.""',
   },
   {
     name: 'Veronica Mariela Stanislavsky',
     role: 'Diseñadora UX/UI',
     avatar: '/team/vero.webp',
-    description: '"Simplifico el software para que sea útil en tu día a día."',
+    description:
+      '"Ordeno la información para que encuentres todo sin vueltas."',
   },
   /*   {
     name: 'Nicolas Mansilla',
