@@ -27,6 +27,8 @@ import { useConfiguration } from '@/hooks/establishment/useConfiguration'
 import { useBreeds } from '@/hooks/establishment/breeds/useBreeds'
 import { Breed } from '@/types/establishment/breed'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const TIPO_ORDENIE_OPTIONS: { value: TipoOrdenie; Label: string }[] = [
   { value: TipoOrdenie.BALDE, Label: 'Balde' },
@@ -42,11 +44,12 @@ const Configuration = () => {
   const [idProvince, setIdProvince] = useState<string | undefined>('')
   const [searchLocality, setSearchLocality] = useState('')
   const [newRazaName, setNewRazaName] = useState('')
-  const [selectedProvinceName, setSelectedProvinceName] = useState('')
   const [selectedLocalityName, setSelectedLocalityName] = useState('')
+  const [confirmContinue, setConfirmContinue] = useState(false)
   const [searchP] = useDebounce(searchProvince, 300)
   const [searchL] = useDebounce(searchLocality, 300)
   const pathname = usePathname()
+  const router = useRouter()
 
   const { data: province } = useProvince({ name: searchP })
   const { data: locality } = useLocality({ id: idProvince, search: searchL })
@@ -109,7 +112,6 @@ const Configuration = () => {
     })
 
     setSearchProvince(data.provincia ?? '')
-    setSelectedProvinceName(data.provincia ?? '')
 
     setSearchLocality(data.localidad ?? '')
     setSelectedLocalityName(data.localidad ?? '')
@@ -159,9 +161,28 @@ const Configuration = () => {
   const ventaLeche = watch('ventaLeche')
   const empleados = watch('empleados')
 
+  const allValues = watch()
+
   const onSubmit = (data: ConfigurationData) => {
-    console.log(data)
-    sendConfiguration(data)
+    sendConfiguration(data, {
+      onSuccess: () => {
+        console.log('success')
+        setConfirmContinue(true)
+        if (pathname.includes('/cuestionario')) {
+          toast.success('Configuración guardada correctamente', {
+            description:
+              'Ya podés invitar a tu equipo o empezar a usar tu establecimiento',
+            position: 'top-center',
+            duration: 5000,
+          })
+        } else {
+          toast.success('Configuración guardada correctamente', {
+            position: 'top-center',
+            duration: 5000,
+          })
+        }
+      },
+    })
   }
 
   const toggleRaza = (nombre: string, id?: string) => {
@@ -183,10 +204,6 @@ const Configuration = () => {
     }
   }
 
-  const omitUrl =
-    pathname.includes('cuestionario') &&
-    pathname.replace('cuestionario', 'configuracion')
-
   return (
     <div
       className={`flex flex-col gap-10 w-full ${pathname.includes('cuestionario') ? 'p-8' : ''}`}
@@ -196,9 +213,16 @@ const Configuration = () => {
           <h1 className="text-4xl font-bold text-slate-900">
             Configura tu Perfil
           </h1>
-          <span className="bg-emerald-600 text-white text-[10px] px-3 py-1 rounded-full">
+          <Link
+            href={
+              pathname.includes('cuestionario')
+                ? pathname.replace('cuestionario', 'invitar')
+                : pathname.replace('configuracion', 'invitar')
+            }
+            className="bg-[#29845A] text-white text-[10px] px-3 py-1 rounded-full"
+          >
             Invitación
-          </span>
+          </Link>
         </div>
         <p className="text-slate-500 text-lg">
           Ayudanos a personalizar la experiencia de Tambo360 con los datos
@@ -220,7 +244,7 @@ const Configuration = () => {
                   shouldValidate: true,
                 })
               }
-              className="h-full px-4 bg-slate-300 text-slate-600 rounded-lg hover:bg-slate-400 transition-colors"
+              className="h-full px-4 bg-[#669213] text-white rounded-lg hover:bg-[#669213]/80 transition-colors"
             >
               <Minus size={20} />
             </button>
@@ -231,7 +255,7 @@ const Configuration = () => {
                 'h-full border-2 rounded-lg text-center font-bold text-xl outline-none transition-colors',
                 errors.cantidadVacas
                   ? 'border-red-400 focus:border-red-500'
-                  : 'border-lime-200 focus:border-lime-500'
+                  : 'border-lime-200 focus:border-[#669213]'
               )}
             />
             <button
@@ -241,7 +265,7 @@ const Configuration = () => {
                   shouldValidate: true,
                 })
               }
-              className="h-full px-4 bg-lime-600 text-white rounded-lg hover:bg-lime-700 transition-colors"
+              className="h-full px-4 bg-[#669213] text-white rounded-lg hover:bg-[#669213]/80 transition-colors"
             >
               <Plus size={20} />
             </button>
@@ -267,7 +291,7 @@ const Configuration = () => {
                 className={cn(
                   'p-4 rounded-xl border font-medium transition-all',
                   razasSeleccionadas?.find((r) => r.nombre === breed.nombre)
-                    ? 'bg-emerald-200 border-emerald-300 text-emerald-900'
+                    ? 'bg-emerald-200 border-emerald-300 text-[#29845A]'
                     : 'bg-white border-slate-200 text-slate-500 shadow-sm'
                 )}
               >
@@ -281,7 +305,7 @@ const Configuration = () => {
                 <button
                   key={crypto.randomUUID()}
                   type="button"
-                  className="p-4 rounded-xl border font-medium transition-all bg-emerald-200 border-emerald-300 text-emerald-900"
+                  className="p-4 rounded-xl border font-medium transition-all bg-emerald-200 border-emerald-300 text-[#29845A] capitalize"
                   onClick={() => toggleRaza(r.nombre)}
                 >
                   {r.nombre}
@@ -301,7 +325,7 @@ const Configuration = () => {
                     setNewRazaName('')
                   }
                 }}
-                className="w-full bg-transparent outline-none px-2 text-sm text-emerald-900 placeholder:text-emerald-400"
+                className="w-full bg-transparent outline-none px-2 text-sm text-[#29845A] placeholder:text-emerald-400"
               />
               <button
                 type="button"
@@ -311,7 +335,7 @@ const Configuration = () => {
                     setNewRazaName('')
                   }
                 }}
-                className="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                className="p-2 bg-[#29845A] text-white rounded-lg hover:bg-emerald-700"
               >
                 <Plus size={18} />
               </button>
@@ -342,7 +366,7 @@ const Configuration = () => {
                   onChange={() =>
                     setValue('cantOrdenie', n, { shouldValidate: true })
                   }
-                  className="w-4 h-4 accent-emerald-600"
+                  className="w-4 h-4 accent-[#29845A]"
                 />
                 {n === 1 ? '1 vez' : `${n} veces`}
               </Label>
@@ -368,7 +392,7 @@ const Configuration = () => {
                 className={cn(
                   'p-4 rounded-xl border font-medium transition-all',
                   tipoOrdenie === value
-                    ? 'bg-emerald-200 border-emerald-300 text-emerald-900'
+                    ? 'bg-emerald-200 border-emerald-300 text-[#29845A]'
                     : 'bg-white border-slate-200 text-slate-500 shadow-sm'
                 )}
               >
@@ -395,7 +419,7 @@ const Configuration = () => {
                 'w-full p-4 border-2 rounded-xl outline-none bg-slate-50/50 transition-colors',
                 errors.promLitros
                   ? 'border-red-400 focus:border-red-500'
-                  : 'border-slate-200 focus:border-emerald-500'
+                  : 'border-slate-200 focus:border-[#29845A]'
               )}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">
@@ -429,9 +453,9 @@ const Configuration = () => {
                   onChange={() =>
                     setValue('ventaLeche', n, { shouldValidate: true })
                   }
-                  className="w-4 h-4 accent-emerald-600"
+                  className="w-4 h-4 accent-[#29845A] capitalize"
                 />
-                {n}
+                {n == 'fabrica_propia' ? 'Fábrica propia' : n}
               </Label>
             ))}
           </div>
@@ -454,7 +478,7 @@ const Configuration = () => {
                 className={cn(
                   'p-4 rounded-xl border flex items-center gap-3 text-sm font-medium transition-all',
                   !empleados
-                    ? 'border-2 border-emerald-500 bg-emerald-100'
+                    ? 'border-2 border-[#29845A] bg-emerald-100'
                     : 'border-slate-200'
                 )}
               >
@@ -462,7 +486,7 @@ const Configuration = () => {
                   className={cn(
                     'w-4 h-4 rounded-full border-2',
                     !empleados
-                      ? 'bg-emerald-600 border-emerald-600'
+                      ? 'bg-[#29845A] border-[#669213]'
                       : 'border-slate-300'
                   )}
                 />
@@ -476,7 +500,7 @@ const Configuration = () => {
                 className={cn(
                   'p-4 rounded-xl border-2 flex items-center justify-between text-sm font-medium transition-all',
                   empleados
-                    ? 'border-emerald-500 bg-emerald-100'
+                    ? 'border-[#29845A] bg-emerald-100'
                     : 'border-slate-200'
                 )}
               >
@@ -484,7 +508,7 @@ const Configuration = () => {
                 <div
                   className={cn(
                     'w-4 h-4 rounded-full',
-                    empleados ? 'bg-emerald-600' : 'bg-slate-300'
+                    empleados ? 'bg-[#29845A]' : 'bg-slate-300'
                   )}
                 />
               </button>
@@ -500,7 +524,7 @@ const Configuration = () => {
               Plan Sugerido
             </p>
             <div className="flex justify-between items-center bg-emerald-200/60 p-4 rounded-xl border border-emerald-300 ">
-              <span className="text-sm font-bold text-emerald-900">
+              <span className="text-sm font-bold text-[#29845A]">
                 {empleados ? 'Plan Equipo/Multi' : 'Plan Individual'}
               </span>
               {empleados && (
@@ -568,7 +592,6 @@ const Configuration = () => {
 
                   setIdProvince(id)
 
-                  setSelectedProvinceName(selectedProv.nombre)
                   setSearchProvince(selectedProv.nombre)
 
                   setValue('ubicacion.provincia', selectedProv.nombre)
@@ -588,7 +611,6 @@ const Configuration = () => {
 
                     if (val === '') {
                       setIdProvince('')
-                      setSelectedProvinceName('')
                       setValue('ubicacion.provincia', '')
                     }
                   }}
@@ -698,36 +720,50 @@ const Configuration = () => {
         )}
 
         {/* Footer de Navegación */}
-        <footer className="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-slate-100">
+        <footer className="flex items-center justify-between gap-4 pt-8 border-t border-slate-100">
           {pathname.includes('cuestionario') && (
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full">
               <button
                 type="button"
-                className="px-12 py-4 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-all"
+                className="px-12 py-4 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-all cursor-pointer"
+                disabled={isPending}
               >
-                Atrás
+                <Link href="/organizaciones">Atrás</Link>
               </button>
               <button
                 type="button"
-                className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all"
+                className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all cursor-pointer"
+                disabled={isPending}
               >
-                <Link href={omitUrl.toString()}>Omitir</Link>
+                <Link href={pathname.replace('cuestionario', 'invitar')}>
+                  Omitir
+                </Link>
               </button>
             </div>
           )}
 
-          <div className="flex gap-4">
-            <button className="px-12 py-4 bg-white border-2 border-lime-600 text-lime-700 font-bold rounded-xl hover:bg-lime-50 transition-all">
-              Aceptar
-            </button>
+          <div className="flex gap-4 w-full justify-end">
             <button
-              type="button"
+              type="submit"
+              className="px-12 py-4 bg-white border-2 border-lime-600 text-lime-700 font-bold rounded-xl hover:bg-lime-50 transition-all cursor-pointer"
               disabled={isPending}
-              className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isPending ? 'Guardando...' : 'Siguiente'}{' '}
-              <ChevronRight size={20} />
+              {isPending ? 'Guardando...' : 'Guardar'}{' '}
             </button>
+
+            {pathname.includes('cuestionario') && (
+              <button
+                type="button"
+                disabled={isPending || !confirmContinue}
+                onClick={() => {
+                  router.push(pathname.replace('cuestionario', 'invitar'))
+                }}
+                className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Siguiente
+                <ChevronRight size={20} />
+              </button>
+            )}
           </div>
         </footer>
       </form>

@@ -1,5 +1,5 @@
 'use client'
-import { User, ShieldCheck, Send } from 'lucide-react'
+import { User, ShieldCheck, Send, ChevronRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -8,9 +8,13 @@ import { useSendInvite } from '@/hooks/invitation/useSendInvite'
 import { sendInviteSchema } from '@/types/invite'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InvitationRole } from '@/types/enums'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 
 const SendInvite = () => {
   const { mutate, isPending, error } = useSendInvite()
+  const pathname = usePathname()
+  const router = useRouter()
   const {
     register,
     formState: { errors },
@@ -198,36 +202,41 @@ const SendInvite = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 mt-4">
-        <div className="flex gap-3">
-          <Button
-            className="px-10 py-3 bg-slate-200 text-slate-600 font-bold rounded-xl hover:bg-slate-300 transition-colors"
-            disabled={isPending}
-          >
-            Cancelar
-          </Button>
-          <Button
-            className="px-10 py-3 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-colors"
-            disabled={isPending}
-          >
-            Omitir
-          </Button>
-        </div>
-        <div className="flex gap-3">
-          <Button
-            className="px-10 py-3 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-colors"
+      <footer className="flex items-center justify-between gap-4 pt-8 border-t border-slate-100">
+        <div className="flex gap-4 w-full">
+          <button
+            type="button"
+            className="px-12 py-4 bg-emerald-200 text-emerald-800 font-bold rounded-xl hover:bg-emerald-300 transition-all cursor-pointer"
+            onClick={() => router.back()}
             disabled={isPending}
           >
             Atrás
-          </Button>
-          <Button
-            className="px-10 py-3 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 transition-colors"
+          </button>
+          <button
+            type="button"
+            className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all cursor-pointer"
             disabled={isPending}
           >
-            Siguiente
-          </Button>
+            <Link href={pathname.replace('invitar', 'produccion')}>Omitir</Link>
+          </button>
         </div>
-      </div>
+
+        <div className="flex gap-4 w-full justify-end">
+          <button
+            type="button"
+            disabled={isPending}
+            className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+          >
+            <Link
+              href={pathname.replace('invitar', 'produccion')}
+              className="flex gap-2"
+            >
+              Siguiente
+              <ChevronRight size={20} />
+            </Link>
+          </button>
+        </div>
+      </footer>
     </div>
   )
 }
