@@ -13,21 +13,31 @@ import { EstablishmentSchema } from '@/types/establishment'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowRight } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface CreateEstablishmentProps {
   open: boolean
   onClose: () => void
   onOpen?: () => void
+  firstTime?: (id: string) => void
   organizationId: string
 }
 
 const CreateEstablishment = ({
   open,
   onClose,
+  firstTime,
   organizationId,
 }: CreateEstablishmentProps) => {
-  const { mutate, isPending, error, isSuccess } = useCreateEstablishment()
+  const [url, setUrl] = useState('')
+  const {
+    mutate,
+    isPending,
+    error,
+    isSuccess,
+    reset: resetForm,
+  } = useCreateEstablishment()
   const navigate = useRouter()
   const pathname = usePathname()
 
@@ -44,7 +54,19 @@ const CreateEstablishment = ({
   })
 
   const onSubmit = handleSubmit((data) => {
-    mutate({ nombre: data.nombre, organizacionId: organizationId })
+    mutate(
+      { nombre: data.nombre, organizacionId: organizationId },
+      {
+        onSuccess: (data) => {
+          if (firstTime) {
+            firstTime(data.data.idEstablecimiento)
+            setUrl(
+              `/organizaciones/${organizationId}/${data.data.idEstablecimiento}/cuestionario`
+            )
+          }
+        },
+      }
+    )
   })
 
   return (
@@ -62,26 +84,43 @@ const CreateEstablishment = ({
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center gap-6">
             <img src="/successIcon.svg" alt="success" className="w-20 h-20" />
-            <h2 className="text-4xl font-bold tracking-tight text-[#0B1001]">
+            <h2 className="text-4xl font-bold tracking-tight text-[#0B1001] text-center">
               Establecimiento creado correctamente
             </h2>
-            <p className="text-sm text-body-text text-center">
-              El establecimiento ha sido creado exitosamente.
-            </p>
-            <Button
-              variant="darkGreen"
-              onClick={() => {
-                navigate.push('/organizaciones')
-              }}
-            >
-              {pathname == '/organizaciones' ? (
-                'Cerrar'
-              ) : (
-                <>
-                  Ir al panel <ArrowRight className="size-5" />
-                </>
+
+            <div className="flex items-center gap-4">
+              <Button
+                variant="landing"
+                onClick={() => {
+                  navigate.push('/organizaciones')
+                  reset()
+                  onClose()
+                  resetForm()
+                }}
+              >
+                {pathname == '/organizaciones' ? (
+                  'Cerrar'
+                ) : (
+                  <>
+                    Ir al panel <ArrowRight className="size-5" />
+                  </>
+                )}
+              </Button>
+
+              {url && (
+                <Button
+                  variant="darkGreen"
+                  onClick={() => {
+                    navigate.push(url)
+                    reset()
+                    onClose()
+                    resetForm()
+                  }}
+                >
+                  Ir al cuestionario <ArrowRight className="size-5" />
+                </Button>
               )}
-            </Button>
+            </div>
           </div>
         ) : (
           <form className="space-y-8 my-8" onSubmit={onSubmit}>

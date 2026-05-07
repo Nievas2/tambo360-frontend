@@ -19,6 +19,7 @@ interface OrganizationCardProps {
 }
 const OrganizationCard = ({ organization }: OrganizationCardProps) => {
   const [showCreateEstablishment, setShowCreateEstablishment] = useState(false)
+  const [firstTime, setFirstTime] = useState('')
   return (
     <div className="flex flex-col gap-2 w-full">
       <h2 className="font-bold text-2xl">
@@ -47,7 +48,11 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
                 <CardFooter className="flex justify-between w-full px-0 pt-0">
                   <Button variant="landing" asChild>
                     <Link
-                      href={`/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/produccion`}
+                      href={
+                        firstTime == estOrg.idEstablecimiento
+                          ? `/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/cuestionario`
+                          : `/organizaciones/${organization.idOrganizacion}/${estOrg.idEstablecimiento}/produccion`
+                      }
                     >
                       Ingresar
                     </Link>
@@ -80,6 +85,7 @@ const OrganizationCard = ({ organization }: OrganizationCardProps) => {
         open={showCreateEstablishment}
         onClose={() => setShowCreateEstablishment(false)}
         organizationId={organization.idOrganizacion}
+        firstTime={(id: string) => setFirstTime(id)}
       />
     </div>
   )
