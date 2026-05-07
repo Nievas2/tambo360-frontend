@@ -24,6 +24,12 @@ const team = [
     avatar: '/team/cintiaduarte.webp',
     description: '"Simplifico el software para que sea útil en tu día a día."',
   },
+  {
+    name: 'Veronica Mariela Stanislavsky',
+    role: 'Diseñadora UX/UI',
+    avatar: '/team/vero.webp',
+    description: '"Simplifico el software para que sea útil en tu día a día."',
+  },
   /*   {
     name: 'Nicolas Mansilla',
     role: 'Diseñador UX/UI',
