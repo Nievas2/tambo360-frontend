@@ -1,8 +1,8 @@
 'use client'
-import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
+import { Check } from 'lucide-react'
+import { motion } from 'motion/react'
 import Link from 'next/link'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 type Period = 'Mensual' | 'Semestral' | 'Anual'
 
@@ -10,51 +10,69 @@ const PERIODS: Period[] = ['Mensual', 'Semestral', 'Anual']
 
 const plans = [
   {
-    name: 'Trial',
+    name: 'Prueba de Ordeñe',
+    description: 'Ideal para dar el primer paso hacia la gestión digital.',
     /*  prices: { Mensual: '$0', Semestral: '$0', Anual: '$0' }, */
     currency: 'ARS',
     features: [
-      'Registro de 1 Establecimiento',
-      '1 Usuario',
-      '3–5 alertas /mes',
+      'Uso en celular y PC (Gestión en el campo y en la oficina).',
+      'Registro de producción, mermas y costos sin límites.',
+      'Tablero de Control: Precio de la leche actualizado y planilla lista para SIGLeA.',
+      'Modo Campo (Offline): Registrá datos sin señal, se sincroniza cuando vuelvas a tener internet.',
+      'Alertas IA: 5 alertas mensuales para detectar desvíos básicos.',
+      'Limitación: 1 Usuario / 1 Tambo.',
     ],
-    cta: 'Empezar Ahora',
+    cta: 'Prueba 30 días a $0 USD',
     href: '/contacto',
     highlighted: false,
     badge: null,
   },
   {
-    name: 'Individual' /* 
+    name: 'Monotambo' /* 
     prices: { Mensual: '$15.000', Semestral: '$75.000', Anual: '$130.000' }, */,
-    currency: 'ARS',
-    features: ['Registro de 1 Establecimiento', '1 Usuario', '50 alertas /mes'],
-    cta: 'Empezar Ahora',
-    href: '/contacto',
-    highlighted: false,
-    badge: null,
-  },
-  {
-    name: 'Equipo' /* 
-    prices: { Mensual: '$45.000', Semestral: '$230.000', Anual: '$390.000' }, */,
+    description: 'Para el productor que toma las riendas de su eficiencia.',
     currency: 'ARS',
     features: [
-      'Registro de 1 Establecimiento',
-      'Dueño + 5 usuarios',
-      '100 alertas /mes',
+      'Todo lo del Plan Prueba + Análisis Predictivo',
+      '50 alertas con IA por mes (detección temprana de anomalías en producción).',
+      'Gestión de Rentabilidad: Cálculo automático del costo por litro de leche.',
+      'Modo Invernación: Si dejás de usarlo, tus datos quedan protegidos y disponibles.',
+      'Limitación: 1 Usuario / 1 Tambo.',
     ],
-    cta: 'Prueba 90 días a $0 USD',
+    cta: 'Empezar Ahora',
+    href: '/contacto',
+    highlighted: false,
+    badge: null,
+  },
+  {
+    name: 'Establecimiento' /* 
+    prices: { Mensual: '$45.000', Semestral: '$230.000', Anual: '$390.000' }, */,
+    description:
+      'Para equipos de trabajo que necesitan profesionalizar cada área.',
+    currency: 'ARS',
+    features: [
+      'Todo lo de Monotambo + Gestión Colaborativa.',
+      'Hasta 5 usuarios con roles definidos (Dueño, Veterinario, Tambero).',
+      'Seguridad: Historial de cambios para ver quién registró cada dato.',
+      'IA Avanzada: 100 alertas mensuales para un control riguroso de mermas y desvíos.',
+      'Limitación: 1 Tambo.',
+    ],
+    cta: 'Empezar ahora',
     href: '/contacto',
     highlighted: true,
     badge: 'Recomendado',
   },
   {
-    name: 'Multi' /* 
+    name: 'Multitambo' /* 
     prices: { Mensual: '$85.000', Semestral: '$430.000', Anual: '$720.000' }, */,
+    description: 'Para administradores y grandes grupos productivos.',
     currency: 'ARS',
     features: [
-      'Registro de 5 establecimientos',
-      '20 usuarios',
-      '300 alertas /mes',
+      'Todo lo de Establecimiento + Visión Global',
+      'Gestión de hasta 5 tambos desde una sola cuenta.',
+      'Gran Escala: Hasta 20 usuarios para cubrir toda la estructura administrativa.',
+      'Potencia Máxima: 300 alertas con IA (ideal para detectar patrones entre distintos establecimientos).',
+      'Limitación: 1 Tambo.',
     ],
     cta: 'Empezar ahora',
     href: '/contacto',
@@ -81,7 +99,7 @@ const PricingCard = ({
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.35, delay }}
     viewport={{ once: true }}
-    className={`relative rounded-2xl p-6 flex flex-col gap-6 h-full transition-transform hover:-translate-y-1 ${
+    className={`relative rounded-2xl p-4 flex flex-col gap-6 h-full transition-transform hover:-translate-y-1 ${
       plan.highlighted
         ? 'bg-linear-to-br from-[#d8f0c6] to-[#c2e8a8] border-2 border-[#80B718]'
         : 'bg-white border border-[#e0e8dc]'
@@ -94,7 +112,10 @@ const PricingCard = ({
     )}
 
     <div>
-      <p className="text-sm font-bold text-gray-800" /*  mb-3 */>{plan.name}</p>
+      <h5 className="text-sm font-bold text-gray-800" /*  mb-3 */>
+        {plan.name}
+      </h5>
+      <p className="text-sm text-gray-500">{plan.description}</p>
       {/* <AnimatePresence mode="wait">
         <motion.div
           key={period}
@@ -112,7 +133,7 @@ const PricingCard = ({
       </AnimatePresence> */}
     </div>
 
-    <ul className="flex flex-col gap-3 flex-1 mb-40">
+    <ul className="flex flex-col gap-3 flex-1 mb-20">
       {plan.features.map((f) => (
         <li key={f} className="flex items-center gap-2.5 text-sm text-gray-600">
           <span

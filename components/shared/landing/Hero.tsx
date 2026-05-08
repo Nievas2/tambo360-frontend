@@ -23,8 +23,8 @@ const Hero = () => {
           </p>
 
           <div className="flex gap-4 justify-center md:justify-start w-full">
-            <Button variant="landing" className="h-12 w-44">
-              Ver Demo
+            <Button variant="landing" className="h-12 w-44" asChild>
+              <Link href="/iniciar-sesion">Ver Demo</Link>
             </Button>
 
             <Button variant="landingSecondary" className="h-12 w-44" asChild>
