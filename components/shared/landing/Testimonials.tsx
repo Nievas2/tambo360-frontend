@@ -63,7 +63,9 @@ const Testimonials = () => {
               className="border border-gray-200 rounded-2xl p-6 flex flex-col justify-between gap-6"
             >
               <p className="text-gray-500 text-sm leading-relaxed italic">
-                "{t.quote}"
+                {'"'}
+                {t.quote}
+                {'"'}
               </p>
               <div className="flex items-center gap-3">
                 <img

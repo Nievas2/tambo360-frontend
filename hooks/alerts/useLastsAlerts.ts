@@ -3,13 +3,13 @@ import { queryKeys } from '@/utils/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 
 interface LastsAlertsProps {
-  id: string
+  id?: string
 }
 export function useLastsAlerts({ id }: LastsAlertsProps) {
   return useQuery({
     queryKey: queryKeys.alert.lasts(),
     queryFn: async () => {
-      const { data } = await getLastsAlerts(id)
+      const { data } = await getLastsAlerts(id!)
       return data
     },
     enabled: !!id,

@@ -11,10 +11,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Batch } from '@/types/batch'
+import { Lote } from '@/types/batch'
 
 interface DeleteBatchProps {
-  batch: Batch
+  batch: Lote
   onSuccess?: () => void
 }
 
@@ -41,8 +41,8 @@ const DeleteBatch = ({ batch, onSuccess }: DeleteBatchProps) => {
         }}
         disabled={
           isPending ||
-          batch.costosDirectos.length > 0 ||
-          batch.mermas.length > 0 ||
+          batch.costosDirectos != undefined ||
+          batch.mermas != undefined ||
           batch.estado
         }
       >

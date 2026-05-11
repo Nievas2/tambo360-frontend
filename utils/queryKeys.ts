@@ -11,6 +11,10 @@ export const baseKeys = {
   decrease: ['decrease'] as const,
   dashboard: ['dashboard'] as const,
   alert: ['alert'] as const,
+  organization: ['organization'] as const,
+  establishment: ['establishment'] as const,
+  invitation: ['invitation'] as const,
+  breed: ['breed'] as const,
 } as const
 
 export const authKeys = {
@@ -79,6 +83,30 @@ export const dashboardKeys = {
   current: () => [...baseKeys.dashboard, 'current'] as const,
 }
 
+export const organizationKeys = {
+  all: baseKeys.organization,
+  lists: () => [...baseKeys.organization, 'list'] as const,
+  detail: (id: string) => [...baseKeys.organization, id] as const,
+}
+
+export const establishmentKeys = {
+  all: baseKeys.establishment,
+  lists: () => [...baseKeys.establishment, 'list'] as const,
+  detail: (id: string) => [...baseKeys.establishment, id] as const,
+  configuration: () => [...baseKeys.establishment, 'configuration'] as const,
+}
+
+export const invitationsKeys = {
+  all: baseKeys.invitation,
+  lists: () => [...baseKeys.invitation, 'list'] as const,
+  detail: (id: string) => [...baseKeys.invitation, id] as const,
+}
+
+export const breedKeys = {
+  all: baseKeys.breed,
+  lists: () => [...baseKeys.breed, 'list'] as const,
+}
+
 export const queryKeys = {
   auth: authKeys,
   batch: batchKeys,
@@ -89,4 +117,8 @@ export const queryKeys = {
   decrease: decreaseKeys,
   alert: alertKeys,
   dashboard: dashboardKeys,
+  organization: organizationKeys,
+  establishment: establishmentKeys,
+  invitation: invitationsKeys,
+  breed: breedKeys,
 } as const

@@ -38,7 +38,7 @@ const features = [
     icon: BotIcon,
     title: 'Alertas con Inteligencia Artificial',
     description:
-      'El asistente inteligente supervisa las tu produccion y te envía alertas inmediatas ante cualquier desvío.',
+      'El asistente inteligente supervisa tu producción y te envía alertas inmediatas ante cualquier desvío.',
   },
 ]
 

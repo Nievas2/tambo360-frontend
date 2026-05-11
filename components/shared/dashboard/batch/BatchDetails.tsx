@@ -168,23 +168,31 @@ export default function BatchDetails({ id }: BatchDetailsProps) {
           <StatCard
             icon={<Factory />}
             title="Costo de producción"
-            value={batch!.data?.costosDirectos
-              .reduce((total, costo) => total + Number(costo.monto), 0)
-              .toString()}
+            value={
+              batch!.data?.costosDirectos
+                ? batch!.data.costosDirectos
+                    .reduce((total, costo) => total + Number(costo.monto), 0)
+                    .toString()
+                : '0'
+            }
             unit="$ "
           />
           <StatCard
             icon={<TrendingDown />}
             title="Merma Registrada"
-            value={batch!.data.mermas
-              ?.reduce((total, m) => {
-                const qty =
-                  typeof m.cantidad === 'string'
-                    ? parseFloat(m.cantidad)
-                    : (m.cantidad ?? 0)
-                return total + qty
-              }, 0)
-              .toString()}
+            value={
+              batch!.data.mermas
+                ? batch!.data.mermas
+                    ?.reduce((total, m) => {
+                      const qty =
+                        typeof m.cantidad === 'string'
+                          ? parseFloat(m.cantidad)
+                          : (m.cantidad ?? 0)
+                      return total + qty
+                    }, 0)
+                    .toString()
+                : '0'
+            }
             unit=" L"
           />
         </div>

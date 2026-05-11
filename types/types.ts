@@ -1,20 +1,34 @@
-export interface Establecimiento {
-  idEstablecimiento: string
-  nombre: string
-  localidad: string
-  provincia: string
-  fechaCreacion: string
-  idUsuario: string
-}
+import { TipoToken } from '@/types/enums'
+import { Invitacion } from '@/types/invite'
+import { OrganizacionUsuario } from '@/types/organization'
 
 export interface User {
   idUsuario: string
   correo: string
   contrasena: string
   nombre: string
-  fechaCreacion: string
-  establecimientos: Establecimiento[]
+  verificado: boolean
+  fechaCreacion: Date
+  activo: boolean
+
+  tokens?: VerificarToken[]
+  organizaciones?: OrganizacionUsuario[]
+  invitacions?: Invitacion[]
 }
+
+export interface VerificarToken {
+  tokenid: string
+
+  idUsuario: string
+  usuario?: User
+
+  tipo: TipoToken
+  tokenHash: string
+  expiraEn: Date
+  usadoEn?: Date
+  creadoEn: Date
+}
+
 export interface AuthState {
   user: User | null
   token: string | null

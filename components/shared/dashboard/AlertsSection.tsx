@@ -7,11 +7,17 @@ import { useLastsAlerts } from '@/hooks/alerts/useLastsAlerts'
 import { Alert } from '@/types/alerts'
 import { ShieldAlert } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEstablishment } from '@/hooks/establishment/useEstablishment'
 
 const AlertsSection = () => {
   const { user } = useAuth()
+  const pathname = usePathname()
+  const { data: establishment } = useEstablishment({
+    id: pathname.split('/')[3],
+  })
   const { data, isPending } = useLastsAlerts({
-    id: user!.establecimientos[0].idEstablecimiento,
+    id: establishment?.data.establecimiento?.idEstablecimiento,
   })
 
   return (
