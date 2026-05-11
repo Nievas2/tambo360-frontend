@@ -11,6 +11,6 @@ export interface Alert {
   nivel: NivelAlerta
 
   descripcion: string
-  creadoEn: string
+  creadoEn: Date
   visto: boolean
 }
