@@ -25,7 +25,7 @@ const AlertCard = ({ alert }: AlertCardProps) => {
         <CardDescription className="flex justify-between items-center">
           <span className="flex gap-2 text-xs">
             <History className="size-3" />{' '}
-            {new Date(alert.creado_en)
+            {new Date(alert.creadoEn)
               .toLocaleString('es-ES', {
                 month: 'long',
                 year: 'numeric',

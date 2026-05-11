@@ -6,7 +6,7 @@ export interface Alert {
   categoria: string
   nivel: string
   descripcion: string
-  creado_en: string
+  creadoEn: string
   visto: boolean
   numeroLote: string
 }
