@@ -2,13 +2,12 @@
 
 import Loading from '@/components/layout/Loading'
 import { useAuth } from '@/context/AuthContext'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth()
   const router = useRouter()
-  const pathname = usePathname()
 
   useEffect(() => {
     if (loading) return
@@ -19,14 +18,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
-    if (
-      user.organizaciones != undefined &&
-      user.organizaciones?.length > 0 &&
-      pathname === '/bienvenida'
-    ) {
-      router.replace('/organizaciones')
+    if (user.establecimientos && user.establecimientos.length === 0) {
+      router.replace('/establecimiento')
     }
-  }, [user, loading, router, pathname])
+  }, [user, loading, router])
 
   if (loading || !user) {
     return <Loading />

@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { useState } from 'react'
 import ChangeBatch from '@/components/shared/dashboard/batch/ChangeBatch'
-import { Lote } from '@/types/batch'
+import { Batch } from '@/types/batch'
 import { useBatchesDay } from '@/hooks/batch/useBatchesDay'
 
 const DailyProductionLog = () => {
@@ -71,7 +71,7 @@ const DailyProductionLog = () => {
             </TableHeader>
             <TableBody>
               {data?.data?.length > 0 &&
-                data?.data?.map((batch: Lote) => (
+                data?.data?.map((batch: Batch) => (
                   <TableRow key={batch.idLote}>
                     <TableCell>
                       #{String(batch.numeroLote).padStart(3, '0')}
@@ -80,7 +80,7 @@ const DailyProductionLog = () => {
                     <TableCell suppressHydrationWarning>
                       {batch.fechaProduccion.split('T')[1].slice(0, 5)}
                     </TableCell>
-                    <TableCell>{batch.producto?.nombre}</TableCell>
+                    <TableCell>{batch.producto.nombre}</TableCell>
                     <TableCell>
                       {batch.cantidad} {batch.unidad}
                     </TableCell>
@@ -94,8 +94,8 @@ const DailyProductionLog = () => {
                       }, 0)}
                     </TableCell>
                     <TableCell>
-                      {(batch.costosDirectos &&
-                        batch.costosDirectos.length > 0) ||
+                      {(batch.costosDirectos.length > 0 &&
+                        batch.costosDirectos[0].moneda) ||
                         '$'}{' '}
                       {batch.costosDirectos?.reduce((total, m) => {
                         const qty =

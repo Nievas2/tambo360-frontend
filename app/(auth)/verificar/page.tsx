@@ -100,10 +100,10 @@ const VerifyUser = () => {
                     </p>
                     <Button
                       className="w-full h-14 bg-[#0B1001] text-white rounded-lg flex items-center justify-center gap-2"
-                      onClick={() => navigate.push('/bienvenida')}
+                      onClick={() => navigate.push('/establecimiento')}
                       data-testid="create-establishment-button"
                     >
-                      Continuar <ArrowRight className="size-5" />
+                      Crear establecimiento <ArrowRight className="size-5" />
                     </Button>
                   </div>
                 )}

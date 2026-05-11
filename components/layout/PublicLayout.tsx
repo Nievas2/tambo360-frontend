@@ -2,7 +2,7 @@
 
 import Loading from '@/components/layout/Loading'
 import { useAuth } from '@/context/AuthContext'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 export default function PublicLayout({
@@ -17,7 +17,11 @@ export default function PublicLayout({
     if (loading) return
 
     if (user) {
-      router.replace('/organizaciones')
+      if (user.establecimientos?.length === 0) {
+        router.replace('/establecimiento')
+      } else {
+        router.replace('/analisis')
+      }
     }
   }, [user, loading, router])
 

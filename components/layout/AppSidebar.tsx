@@ -1,5 +1,7 @@
 'use client'
-import { LayoutDashboard, Milk, Cpu, User, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, Milk, Cpu, User } from 'lucide-react'
+import { useNoViewedAlerts } from '@/hooks/alerts/useNoViewedAlerts'
+import { useAuth } from '@/context/AuthContext'
 import {
   Sidebar,
   SidebarContent,
@@ -10,9 +12,6 @@ import {
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEstablishment } from '@/hooks/establishment/useEstablishment'
-import { useNoViewedAlerts } from '@/hooks/alerts/useNoViewedAlerts'
-import { Button } from '@/components/ui/button'
 
 interface AppSidebarProps {
   forcedCollapsed?: boolean
@@ -20,31 +19,29 @@ interface AppSidebarProps {
 
 export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
   const pathname = usePathname()
-  const { data } = useEstablishment({ id: pathname.split('/')[3] })
-  const { data: noViewedAlerts } = useNoViewedAlerts({
-    id: data?.data.establecimiento?.idEstablecimiento,
+  const { user } = useAuth()
+  const { data } = useNoViewedAlerts({
+    id: user!.establecimientos[0].idEstablecimiento,
   })
   const isCollapsed = forcedCollapsed
-
-  const baseUrl = pathname.split('/').slice(0, 4).join('/')
 
   const mainMenuItems = [
     {
       title: 'Dashboard',
       icon: LayoutDashboard,
-      url: baseUrl + '/analisis',
+      url: '/analisis',
       data: "data-test-id='dashboard'",
     },
     {
       title: 'Producción',
       icon: Milk,
-      url: baseUrl + '/produccion',
+      url: '/produccion',
       data: "data-test-id='produccion'",
     },
     {
       title: 'TamboEngine',
       icon: Cpu,
-      url: baseUrl + '/alertas',
+      url: '/alertas',
       data: "data-test-id='tambo-engine'",
     },
   ]
@@ -78,7 +75,9 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
         <SidebarMenu>
           {mainMenuItems.map((item) => {
             const isActive =
-              item.url === '/' ? pathname === '/' : pathname.includes(item.url)
+              item.url === '/'
+                ? pathname === '/'
+                : pathname.startsWith(item.url)
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
@@ -100,12 +99,11 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
                         className={`font-semibold flex justify-between w-full ${isActive ? 'text-[#669213]' : 'text-gray-400'}`}
                       >
                         {item.title}{' '}
-                        {item.url === '/alertas' &&
-                          noViewedAlerts?.data.cantidad > 0 && (
-                            <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
-                              {noViewedAlerts.data.cantidad}
-                            </span>
-                          )}
+                        {item.url === '/alertas' && data?.data.cantidad > 0 && (
+                          <span className="text-white bg-red-main rounded-full size-6 text-center text-[16px]">
+                            {data.data.cantidad}
+                          </span>
+                        )}
                       </span>
                     )}
                   </Link>
@@ -121,48 +119,26 @@ export function AppSidebar({ forcedCollapsed }: AppSidebarProps) {
               asChild
               className={`py-4 transition-all duration-200 rounded-lg shadow-none! flex items-center ${
                 isCollapsed ? 'justify-center' : 'justify-start'
-              } ${pathname.includes('/configuracion') ? 'bg-[#D7ECAF] hover:bg-[#D7ECAF]/60 hover:text-[#669213]/60 border-l-6 border-l-black' : 'bg-transparent text-gray-400 hover:bg-gray-100'}`}
+              } ${pathname === '/perfil' ? 'bg-[#D7ECAF] hover:bg-[#D7ECAF]/60 hover:text-[#669213]/60 border-l-6 border-l-black' : 'bg-transparent text-gray-400 hover:bg-gray-100'}`}
             >
               <Link
-                href={baseUrl + '/configuracion'}
+                href="/perfil"
                 className={`flex items-center gap-3 w-full ${isCollapsed ? 'justify-center' : ''}`}
                 data-test-id="data-test-id='perfil'"
               >
                 <User
-                  className={`h-5 w-5 shrink-0 ${pathname === '/configuracion' ? 'text-[#669213]' : 'text-gray-400'}`}
+                  className={`h-5 w-5 shrink-0 ${pathname === '/perfil' ? 'text-[#669213]' : 'text-gray-400'}`}
                 />
                 {!isCollapsed && (
                   <span
-                    className={`font-semibold ${pathname === '/configuracion' ? 'text-[#669213]' : 'text-gray-400'}`}
+                    className={`font-semibold ${pathname === '/perfil' ? 'text-[#669213]' : 'text-gray-400'}`}
                   >
-                    Configuración
+                    Perfil
                   </span>
                 )}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-
-          <Button
-            variant="ghost"
-            className={`w-full ${isCollapsed ? 'justify-center' : ''}`}
-          >
-            {!isCollapsed ? (
-              <Link
-                href="/organizaciones"
-                className={`flex items-center gap-3 w-full ${isCollapsed ? 'justify-center' : ''}`}
-              >
-                <ArrowLeft className="h-5 w-5 shrink-0" />
-                Volver
-              </Link>
-            ) : (
-              <Link
-                href="/organizaciones"
-                className={`flex items-center gap-3 w-full ${isCollapsed ? 'justify-center' : ''}`}
-              >
-                <ArrowLeft className="h-5 w-5 shrink-0" />
-              </Link>
-            )}
-          </Button>
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>

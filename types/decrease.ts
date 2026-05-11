@@ -1,4 +1,4 @@
-import { Lote } from '@/types/batch'
+import { Batch } from '@/types/batch'
 import z from 'zod'
 
 export enum TipoMerma {
@@ -40,13 +40,14 @@ export type DecreaseWithLote = DecreaseData & {
   idLote: string
 }
 
-export interface Merma {
+export interface Decrease {
   idMerma: string
+  cantidad: string
+  descripcion: string
+  observacion: string
   tipo: TipoMerma
-  observacion?: string
-  cantidad: number
-  fechaCreacion: string
-
+  unidad: string
   idLote: string
-  lote?: Lote
+  lote: Batch
+  fechaCreacion: string
 }

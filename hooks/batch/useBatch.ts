@@ -1,10 +1,10 @@
-import { Lote } from '@/types/batch'
+import { Batch } from '@/types/batch'
 import { getBatch } from '@/utils/api/batch.api'
 import { queryKeys } from '@/utils/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 
 export function useBatch({ id }: { id: string }) {
-  return useQuery<{ data: Lote }>({
+  return useQuery<{ data: Batch }>({
     queryKey: queryKeys.batch.detail(id),
     queryFn: async () => {
       const { data } = await getBatch(id)

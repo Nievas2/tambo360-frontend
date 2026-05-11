@@ -2,14 +2,7 @@ import { api } from '@/services/api'
 import { EstablishmentData, EstablishmentName } from '@/types/establishment'
 
 export const createEstablishment = (dto: EstablishmentData) =>
-  api.post('/establecimiento', dto, {
-    headers: {
-      'x-organizacion-id': dto.organizacionId,
-    },
-  })
+  api.post('/establecimiento/registrar', dto)
 
 export const updateEstablishmentName = (dto: EstablishmentName) =>
-  api.patch(`/establecimiento`, dto)
-
-export const getEstablishment = (id: string) =>
-  api.get(`/establecimiento/${id}`)
+  api.patch(`/establecimiento/editar-nombre`, dto)

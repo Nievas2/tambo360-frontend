@@ -1,5 +1,4 @@
-import { Lote } from '@/types/batch'
-import { ConceptoCosto } from '@/types/enums'
+import { Batch } from '@/types/batch'
 import z from 'zod'
 
 export enum Concept {
@@ -37,7 +36,7 @@ export const UpdateCostSchema = z.object({
 
 export type UpdateCostData = z.infer<typeof UpdateCostSchema>
 
-export interface Costo {
+export interface Cost {
   idCostoDirecto: string
   concepto: string
   monto: string
@@ -45,16 +44,5 @@ export interface Costo {
   observaciones: string
   fechaCreacion: string
   idLote: string
-  lote: Lote
-}
-
-export interface CostosDirecto {
-  idCostoDirecto: string
-  concepto: ConceptoCosto
-  monto: number
-  observaciones?: string
-  fechaCreacion: string
-
-  idLote: string
-  lote?: Lote
+  lote: Batch
 }

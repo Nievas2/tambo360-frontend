@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(user)
     setToken(token)
     setError(null)
-    navigate.push('/bienvenida')
+    navigate.push('/analisis')
     setLoading(false)
   }
 

@@ -6,7 +6,7 @@ const TamboEngineSection = () => {
           <div className="w-full md:w-1/2">
             <img
               src="/landing/tambo-engine.webp"
-              alt="dashboard-produccion-lechera"
+              alt="TamboEngine Dashboard"
               className="w-full rounded-xl"
             />
           </div>

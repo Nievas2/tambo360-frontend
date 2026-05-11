@@ -1,7 +1,7 @@
 'use client'
 
 import { AppSidebar } from '@/components/layout/AppSidebar'
-import { Navbar } from '@/components/shared/dashboard/Navbar'
+import { Navbar } from '@/components/Navbar'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { useState, useEffect } from 'react'
 
