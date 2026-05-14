@@ -1,5 +1,7 @@
-export type Unidad = 'kg' | 'litros'
-
+export enum Unidad {
+  KG = 'kg',
+  LITROS = 'litros',
+}
 export type Moneda = 'USD' | 'EUR' | 'ARS'
 
 export type Categoria = 'quesos' | 'leches'

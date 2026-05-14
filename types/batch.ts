@@ -8,6 +8,21 @@ import z from 'zod'
 
 export const BatchSchema = z.object({
   idProducto: z.uuidv4().min(1, 'Debe seleccionar un producto válido'),
+  cantRaza: z.preprocess(
+    (val) => {
+      if (val === '' || val === null || val === undefined) return undefined
+      const parsed = Number(val)
+      return isNaN(parsed) ? undefined : parsed
+    },
+    z
+      .number()
+      .refine((v) => v !== undefined, {
+        message: 'La cantidad es obligatoria',
+      })
+      .positive('La cantidad debe ser mayor a 0')
+  ),
+  idRaza: z.uuidv4().min(1, 'Debe seleccionar una raza valida'),
+  unidad: z.enum(Unidad, 'Unidad inválida'),
 
   cantidad: z.preprocess(
     (val) => {
