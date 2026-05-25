@@ -14,7 +14,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (loading) return
 
     if (!user) {
-      console.log('Redirigiendo a login porque no hay user')
       router.replace('/iniciar-sesion')
       return
     }

@@ -244,7 +244,7 @@ const Produccion: React.FC = () => {
                             .join('/')}
                         </TableCell>
                         <TableCell>
-                          <Link href={`/produccion/lote/${batch.idLote}`}>
+                          <Link href={`produccion/lote/${batch.idLote}`}>
                             <HighlightMatch
                               text={
                                 batch.producto?.nombre || 'Producto desconocido'
@@ -260,7 +260,7 @@ const Produccion: React.FC = () => {
                         </TableCell>
                         <TableCell className="truncate">
                           <Link
-                            href={`/produccion/lote/${batch.idLote}/#mermas`}
+                            href={`produccion/lote/${batch.idLote}/#mermas`}
                           >
                             {batch.mermas
                               ?.reduce((total, m) => {
@@ -298,7 +298,7 @@ const Produccion: React.FC = () => {
                         </TableCell>
                         <TableCell className="truncate">
                           <Link
-                            href={`/produccion/lote/${batch.idLote}/#costos`}
+                            href={`produccion/lote/${batch.idLote}/#costos`}
                           >
                             {(batch.costosDirectos &&
                               batch.costosDirectos.length > 0) ||
@@ -325,7 +325,7 @@ const Produccion: React.FC = () => {
                               <DropdownMenuGroup>
                                 <DropdownMenuItem>
                                   <Link
-                                    href={`/produccion/lote/${batch.idLote}`}
+                                    href={`produccion/lote/${batch.idLote}`}
                                     className="flex items-center gap-2"
                                   >
                                     <Eye /> Ver Detalles
