@@ -16,7 +16,7 @@ export const getBatches = ({ filters }: { filters: BatchFilters }) => {
   return api.get('/lote/listar', { params })
 }
 
-export const getBatch = (id: string) => api.get(`/lote/buscar-lote/${id}`)
+export const getBatch = (id: string) => api.get(`/lote/buscar/${id}`)
 
 export const getBatchesDay = () => api.get('/lote/produccion-hoy')
 
