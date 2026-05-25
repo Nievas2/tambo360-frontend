@@ -90,6 +90,9 @@ export interface Lote {
   cantidad: string
   unidad: Unidad
 
+  idRaza: string
+  cantRazas?: number
+
   idEstablecimiento: string
   estado: boolean
   establecimiento?: Establecimiento

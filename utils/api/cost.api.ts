@@ -2,9 +2,8 @@ import { api } from '@/services/api'
 import { UpdateCostData } from '@/types/cost'
 
 export const createCost = async (values: UpdateCostData, id: string) =>
-  api.post('/costos/registrar', {
+  api.post('/costos', {
     loteId: id,
-    observaciones: '',
     ...values,
   })
 
