@@ -97,7 +97,7 @@ export interface Lote {
   estado: boolean
   establecimiento?: Establecimiento
 
-  mermas?: Merma[]
+  mermas: Merma[]
   costosDirectos?: CostosDirecto[]
   alertas?: Alert[]
 }

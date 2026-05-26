@@ -468,19 +468,7 @@ const Produccion: React.FC = () => {
           setSelectedBatch(null)
         }}
         onOpen={() => setIsChangeBatchOpen(true)}
-        batch={
-          selectedBatch
-            ? {
-                id: selectedBatch.idLote,
-                idProducto: selectedBatch.idProducto,
-                cantidad:
-                  typeof selectedBatch.cantidad === 'string'
-                    ? parseFloat(selectedBatch.cantidad)
-                    : Number(selectedBatch.cantidad ?? 0),
-                fechaProduccion: selectedBatch.fechaProduccion,
-              }
-            : undefined
-        }
+        batch={selectedBatch ? selectedBatch : undefined}
       />
 
       <ChangeDecrease

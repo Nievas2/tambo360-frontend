@@ -23,7 +23,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { BatchDto, BatchSchema } from '@/types/batch'
+import { Lote, BatchSchema } from '@/types/batch'
 import { useCreateBatch } from '@/hooks/batch/useCreateBatch'
 import { useUpdateBatch } from '@/hooks/batch/useUpdateBatch'
 import { useProducts } from '@/hooks/product/useProducts'
@@ -40,9 +40,16 @@ interface ChangeBatchProps {
   open: boolean
   onClose: () => void
   onOpen?: () => void
-  batch?: BatchDto
+  batch?: Lote
+  cantRazas?: number
 }
-const ChangeBatch = ({ open, onClose, onOpen, batch }: ChangeBatchProps) => {
+const ChangeBatch = ({
+  open,
+  onClose,
+  onOpen,
+  batch,
+  cantRazas,
+}: ChangeBatchProps) => {
   const [id, setId] = useState('')
   const [finished, setFinished] = useState(false)
   const { mutateAsync } = useCreateBatch()
@@ -95,7 +102,11 @@ const ChangeBatch = ({ open, onClose, onOpen, batch }: ChangeBatchProps) => {
         fechaProduccion: fecha,
         unidad: batch.unidad ?? Unidad.KG,
         idRaza: batch.idRaza ?? '',
-        cantRaza: batch.cantRaza ?? 0,
+        cantRaza: batch.cantRazas
+          ? batch.cantRazas.toString()
+          : cantRazas
+            ? cantRazas.toString()
+            : '0',
       })
 
       setValue('fechaProduccion', fecha, {
@@ -146,10 +157,10 @@ const ChangeBatch = ({ open, onClose, onOpen, batch }: ChangeBatchProps) => {
           date.getUTCFullYear(),
         ].join('/')
         await mutateAsyncUpdate({
-          id: batch.id,
+          id: batch.idLote,
           values: { ...data, fechaProduccion },
         })
-        setId(batch.id)
+        setId(batch.idLote)
         setFinished(true)
       }
     })
