@@ -271,19 +271,7 @@ export default function BatchDetails({ id }: BatchDetailsProps) {
         open={isChangeBatchOpen}
         onOpen={() => setIsChangeBatchOpen(true)}
         onClose={() => setIsChangeBatchOpen(false)}
-        batch={
-          batch!.data != undefined
-            ? {
-                id: batch!.data.idLote,
-                idProducto: batch!.data.idProducto,
-                cantidad:
-                  typeof batch!.data.cantidad === 'string'
-                    ? parseFloat(batch!.data.cantidad)
-                    : Number(batch!.data.cantidad ?? 0),
-                fechaProduccion: batch!.data.fechaProduccion,
-              }
-            : undefined
-        }
+        batch={batch!.data != undefined ? batch!.data : undefined}
       />
 
       <ChangeDecrease
