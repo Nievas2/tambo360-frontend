@@ -28,7 +28,7 @@ import { ConfirmDeleteDialog } from '@/components/shared/dashboard/batch/DeleteB
 import ChangeCost from '@/components/shared/dashboard/cost/ChangeCost'
 import { useDeleteCost } from '@/hooks/cost/useDeleteCost'
 import { Lote } from '@/types/batch'
-import { CONCEPTO_LABELS, CostosDirecto } from '@/types/cost'
+import { CostosDirecto, TIPO_COSTO_LABELS } from '@/types/cost'
 import { Ellipsis, Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
 
@@ -114,7 +114,7 @@ const CostTable = ({ batch, changeCost, isPending }: CostTableProps) => {
               : batch.costosDirectos &&
                 batch.costosDirectos.length > 0 &&
                 batch.costosDirectos.map((cost: CostosDirecto) => (
-                  <TableRow key={cost.idLote}>
+                  <TableRow key={cost.idCostoDirecto}>
                     <TableCell suppressHydrationWarning>
                       {cost.fechaCreacion
                         .slice(0, 10)
@@ -123,7 +123,7 @@ const CostTable = ({ batch, changeCost, isPending }: CostTableProps) => {
                         .join('/')}
                     </TableCell>
                     <TableCell>
-                      {CONCEPTO_LABELS[cost.concepto] || cost.concepto}
+                      {TIPO_COSTO_LABELS[cost.tipoCosto] || cost.tipoCosto}
                     </TableCell>
                     <TableCell>
                       $ {Number(cost.monto).toLocaleString('es-AR')}

@@ -1,5 +1,5 @@
 import { Lote } from '@/types/batch'
-import { ConceptoCosto } from '@/types/enums'
+import { TipoCosto } from '@/types/enums'
 import z from 'zod'
 
 export enum Concept {
@@ -16,11 +16,21 @@ export const CONCEPTO_LABELS: Record<string, string> = {
   refrigeracion: 'Refrigeración',
 }
 
+export const TIPO_COSTO_LABELS: Record<string, string> = {
+  ALIMENTACION: 'Alimentación',
+  SANIDAD: 'Sanidad',
+  MANO_OBRA: 'Mano de Obra',
+  ENERGIA: 'Energía',
+  MANTENIMIENTO: 'Mantenimiento',
+  LOGISTICA: 'Logística',
+  OTRO: 'Otro',
+}
+
 export const UpdateCostSchema = z.object({
   concepto: z
-    .enum(Object.values(Concept))
-    .refine((value) => value !== undefined, 'Concepto requerido')
-    .default(Concept.insumos_basicos),
+    .enum(TipoCosto)
+    .optional()
+    .refine((value) => value !== undefined, 'Concepto requerido'),
   monto: z
     .string()
     .min(1, 'Monto requerido')
@@ -50,10 +60,11 @@ export interface Costo {
 
 export interface CostosDirecto {
   idCostoDirecto: string
-  concepto: ConceptoCosto
+  concepto: TipoCosto
   monto: number
   observaciones?: string
   fechaCreacion: string
+  tipoCosto: TipoCosto
 
   idLote: string
   lote?: Lote

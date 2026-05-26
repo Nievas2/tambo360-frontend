@@ -16,6 +16,15 @@ export type ConceptoCosto =
   | 'cuajo_y_fermentos'
   | 'refrigeracion'
 
+export enum TipoCosto {
+  ALIMENTACION = 'ALIMENTACION',
+  SANIDAD = 'SANIDAD',
+  MANO_OBRA = 'MANO_OBRA',
+  ENERGIA = 'ENERGIA',
+  MANTENIMIENTO = 'MANTENIMIENTO',
+  LOGISTICA = 'LOGISTICA',
+  OTRO = 'OTRO',
+}
 export type RolOrganizacion = 'ORG_OWNER' | 'ORG_ADMIN' | 'MEMBER'
 
 export type RolEstablecimiento = 'OWNER' | 'ADMIN' | 'EMPLOYEE'

@@ -22,11 +22,12 @@ import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { useCreateCost } from '@/hooks/cost/useCreateCost'
 import { useUpdateCost } from '@/hooks/cost/useUpdateCost'
 import { useErrorMessage } from '@/hooks/useErrorMessage'
-import { Concept, CostosDirecto, UpdateCostSchema } from '@/types/cost'
+import { CostosDirecto, UpdateCostSchema } from '@/types/cost'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { TipoCosto } from '@/types/enums'
 
 interface ChangeCostProps {
   open: boolean
@@ -65,7 +66,7 @@ const ChangeCost = ({
     control,
   } = useForm({
     defaultValues: {
-      concepto: Concept.insumos_basicos,
+      concepto: undefined,
       monto: '',
       observaciones: '',
     },
@@ -75,13 +76,13 @@ const ChangeCost = ({
   useEffect(() => {
     if (cost) {
       reset({
-        concepto: cost.concepto as Concept,
+        concepto: cost.tipoCosto,
         monto: cost.monto.toString(),
         observaciones: cost.observaciones,
       })
     } else {
       reset({
-        concepto: Concept.insumos_basicos,
+        concepto: undefined,
         monto: '',
         observaciones: '',
       })
@@ -93,6 +94,7 @@ const ChangeCost = ({
       if (cost) {
         await updateCost({
           values: data,
+
           id: cost.idCostoDirecto,
           loteId: loteId!,
         })
@@ -129,8 +131,8 @@ const ChangeCost = ({
               control={control}
               render={({ field }) => (
                 <Select
-                  value={field.value}
-                  onValueChange={field.onChange}
+                  value={String(field.value ?? '')}
+                  onValueChange={(val) => field.onChange(val)}
                   disabled={isPending}
                 >
                   <SelectTrigger className="w-full">
@@ -138,17 +140,41 @@ const ChangeCost = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value={Concept.insumos_basicos}>
-                        Insumos básicos
+                      {/* export enum TipoCosto {
+                        ALIMENTACION,
+                        SANIDAD,
+                        MANO_OBRA,
+                        ENERGIA,
+                        MANTENIMIENTO,
+                        LOGISTICA,
+                        OTRO,
+                      } */}
+                      <SelectItem value={TipoCosto.ALIMENTACION.toString()}>
+                        Alimentación
                       </SelectItem>
-                      <SelectItem value={Concept.leche_cruda}>
-                        Leche cruda
+
+                      <SelectItem value={TipoCosto.SANIDAD.toString()}>
+                        Sanidad
                       </SelectItem>
-                      <SelectItem value={Concept.cuajo_y_fermentos}>
-                        Cuajo y fermentos
+
+                      <SelectItem value={TipoCosto.MANO_OBRA.toString()}>
+                        Mano de obra
                       </SelectItem>
-                      <SelectItem value={Concept.refrigeracion}>
-                        Refrigeración
+
+                      <SelectItem value={TipoCosto.ENERGIA.toString()}>
+                        Energia
+                      </SelectItem>
+
+                      <SelectItem value={TipoCosto.MANTENIMIENTO.toString()}>
+                        Mantenimiento
+                      </SelectItem>
+
+                      <SelectItem value={TipoCosto.LOGISTICA.toString()}>
+                        Logística
+                      </SelectItem>
+
+                      <SelectItem value={TipoCosto.OTRO.toString()}>
+                        Otro
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>
