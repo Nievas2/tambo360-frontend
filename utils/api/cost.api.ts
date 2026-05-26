@@ -13,6 +13,6 @@ export const getBatchCosts = (id: string) =>
 export const getCostDetail = (id: string) => api.get(`/costos/detalle/${id}`)
 
 export const updateCost = (dto: UpdateCostData, id: string) =>
-  api.put(`/costos/actualizar/${id}`, dto)
+  api.patch(`/costos/${id}`, { ...dto, tipoCosto: dto.concepto })
 
-export const deleteCost = (id: string) => api.delete(`/costos/eliminar/${id}`)
+export const deleteCost = (id: string) => api.delete(`/costos/${id}`)
