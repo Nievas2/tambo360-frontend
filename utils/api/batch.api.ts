@@ -4,7 +4,7 @@ import { BatchData, BatchFilters } from '@/types/batch'
 export const createBatch = (dto: BatchData) => api.post('/lote', dto)
 
 export const updateBatch = (dto: BatchData, id: string) =>
-  api.put(`/lote/actualizar/${id}`, dto)
+  api.patch(`/lote/${id}`, dto)
 
 export const getBatches = ({ filters }: { filters: BatchFilters }) => {
   const params = Object.fromEntries(
