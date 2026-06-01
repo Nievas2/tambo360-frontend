@@ -1,28 +1,26 @@
 import { Lote } from '@/types/batch'
+import { TipoMerma } from '@/types/enums'
 import z from 'zod'
 
-export enum TipoMerma {
-  Natural = 'Natural',
-  Tecnica = 'Tecnica',
-  Administrativa = 'Administrativa',
-  Danio = 'Danio',
-}
-
 export const TIPO_MERMA_LABELS = {
-  [TipoMerma.Natural]: 'Natural',
-  [TipoMerma.Tecnica]: 'Técnica',
-  [TipoMerma.Administrativa]: 'Administrativa',
-  [TipoMerma.Danio]: 'Daño',
+  [TipoMerma.MASTITIS]: 'Mastitis',
+  [TipoMerma.ESTRES_CALORICO]: 'Estrés Calórico',
+  [TipoMerma.DERRAME_EN_ORDENE]: 'Derrame en ordeñe',
+  [TipoMerma.FALLA_EQUIPO]: 'Falla de Equipo',
+  [TipoMerma.RECHAZO_ANTIBIOTICOS]: 'Rechazo por Antibióticos',
+  [TipoMerma.ACIDOSIS_RUMINAL]: 'Acidosis Ruminal',
+  [TipoMerma.PERDIDA_EN_TRANSPORTE]: 'Perdida en Transporte',
+  [TipoMerma.VENCIMIENTO_PRODUCTO]: 'Vencimiento de Producto',
+  [TipoMerma.DANO_POR_MANIPULACION]: 'Daño por Manipulación',
+  [TipoMerma.DISCREPANCIA_INVENTARIO]: 'Discrepancia de Inventario',
+  [TipoMerma.MERMA_DESCONOCIDA]: 'Merma Desconocida',
+  [TipoMerma.OTRO]: 'Otro',
 }
 export const DecreaseSchema = z.object({
   tipo: z
-    .enum([
-      TipoMerma.Natural,
-      TipoMerma.Tecnica,
-      TipoMerma.Administrativa,
-      TipoMerma.Danio,
-    ])
-    .default(TipoMerma.Natural),
+    .enum(TipoMerma)
+    .optional()
+    .refine((value) => value !== undefined, 'Tipo es requerido'),
   observacion: z
     .string()
     .max(100, 'La observación no puede tener mas de 100 caracteres')

@@ -22,11 +22,12 @@ import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { useCreateDecrease } from '@/hooks/decrease/useCreateDecrease'
 import { useUpdateDecrease } from '@/hooks/decrease/useUpdateDecrease'
 import { useErrorMessage } from '@/hooks/useErrorMessage'
-import { Merma, DecreaseSchema, TipoMerma } from '@/types/decrease'
+import { Merma, DecreaseSchema, TIPO_MERMA_LABELS } from '@/types/decrease'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertCircle } from 'lucide-react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { TipoMerma } from '@/types/enums'
 
 interface ChangeDecreaseProps {
   open: boolean
@@ -69,7 +70,7 @@ const ChangeDecrease = ({
     defaultValues: {
       cantidad: '',
       observacion: '',
-      tipo: TipoMerma.Natural,
+      tipo: undefined,
     },
 
     resolver: zodResolver(DecreaseSchema),
@@ -86,7 +87,7 @@ const ChangeDecrease = ({
       reset({
         cantidad: '',
         observacion: '',
-        tipo: TipoMerma.Natural,
+        tipo: undefined,
       })
     }
   }, [decrease, reset])
@@ -94,9 +95,23 @@ const ChangeDecrease = ({
   const onSubmit = handleSubmit(
     handleSubmitWithConnectionCheck(async (data) => {
       if (decrease) {
-        await update({ id: decrease.idMerma, values: data })
+        await update(
+          { id: decrease.idMerma, values: data },
+          {
+            onSuccess: () => {
+              reset()
+            },
+          }
+        )
       } else {
-        await create({ ...data, idLote: idBatch! })
+        await create(
+          { ...data, idLote: idBatch! },
+          {
+            onSuccess: () => {
+              reset()
+            },
+          }
+        )
       }
       onClose()
     })
@@ -124,7 +139,6 @@ const ChangeDecrease = ({
         <form className="space-y-4" onSubmit={onSubmit}>
           <div className="space-y-2">
             <Label>Tipo de merma*</Label>
-
             <Controller
               name="tipo"
               control={control}
@@ -139,12 +153,42 @@ const ChangeDecrease = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="Natural">Natural</SelectItem>
-                      <SelectItem value="Tecnica">Tecnica</SelectItem>
-                      <SelectItem value="Administrativa">
-                        Administrativa
+                      <SelectItem value={TipoMerma.MASTITIS}>
+                        {TIPO_MERMA_LABELS[TipoMerma.MASTITIS]}
                       </SelectItem>
-                      <SelectItem value="Danio">Daño</SelectItem>
+                      <SelectItem value={TipoMerma.ESTRES_CALORICO}>
+                        {TIPO_MERMA_LABELS[TipoMerma.ESTRES_CALORICO]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.DERRAME_EN_ORDENE}>
+                        {TIPO_MERMA_LABELS[TipoMerma.DERRAME_EN_ORDENE]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.FALLA_EQUIPO}>
+                        {TIPO_MERMA_LABELS[TipoMerma.FALLA_EQUIPO]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.RECHAZO_ANTIBIOTICOS}>
+                        {TIPO_MERMA_LABELS[TipoMerma.RECHAZO_ANTIBIOTICOS]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.ACIDOSIS_RUMINAL}>
+                        {TIPO_MERMA_LABELS[TipoMerma.ACIDOSIS_RUMINAL]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.PERDIDA_EN_TRANSPORTE}>
+                        {TIPO_MERMA_LABELS[TipoMerma.PERDIDA_EN_TRANSPORTE]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.VENCIMIENTO_PRODUCTO}>
+                        {TIPO_MERMA_LABELS[TipoMerma.VENCIMIENTO_PRODUCTO]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.DANO_POR_MANIPULACION}>
+                        {TIPO_MERMA_LABELS[TipoMerma.DANO_POR_MANIPULACION]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.DISCREPANCIA_INVENTARIO}>
+                        {TIPO_MERMA_LABELS[TipoMerma.DISCREPANCIA_INVENTARIO]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.MERMA_DESCONOCIDA}>
+                        {TIPO_MERMA_LABELS[TipoMerma.MERMA_DESCONOCIDA]}
+                      </SelectItem>
+                      <SelectItem value={TipoMerma.OTRO}>
+                        {TIPO_MERMA_LABELS[TipoMerma.OTRO]}
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

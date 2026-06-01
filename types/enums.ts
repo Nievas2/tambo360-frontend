@@ -8,7 +8,20 @@ export type Categoria = 'quesos' | 'leches'
 
 export type TipoToken = 'verificacion' | 'recuperacion'
 
-export type TipoMerma = 'Natural' | 'Tecnica' | 'Administrativa' | 'Danio'
+export enum TipoMerma {
+  MASTITIS = 'MASTITIS',
+  ESTRES_CALORICO = 'ESTRES_CALORICO',
+  DERRAME_EN_ORDENE = 'DERRAME_EN_ORDENE',
+  FALLA_EQUIPO = 'FALLA_EQUIPO',
+  RECHAZO_ANTIBIOTICOS = 'RECHAZO_ANTIBIOTICOS',
+  ACIDOSIS_RUMINAL = 'ACIDOSIS_RUMINAL',
+  PERDIDA_EN_TRANSPORTE = 'PERDIDA_EN_TRANSPORTE',
+  VENCIMIENTO_PRODUCTO = 'VENCIMIENTO_PRODUCTO',
+  DANO_POR_MANIPULACION = 'DANO_POR_MANIPULACION',
+  DISCREPANCIA_INVENTARIO = 'DISCREPANCIA_INVENTARIO',
+  MERMA_DESCONOCIDA = 'MERMA_DESCONOCIDA',
+  OTRO = 'OTRO',
+}
 
 export type ConceptoCosto =
   | 'insumos_basicos'

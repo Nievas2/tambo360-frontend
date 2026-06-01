@@ -140,15 +140,6 @@ const ChangeCost = ({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {/* export enum TipoCosto {
-                        ALIMENTACION,
-                        SANIDAD,
-                        MANO_OBRA,
-                        ENERGIA,
-                        MANTENIMIENTO,
-                        LOGISTICA,
-                        OTRO,
-                      } */}
                       <SelectItem value={TipoCosto.ALIMENTACION.toString()}>
                         Alimentación
                       </SelectItem>

@@ -112,7 +112,7 @@ const DecreaseTable = ({ batch, isPending }: DecreaseTableProps) => {
               : batch.mermas &&
                 batch.mermas.length > 0 &&
                 batch.mermas.map((decrease: Merma) => (
-                  <TableRow key={decrease.idLote}>
+                  <TableRow key={decrease.idMerma}>
                     <TableCell suppressHydrationWarning>
                       {decrease.fechaCreacion
                         .slice(0, 10)
