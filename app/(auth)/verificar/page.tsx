@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 const VerifyUser = () => {
   const { mutateAsync, error, isPending } = useVerifyEmail()
   const search = useSearchParams()
-  const { setToken, setUser } = useAuth()
+  const { setUser } = useAuth()
   const navigate = useRouter()
 
   useEffect(() => {
@@ -19,14 +19,15 @@ const VerifyUser = () => {
       try {
         const token = search.get('token')
         if (token) {
-          await mutateAsync(token)
+          const response = await mutateAsync(token)
+          setUser(response.data.user)
         }
       } catch (err) {
         console.warn(err)
       }
     }
     checkToken()
-  }, [search, mutateAsync])
+  }, [search, mutateAsync, setUser])
 
   return (
     <div
@@ -72,6 +73,10 @@ const VerifyUser = () => {
                     <h2 className="text-4xl font-bold tracking-tight text-[#B91C1C]">
                       Verificación fallida
                     </h2>
+                    <p className="text-sm text-body-text text-center">
+                      {error.response?.data?.message ||
+                        'El enlace de verificación no es válido o ha expirado.'}
+                    </p>
                     <Button
                       onClick={() => navigate.push('/iniciar-sesion')}
                       variant="outline"
