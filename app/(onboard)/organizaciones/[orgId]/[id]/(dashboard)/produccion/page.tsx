@@ -127,6 +127,7 @@ const Produccion: React.FC = () => {
 
           <Button
             className="flex items-center gap-2 h-12 w-40"
+            variant="darkGreen"
             onClick={() => setIsChangeBatchOpen(true)}
           >
             Registrar lote <Plus className="w-5 h-5" />
