@@ -18,7 +18,11 @@ export default function PublicLayout({
     if (loading) return
 
     if (user && !pathname.includes('/verificar')) {
-      router.replace('/organizaciones')
+      if (user.organizaciones != undefined && user.organizaciones?.length > 0) {
+        router.replace('/organizaciones')
+        return
+      }
+      router.replace('/bienvenida')
     }
   }, [user, loading, router, pathname])
 
