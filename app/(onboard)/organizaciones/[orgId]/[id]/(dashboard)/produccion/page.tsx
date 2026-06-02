@@ -42,6 +42,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import ChangeDecrease from '@/components/shared/dashboard/decrease/ChangeDecrease'
 import ChangeCost from '@/components/shared/dashboard/cost/ChangeCost'
 import ChangeBatch from '@/components/shared/dashboard/batch/ChangeBatch'
@@ -53,6 +58,7 @@ import { useDebounce } from 'use-debounce'
 import { HighlightMatch } from '@/components/shared/dashboard/batch/HighlightMatch'
 import CompleteBatch from '@/components/shared/dashboard/batch/CompleteBatch'
 import Link from 'next/link'
+import { getClosingStatus } from '@/utils/getClosingStatus'
 
 const Produccion: React.FC = () => {
   const [isChangeDecreaseOpen, setIsChangeDecreaseOpen] = useState(false)
@@ -103,12 +109,29 @@ const Produccion: React.FC = () => {
             Lotes de producción
           </h1>
         </div>
-        <Button
-          className="flex items-center gap-2 h-12 w-40"
-          onClick={() => setIsChangeBatchOpen(true)}
-        >
-          Registrar lote <Plus className="w-5 h-5" />
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            className="flex items-center gap-2 h-12 w-40"
+            disabled={isPending || (data?.data.lotes.length === 0 && !error)}
+            asChild
+          >
+            <Link
+              href="produccion/lote/nuevo"
+              className="flex items-center gap-2"
+            >
+              Descargar Reporte
+            </Link>
+          </Button>
+
+          <Button
+            className="flex items-center gap-2 h-12 w-40"
+            onClick={() => setIsChangeBatchOpen(true)}
+          >
+            Registrar lote <Plus className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
 
       <Card className="border-gray-200 shadow-sm overflow-hidden rounded-2xl bg-white gap-0 py-0">
@@ -173,20 +196,26 @@ const Produccion: React.FC = () => {
                 <TableHead className="w-[10%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Fecha
                 </TableHead>
-                <TableHead className="w-[35%] min-w-40 text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
+                <TableHead className="w-[10%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Producto
                 </TableHead>
                 <TableHead className="w-[13%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Cantidad
                 </TableHead>
+                <TableHead className="w-[13%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
+                  Raza
+                </TableHead>
+                <TableHead className="w-[13%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
+                  N° Animales
+                </TableHead>
                 <TableHead className="w-[10%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Merma
                 </TableHead>
-                <TableHead className="w-[10%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
-                  Estado
-                </TableHead>
                 <TableHead className="w-[9%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Costo
+                </TableHead>
+                <TableHead className="w-[10%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
+                  Estado
                 </TableHead>
                 <TableHead className="w-[5%] pr-6 pl-4 text-right font-bold text-gray-400 uppercase text-xs tracking-wider">
                   Acción
@@ -200,24 +229,39 @@ const Produccion: React.FC = () => {
                       <TableCell>
                         <div className="h-4 w-10 bg-gray-200 rounded" />
                       </TableCell>
+
                       <TableCell>
                         <div className="h-4 w-20 bg-gray-200 rounded" />
                       </TableCell>
+
                       <TableCell>
                         <div className="h-4 w-32 bg-gray-200 rounded" />
                       </TableCell>
+
                       <TableCell>
                         <div className="h-4 w-16 bg-gray-200 rounded" />
                       </TableCell>
+
+                      <TableCell>
+                        <div className="h-4 w-20 bg-gray-200 rounded" />
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="h-4 w-20 bg-gray-200 rounded" />
+                      </TableCell>
+
                       <TableCell>
                         <div className="h-4 w-12 bg-gray-200 rounded" />
                       </TableCell>
-                      <TableCell>
-                        <div className="h-6 w-20 bg-gray-200 rounded-full" />
-                      </TableCell>
+
                       <TableCell>
                         <div className="h-4 w-16 bg-gray-200 rounded" />
                       </TableCell>
+
+                      <TableCell>
+                        <div className="h-6 w-20 bg-gray-200 rounded-full" />
+                      </TableCell>
+
                       <TableCell className="text-center">
                         <div className="h-8 w-8 bg-gray-200 rounded mx-auto" />
                       </TableCell>
@@ -227,7 +271,9 @@ const Produccion: React.FC = () => {
                   !error &&
                   data?.data?.lotes.map((batch: Lote) => {
                     const loteDisplay = `#${String(batch.numeroLote).padStart(3, '0')}`
-
+                    const closingStatus = getClosingStatus(
+                      batch.fechaProduccion
+                    )
                     return (
                       <TableRow key={batch.idLote}>
                         <TableCell className="text-center">
@@ -236,6 +282,7 @@ const Produccion: React.FC = () => {
                             query={highlightQuery}
                           />
                         </TableCell>
+
                         <TableCell suppressHydrationWarning>
                           {batch.fechaProduccion
                             .slice(0, 10)
@@ -243,6 +290,7 @@ const Produccion: React.FC = () => {
                             .reverse()
                             .join('/')}
                         </TableCell>
+
                         <TableCell>
                           <Link href={`produccion/lote/${batch.idLote}`}>
                             <HighlightMatch
@@ -258,6 +306,15 @@ const Produccion: React.FC = () => {
                           {Number(batch.cantidad).toLocaleString('es-AR')}{' '}
                           {batch.unidad}
                         </TableCell>
+
+                        <TableCell className="truncate">
+                          {batch.raza?.nombre || 'Raza desconocida'}
+                        </TableCell>
+
+                        <TableCell className="truncate">
+                          {batch.cantRazas ? batch.cantRazas : 'N/A'}
+                        </TableCell>
+
                         <TableCell className="truncate">
                           <Link
                             href={`produccion/lote/${batch.idLote}/#mermas`}
@@ -275,27 +332,7 @@ const Produccion: React.FC = () => {
                               batch.unidad}
                           </Link>
                         </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            className="cursor-pointer"
-                            onClick={() => {
-                              if (batch.estado) return
-                              setSelectedBatch(batch)
-                              setIsCompleteBatchOpen(true)
-                            }}
-                            size="xs"
-                            disabled={batch.estado}
-                            asChild
-                          >
-                            <Badge
-                              className="font-bold"
-                              variant={batch.estado ? 'success' : 'destructive'}
-                            >
-                              {batch.estado ? 'Completo' : 'Incompleto'}
-                            </Badge>
-                          </Button>
-                        </TableCell>
+
                         <TableCell className="truncate">
                           <Link
                             href={`produccion/lote/${batch.idLote}/#costos`}
@@ -314,6 +351,43 @@ const Produccion: React.FC = () => {
                               .toLocaleString('es-AR')}
                           </Link>
                         </TableCell>
+
+                        <TableCell>
+                          <Tooltip open={batch.estado ? false : undefined}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className={`${batch.estado ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                onClick={() => {
+                                  if (batch.estado) return
+                                  setSelectedBatch(batch)
+                                  setIsCompleteBatchOpen(true)
+                                }}
+                                size="xs"
+                                disabled={batch.estado}
+                                asChild
+                              >
+                                <Badge
+                                  variant={
+                                    batch.estado ? 'success' : 'destructive'
+                                  }
+                                  className={`flex items-center gap-1 text-black font-bold ${batch.estado ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                >
+                                  {!batch.estado && (
+                                    <span
+                                      className={`size-2 rounded-full ${closingStatus.color}`}
+                                    />
+                                  )}
+                                  {batch.estado ? 'Completo' : 'Incompleto'}
+                                </Badge>
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{closingStatus.text}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TableCell>
+
                         <TableCell className="text-center mr-2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>

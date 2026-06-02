@@ -2,7 +2,7 @@ import { Alert } from '@/types/alerts'
 import { CostosDirecto } from '@/types/cost'
 import { Merma } from '@/types/decrease'
 import { Unidad } from '@/types/enums'
-import { Establecimiento } from '@/types/establishment'
+import { Establecimiento, Raza } from '@/types/establishment'
 import { Product } from '@/types/product'
 import z from 'zod'
 
@@ -97,6 +97,7 @@ export interface Lote {
   estado: boolean
   establecimiento?: Establecimiento
 
+  raza: Raza
   mermas: Merma[]
   costosDirectos?: CostosDirecto[]
   alertas?: Alert[]
