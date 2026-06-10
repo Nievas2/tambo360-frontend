@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import InventarioRodeosTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/InventarioRodeostab'
+import InventarioRodeosTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/InventarioRodeosTab'
 
 const CATALOG_SUBTABS = [
   { id: 'inventario', label: 'Inventario de Rodeos' },
@@ -18,7 +18,8 @@ export default function CatalogTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Subtabs navegación */}
-      <nav className="flex gap-1 border-b border-[#E5E7EB] overflow-x-auto scrollbar-none">
+      {/* Añadidas clases directas arbitrarias para desaparecer barras y flechas en webkit/firefox */}
+      <nav className="flex gap-1 border-b border-[#E5E7EB] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {CATALOG_SUBTABS.map((tab) => (
           <button
             key={tab.id}
