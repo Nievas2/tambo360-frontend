@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import GeneralTab from '@/components/shared/dashboard/organization/configuration/tabs/GeneralTab'
-import CatalogTab from '@/components/shared/dashboard/organization/configuration/tabs/Catalogotab'
+import CatalogTab from '@/components/shared/dashboard/organization/configuration/tabs/CatalogTab'
 import TeamTab from '@/components/shared/dashboard/organization/configuration/tabs/TeamTab'
 
 const TABS = [

@@ -7,7 +7,7 @@ import {
   UserPlus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useTeam } from '@/hooks/teams/useTeam'
+import { useTeam } from '@/hooks/team/useTeam'
 import { Invitacion } from '@/types/invite'
 import InviteModal from '@/components/shared/dashboard/organization/configuration/modals/InviteModal'
 import DeleteModal from '@/components/shared/dashboard/organization/configuration/modals/DeleteModal'

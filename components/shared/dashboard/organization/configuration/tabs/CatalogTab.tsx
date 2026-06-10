@@ -1,10 +1,10 @@
 'use client'
 import { Plus, MoreVertical } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCatalog, getBreedVisual } from '@/hooks/catalog/useCatalogo'
+import { useCatalog, getBreedVisual } from '@/hooks/catalog/useCatalog'
 import { Breed } from '@/types/establishment/breed'
 import { Product } from '@/types/product'
-import NewProductModal from '@/components/shared/dashboard/organization/configuration/modals/NewProductoModal'
+import NewProductModal from '@/components/shared/dashboard/organization/configuration/modals/NewProductModal'
 import NewBreedModal from '@/components/shared/dashboard/organization/configuration/modals/NewBreedModal'
 
 function Toggle({
