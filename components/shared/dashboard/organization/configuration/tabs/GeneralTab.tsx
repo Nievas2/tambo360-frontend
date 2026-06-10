@@ -1,8 +1,8 @@
 'use client'
-import { Label } from '@/components/ui/label'
-import { MapPin, AlertCircle } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEstablishmentForm } from '@/hooks/establishment/useEstablishmentForm'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -10,22 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { CheckCircle2 } from 'lucide-react'
 
 const CUENCA_LECHERA_OPTIONS = [
-  'Cuenca Oeste',
+  'Cuenca Oeste (Bs. As.)',
+  'Cuenca Abasto',
+  'Cuenca Mar y Sierras',
   'Cuenca Norte',
   'Cuenca Sur',
-  'Cuenca Este',
   'Cuenca Central',
-]
-
-const TIPO_ORDENIE_OPTIONS = [
-  { value: 'espina_de_pescado', label: 'Espina de Pescado' },
-  { value: 'balde', label: 'Balde' },
-  { value: 'linea', label: 'Línea' },
-  { value: 'rotativo', label: 'Rotativo' },
-  { value: 'manual', label: 'Manual' },
-  { value: 'otro', label: 'Otro' },
 ]
 
 export default function GeneralTab() {
@@ -41,11 +34,9 @@ export default function GeneralTab() {
     isGettingLocation,
     handleGetLocation,
     onSubmit,
-    onCancel,
   } = useEstablishmentForm()
 
   const cuencaLechera = watch('cuencaLechera')
-  const tipoOrdenie = watch('tipoOrdenie')
 
   if (isLoading) {
     return (
@@ -59,26 +50,15 @@ export default function GeneralTab() {
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-[#0B1001]">
-          Datos del Establecimiento
-        </h1>
-        <p className="text-sm text-[#6B7280] mt-1">
-          Gestione la información estructural de una unidad productiva para
-          optimizar el seguimiento y los reportes de rendimiento.
-        </p>
+        <h1 className="text-2xl font-bold text-[#0B1001]">Configuración</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* Formulario */}
-          <div
-            className={cn(
-              'flex-1 border border-[#E5E7EB] rounded-xl p-5 flex flex-col gap-4 bg-white',
-              errors.nombre ? 'border-l-4 border-l-[#EF4444]' : ''
-            )}
-          >
-            <p className="text-sm font-semibold text-[#0B1001]">
-              Identificación General
+          {/* Tarjeta izquierda — Datos del Establecimiento */}
+          <div className="flex-1 border border-[#E5E7EB] rounded-xl p-5 flex flex-col gap-4 bg-white">
+            <p className="text-base font-bold text-[#0B1001]">
+              Datos del Establecimiento
             </p>
 
             {/* Nombre */}
@@ -88,7 +68,7 @@ export default function GeneralTab() {
               </Label>
               <input
                 {...register('nombre')}
-                placeholder="Tambo La Esperanza"
+                placeholder="Ej: El Progreso S.A."
                 className={cn(
                   'h-10 w-full px-3 rounded-lg border text-sm outline-none transition-colors bg-[#F9FAFB]',
                   errors.nombre
@@ -97,12 +77,9 @@ export default function GeneralTab() {
                 )}
               />
               {errors.nombre && (
-                <div className="flex items-center gap-1.5 bg-[#FEF2F2] border border-[#FECACA] rounded-lg px-3 py-2">
-                  <AlertCircle size={14} className="text-[#EF4444] shrink-0" />
-                  <p className="text-xs text-[#EF4444]">
-                    {errors.nombre.message}
-                  </p>
-                </div>
+                <p className="text-xs text-[#EF4444]">
+                  {errors.nombre.message}
+                </p>
               )}
             </div>
 
@@ -140,114 +117,82 @@ export default function GeneralTab() {
               )}
             </div>
 
-            {/* Tipo de Ordeñe */}
-            <div className="flex flex-col gap-1.5">
-              <Label className="text-sm text-[#374151]">Tipo de ordeñe</Label>
-              <Select
-                value={tipoOrdenie}
-                onValueChange={(val) =>
-                  setValue('tipoOrdenie', val, { shouldValidate: true })
-                }
-              >
-                <SelectTrigger
-                  className={cn(
-                    'h-10 w-full bg-[#F9FAFB] text-sm',
-                    errors.tipoOrdenie ? 'border-[#EF4444]' : 'border-[#D1D5DB]'
-                  )}
-                >
-                  <SelectValue placeholder="Seleccionar tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  {TIPO_ORDENIE_OPTIONS.map((o) => (
-                    <SelectItem key={o.value} value={o.value}>
-                      {o.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.tipoOrdenie && (
-                <p className="text-xs text-[#EF4444]">
-                  {errors.tipoOrdenie.message}
-                </p>
-              )}
-            </div>
-
             {/* Geolocalización */}
             <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <Label className="text-sm text-[#374151]">
-                  Geolocalización
-                </Label>
+              <Label className="text-sm text-[#374151]">
+                Geolocalización (Clima exacto)
+              </Label>
+              <div className="flex gap-2">
+                <input
+                  {...register('geolocalizacion')}
+                  placeholder="-34.6037, -58.3816"
+                  className={cn(
+                    'h-10 flex-1 px-3 rounded-lg border text-sm outline-none transition-colors bg-[#F9FAFB]',
+                    geoError
+                      ? 'border-[#EF4444]'
+                      : 'border-[#D1D5DB] focus:border-[#29845A]'
+                  )}
+                />
                 <button
                   type="button"
                   onClick={handleGetLocation}
                   disabled={isGettingLocation}
-                  className="flex items-center gap-1.5 text-xs font-medium text-white bg-[#29845A] px-3 py-1.5 rounded-full hover:bg-[#29845A]/90 transition-colors disabled:opacity-60"
+                  className="flex items-center gap-1.5 text-xs font-medium text-white bg-[#29845A] px-4 py-2 rounded-lg hover:bg-[#29845A]/90 transition-colors disabled:opacity-60 shrink-0"
                 >
-                  <MapPin size={12} />
-                  {isGettingLocation ? 'Obteniendo...' : 'Usar mi ubicación'}
+                  <MapPin size={14} />
+                  {isGettingLocation ? 'Obteniendo...' : 'Ubicar'}
                 </button>
               </div>
-              <input
-                {...register('geolocalizacion')}
-                placeholder="-34.6037, -58.3816"
-                className={cn(
-                  'h-10 w-full px-3 rounded-lg border text-sm outline-none transition-colors bg-[#F9FAFB]',
-                  geoError
-                    ? 'border-[#EF4444]'
-                    : 'border-[#D1D5DB] focus:border-[#29845A]'
-                )}
-              />
-              {geoError && (
-                <div className="flex items-start gap-1.5 bg-[#FEF2F2] border border-[#FECACA] rounded-lg px-3 py-2">
-                  <AlertCircle
-                    size={14}
-                    className="text-[#EF4444] shrink-0 mt-0.5"
-                  />
-                  <p className="text-xs text-[#EF4444]">{geoError}</p>
-                </div>
-              )}
+              {geoError && <p className="text-xs text-[#EF4444]">{geoError}</p>}
             </div>
+
+            {/* Botón Guardar */}
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full py-3 text-sm font-bold text-white bg-[#29845A] rounded-lg hover:bg-[#29845A]/90 transition-colors disabled:opacity-60 mt-2"
+            >
+              {isPending ? 'Guardando...' : 'Guardar Cambios'}
+            </button>
           </div>
 
-          {/* Diagnóstico Inicial */}
-          <div className="w-full lg:w-56 shrink-0">
-            <div className="rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] p-4 flex flex-col gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[#29845A] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
-                  i
-                </span>
-                <p className="text-sm font-semibold text-[#14532D]">
-                  Diagnóstico Inicial
-                </p>
-              </div>
-              <p className="text-xs text-[#166534] leading-relaxed">
-                Los datos mostrados han sido recuperados automáticamente de su
-                diagnóstico completado el 12 de febrero. Revise la ubicación
-                exacta para asegurar la precisión de los reportes
-                meteorológicos.
+          {/* Tarjeta derecha — Diagnóstico */}
+          <div className="flex-1 border border-[#BBF7D0] rounded-xl p-5 flex flex-col gap-4 bg-[#F0FDF4]">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={20} className="text-[#29845A]" />
+              <p className="text-base font-bold text-[#14532D]">
+                Diagnóstico Completado
               </p>
             </div>
-          </div>
-        </div>
 
-        {/* Botones */}
-        <div className="flex justify-center gap-3 mt-6">
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={isPending}
-            className="px-8 py-2.5 text-sm font-medium text-[#374151] bg-white border border-[#D1D5DB] rounded-lg hover:bg-[#F9FAFB] transition-colors disabled:opacity-60"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            disabled={isPending}
-            className="px-8 py-2.5 text-sm font-medium text-white bg-[#29845A] rounded-lg hover:bg-[#29845A]/90 transition-colors disabled:opacity-60"
-          >
-            {isPending ? 'Guardando...' : 'Guardar Cambios'}
-          </button>
+            <div className="flex flex-col gap-3">
+              {[
+                { label: 'DEL Global (Curva)', value: '150 Días' },
+                { label: 'Tipo de Ordeñe', value: '2 veces/día · Mecánico' },
+                { label: 'Rodeo Alta', value: '120 cab · $4.50/día' },
+                { label: 'Rodeo Baja', value: '80 cab · $2.80/día' },
+                { label: 'Secas', value: '20 cab · $1.50/día' },
+                { label: 'Comprador', value: 'Danone Argentina' },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center justify-between"
+                >
+                  <p className="text-sm text-[#166534]">{item.label}</p>
+                  <p className="text-sm font-bold text-[#14532D]">
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="w-full py-2.5 text-sm font-medium text-[#374151] bg-white border border-[#D1D5DB] rounded-lg hover:bg-[#F9FAFB] transition-colors mt-2"
+            >
+              Rehacer Diagnóstico
+            </button>
+          </div>
         </div>
       </form>
     </div>
