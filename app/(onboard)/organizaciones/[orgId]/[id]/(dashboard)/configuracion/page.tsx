@@ -1,8 +1,7 @@
-import React from 'react'
-import Configuration from '@/components/shared/dashboard/organization/configuration/Configuration'
+import ConfigurationDashboard from '@/components/shared/dashboard/organization/configuration/ConfigurationDashboard'
 
 const Page = () => {
-  return <Configuration />
+  return <ConfigurationDashboard />
 }
 
 export default Page
