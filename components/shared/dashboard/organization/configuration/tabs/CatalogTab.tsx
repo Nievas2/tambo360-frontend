@@ -2,6 +2,9 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import InventarioRodeosTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/InventarioRodeosTab'
+import TransferirAnimalesTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/TransferirAnimalesTab'
+import HistMovimientoTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/HistMovimientoTab'
+import ParametrosTamboTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/ParametrosTamboTab'
 
 const CATALOG_SUBTABS = [
   { id: 'inventario', label: 'Inventario de Rodeos' },
@@ -18,7 +21,6 @@ export default function CatalogTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Subtabs navegación */}
-      {/* Añadidas clases directas arbitrarias para desaparecer barras y flechas en webkit/firefox */}
       <nav className="flex gap-1 border-b border-[#E5E7EB] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {CATALOG_SUBTABS.map((tab) => (
           <button
@@ -39,21 +41,9 @@ export default function CatalogTab() {
       {/* Contenido */}
       <div className="w-full">
         {activeSubTab === 'inventario' && <InventarioRodeosTab />}
-        {activeSubTab === 'transferir' && (
-          <p className="text-sm text-[#6B7280]">
-            Transferir Animales — próximamente
-          </p>
-        )}
-        {activeSubTab === 'movimientos' && (
-          <p className="text-sm text-[#6B7280]">
-            Hist. Movimientos — próximamente
-          </p>
-        )}
-        {activeSubTab === 'parametros' && (
-          <p className="text-sm text-[#6B7280]">
-            Parámetros de Tambo — próximamente
-          </p>
-        )}
+        {activeSubTab === 'transferir' && <TransferirAnimalesTab />}
+        {activeSubTab === 'movimientos' && <HistMovimientoTab />}
+        {activeSubTab === 'parametros' && <ParametrosTamboTab />}
         {activeSubTab === 'control' && (
           <p className="text-sm text-[#6B7280]">
             Control Lechero Mensual — próximamente
