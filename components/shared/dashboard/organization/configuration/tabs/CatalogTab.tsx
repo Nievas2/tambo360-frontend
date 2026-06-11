@@ -5,6 +5,7 @@ import InventarioRodeosTab from '@/components/shared/dashboard/organization/conf
 import TransferirAnimalesTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/TransferirAnimalesTab'
 import HistMovimientoTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/HistMovimientoTab'
 import ParametrosTamboTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/ParametrosTamboTab'
+import ControlLecheroTab from '@/components/shared/dashboard/organization/configuration/tabs/catalog/ControlLecheroTab'
 
 const CATALOG_SUBTABS = [
   { id: 'inventario', label: 'Inventario de Rodeos' },
@@ -44,11 +45,7 @@ export default function CatalogTab() {
         {activeSubTab === 'transferir' && <TransferirAnimalesTab />}
         {activeSubTab === 'movimientos' && <HistMovimientoTab />}
         {activeSubTab === 'parametros' && <ParametrosTamboTab />}
-        {activeSubTab === 'control' && (
-          <p className="text-sm text-[#6B7280]">
-            Control Lechero Mensual — próximamente
-          </p>
-        )}
+        {activeSubTab === 'control' && <ControlLecheroTab />}
         {activeSubTab === 'productos' && (
           <p className="text-sm text-[#6B7280]">
             Productos Destino — próximamente
