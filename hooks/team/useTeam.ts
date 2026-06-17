@@ -17,7 +17,8 @@ export function useTeam() {
   const [deleteTarget, setDeleteTarget] = useState<Invitacion | null>(null)
   const [search, setSearch] = useState('')
 
-  const { data: invitationsData, isLoading } = useInvitations()
+  const { data: invitationsResponse, isLoading } = useInvitations()
+  const invitationsData = invitationsResponse?.data
   const { mutateAsync: sendInvite, isPending } = useSendInvite()
 
   const {

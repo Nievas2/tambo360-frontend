@@ -13,8 +13,7 @@ export function useInvitations() {
   >({
     queryKey: queryKeys.invitation.lists(),
     queryFn: async () => {
-      const { data } = await getInvitations()
-      return data
+      return await getInvitations()
     },
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
