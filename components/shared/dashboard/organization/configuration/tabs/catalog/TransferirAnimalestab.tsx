@@ -1,209 +1,297 @@
 'use client'
 import { useState } from 'react'
-import { ArrowRightLeft, Info, CheckCircle2 } from 'lucide-react'
+import { Calendar, AlertTriangle, ArrowRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-// Datos quemados para las transferencias activas con los textos exactos de la imagen
-const TRANSFERENCIAS_ACTIVAS = [
+type TransferenciaStatus = 'EN CURSO' | 'PRÓXIMO VENCIMIENTO' | 'PLANIFICADO'
+
+interface Transferencia {
+  id: number
+  desde: string
+  hacia: string
+  cantidadTexto: string
+  motivo: string
+  status: TransferenciaStatus
+  infoRetornoTexto: string
+  infoRetornoValor: string
+  tipoIcono: 'animal' | 'medica' | 'calendario'
+}
+
+// DATOS QUEMADOS EXACTOS DE FIGMA (image_365167.png)
+const TRANSFERENCIAS_ACTIVAS: Transferencia[] = [
   {
     id: 1,
-    desde: 'Alta',
-    hacia: 'Secas',
-    cant: '15 cab',
-    retorno: '25/06',
-    isAlert: true,
+    desde: 'Cría A',
+    hacia: 'Recría',
+    cantidadTexto: '12 Terneros Holando',
+    motivo: 'Motivo: Engorde Estacional',
+    status: 'EN CURSO',
+    infoRetornoTexto: 'Fecha de Retorno',
+    infoRetornoValor: 'En 5 días',
+    tipoIcono: 'animal',
   },
   {
     id: 2,
-    desde: 'Baja',
-    hacia: 'Alta',
-    cant: '5 cab',
-    retorno: 'Manual',
-    isAlert: false,
+    desde: 'Lote 2',
+    hacia: 'Sanidad',
+    cantidadTexto: '4 Vaquillonas',
+    motivo: 'Motivo: Vacunación Aftosa',
+    status: 'PRÓXIMO VENCIMIENTO',
+    infoRetornoTexto: 'Fecha de Retorno',
+    infoRetornoValor: 'Mañana',
+    tipoIcono: 'medica',
+  },
+  {
+    id: 3,
+    desde: 'Pradera B',
+    hacia: 'Cabaña',
+    cantidadTexto: '25 Novillos',
+    motivo: 'Motivo: Clasificación genética',
+    status: 'PLANIFICADO',
+    infoRetornoTexto: 'Inicio Programado',
+    infoRetornoValor: '24 Jun,2026',
+    tipoIcono: 'calendario',
   },
 ]
 
 export default function TransferirAnimalesTab() {
-  // Estados para controlar el formulario
-  const [origen, setOrigen] = useState('alta')
-  const [destino, setDestino] = useState('baja')
-  const [cantidad, setCantidad] = useState('10')
-  const [motivo, setMotivo] = useState('baja_produccion')
-  const [plazo, setPlazo] = useState('30')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log({ origen, destino, cantidad, motivo, plazo })
-  }
+  const [origen, setOrigen] = useState('')
+  const [destino, setDestino] = useState('')
+  const [cantidad, setCantidad] = useState('')
+  const [plazo, setPlazo] = useState('')
+  const [motivo, setMotivo] = useState('')
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-12 w-full">
-      {/* Formulario Izquierdo: Nueva Transferencia */}
-      <div className="lg:col-span-5 bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm flex flex-col h-fit">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="p-2 bg-[#F0FDF4] text-[#29845A] rounded-lg">
-            <ArrowRightLeft size={18} />
-          </div>
-          <h3 className="text-base font-bold text-[#111827]">
+    <div className="w-full bg-white font-sans antialiased">
+      {/* Contenedor principal en Grid sin cajas grises de fondo */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 max-w-[1240px] mx-auto pt-4 pb-12 px-4">
+        {/* COLUMNA IZQUIERDA: Formulario Limpio estilo Figma */}
+        <div className="lg:col-span-5 flex flex-col">
+          <h2 className="text-[16px] font-bold text-black mb-6 tracking-tight">
             Nueva Transferencia
-          </h3>
-        </div>
+          </h2>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Rodeo Origen */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#4B5563]">
-              Rodeo Origen
-            </label>
-            <select
-              value={origen}
-              onChange={(e) => setOrigen(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-            >
-              <option value="alta">Rodeo Alta (120 cab)</option>
-              <option value="baja">Rodeo Baja (80 cab)</option>
-              <option value="secas">Secas (20 cab)</option>
-            </select>
-          </div>
-
-          {/* Rodeo Destino */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#4B5563]">
-              Rodeo Destino
-            </label>
-            <select
-              value={destino}
-              onChange={(e) => setDestino(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-            >
-              <option value="baja">Rodeo Baja (80 cab)</option>
-              <option value="secas">Secas (20 cab)</option>
-              <option value="alta">Rodeo Alta (120 cab)</option>
-            </select>
-          </div>
-
-          {/* Cantidad de Animales */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#4B5563]">
-              Cantidad de Animales
-            </label>
-            <input
-              type="number"
-              value={cantidad}
-              onChange={(e) => setCantidad(e.target.value)}
-              placeholder="10"
-              className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-            />
-          </div>
-
-          {/* Motivo - CORREGIDO EXACTO CON LAS OPCIONES DE LA IMAGEN (image_72711a.png) */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#4B5563]">
-              Motivo
-            </label>
-            <select
-              value={motivo}
-              onChange={(e) => setMotivo(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-            >
-              <option value="baja_produccion">
-                Baja producción (DEL avanzado)
-              </option>
-              <option value="preparto_secado">Preparto / Secado</option>
-              <option value="parto_ordeñe">Parto / Incorporar a ordeñe</option>
-              <option value="enfermedad">Enfermedad</option>
-            </select>
-          </div>
-
-          {/* Plazo de retorno */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-[#4B5563]">
-              Plazo de retorno (días)
-            </label>
-            <input
-              type="number"
-              value={plazo}
-              onChange={(e) => setPlazo(e.target.value)}
-              placeholder="30"
-              className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-            />
-          </div>
-
-          {/* Bloque Informativo */}
-          <div className="flex gap-2.5 bg-[#F0FDF4] border border-[#BBF7D0] rounded-xl p-3.5 mt-2">
-            <Info size={16} className="text-[#16A34A] shrink-0 mt-0.5" />
-            <p className="text-xs text-[#166534] leading-relaxed">
-              Los días comienzan a contar desde el momento del registro. El
-              sistema generará una alerta automática al vencimiento.
-            </p>
-          </div>
-
-          {/* Botón de Confirmación */}
-          <button
-            type="submit"
-            className="w-full mt-2 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold py-2.5 px-4 rounded-xl shadow-sm transition-colors text-sm flex items-center justify-center gap-2"
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={(e) => e.preventDefault()}
           >
-            <CheckCircle2 size={16} />
-            Confirmar Transferencia
-          </button>
-        </form>
-      </div>
+            {/* Rodeo Origen */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-medium text-gray-700">
+                Rodeo Origen
+              </label>
+              <div className="relative">
+                <select
+                  value={origen}
+                  onChange={(e) => setOrigen(e.target.value)}
+                  className="w-full h-10 px-3 text-sm bg-white border border-gray-200 rounded-lg text-gray-400 outline-none appearance-none focus:border-emerald-600 focus:text-black transition-colors"
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="cria_a">Cría A (120 cab)</option>
+                  <option value="rodeo_alta">Rodeo Alta (120 cab)</option>
+                </select>
+                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400 text-xs">
+                  ▼
+                </div>
+              </div>
+            </div>
 
-      {/* Tabla Derecha: Transferencias Activas */}
-      <div className="lg:col-span-7 bg-white border border-[#E5E7EB] rounded-xl shadow-sm overflow-hidden h-fit">
-        <div className="p-5 border-b border-[#E5E7EB]">
-          <h3 className="text-base font-bold text-[#111827]">
-            Transferencias Activas
-          </h3>
+            {/* Rodeo Destino */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-medium text-gray-700">
+                Rodeo Destino
+              </label>
+              <div className="relative">
+                <select
+                  value={destino}
+                  onChange={(e) => setDestino(e.target.value)}
+                  className="w-full h-10 px-3 text-sm bg-white border border-gray-200 rounded-lg text-gray-400 outline-none appearance-none focus:border-emerald-600 focus:text-black transition-colors"
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="recria">Recría</option>
+                  <option value="rodeo_baja">Rodeo Baja (80 cab)</option>
+                </select>
+                <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-gray-400 text-xs">
+                  ▼
+                </div>
+              </div>
+            </div>
+
+            {/* Cantidad de Animales */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-medium text-gray-700">
+                Cantidad de Animales
+              </label>
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={cantidad}
+                  onChange={(e) => setCantidad(e.target.value)}
+                  placeholder="00"
+                  className="w-full h-10 pl-3 pr-20 text-sm bg-white border border-gray-200 rounded-lg text-gray-800 outline-none focus:border-emerald-600 transition-colors"
+                />
+                <span className="absolute right-4 text-sm font-medium text-gray-400 pointer-events-none">
+                  Cabezas
+                </span>
+              </div>
+            </div>
+
+            {/* Plazos de Retorno */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-medium text-gray-700">
+                Plazos de Retorno (Días)
+              </label>
+              <input
+                type="text"
+                value={plazo}
+                onChange={(e) => setPlazo(e.target.value)}
+                className="w-full h-10 px-3 text-sm bg-white border border-gray-200 rounded-lg text-gray-800 outline-none focus:border-emerald-600 transition-colors"
+              />
+            </div>
+
+            {/* Motivo */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[13px] font-medium text-gray-700">
+                Motivo de transferencia
+              </label>
+              <textarea
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                rows={4}
+                className="w-full p-3 text-sm bg-white border border-gray-200 rounded-lg text-gray-800 outline-none resize-none focus:border-emerald-600 transition-colors"
+              />
+            </div>
+
+            {/* Botón Ejecutar */}
+            <button
+              type="submit"
+              className="w-full h-11 mt-4 bg-[#217B53] hover:bg-[#195F40] text-white font-bold rounded-lg transition-all text-sm flex items-center justify-center shadow-none"
+            >
+              Ejecutar Transferencia
+            </button>
+          </form>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  DESDE
-                </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  HACIA
-                </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  CANT.
-                </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280] text-right">
-                  RETORNO
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
-              {TRANSFERENCIAS_ACTIVAS.map((item) => (
-                <tr
+        {/* COLUMNA DERECHA: Tarjetas de Transferencias Activas estilo Figma */}
+        <div className="lg:col-span-7 flex flex-col">
+          <h2 className="text-[16px] font-bold text-black mb-6 tracking-tight">
+            Transferencias Activas
+          </h2>
+
+          <div className="flex flex-col gap-5">
+            {TRANSFERENCIAS_ACTIVAS.map((item) => {
+              const isEnCurso = item.status === 'EN CURSO'
+              const isVencimiento = item.status === 'PRÓXIMO VENCIMIENTO'
+
+              const borderLeftColor = isEnCurso
+                ? 'bg-[#4B8A21]'
+                : isVencimiento
+                  ? 'bg-[#DE2100]'
+                  : 'bg-[#949494]'
+
+              const badgeColor = isEnCurso
+                ? 'bg-[#1D7952] text-white'
+                : isVencimiento
+                  ? 'bg-[#DE2100] text-white'
+                  : 'bg-[#929292] text-white'
+
+              return (
+                <div
                   key={item.id}
-                  className="hover:bg-[#F9FAFB] transition-colors"
+                  className="flex bg-white rounded-xl border border-gray-100 shadow-[0_6px_20px_rgba(0,0,0,0.05)] overflow-hidden min-h-[120px]"
                 >
-                  <td className="py-4 px-5 text-[#374151] font-medium">
-                    {item.desde}
-                  </td>
-                  <td className="py-4 px-5 text-[#374151] font-medium">
-                    {item.hacia}
-                  </td>
-                  <td className="py-4 px-5 text-[#111827] font-bold">
-                    {item.cant}
-                  </td>
-                  <td className="py-4 px-5 text-right whitespace-nowrap">
-                    {item.isAlert ? (
-                      <span className="px-3 py-1 text-xs font-bold bg-[#FEF3C7] text-[#D97706] rounded-full">
-                        {item.retorno}
+                  {/* Línea lateral de color */}
+                  <div
+                    className={cn('w-[6px] h-full shrink-0', borderLeftColor)}
+                  />
+
+                  {/* Contenido Interno de la Tarjeta */}
+                  <div className="w-full p-5 flex flex-col justify-between">
+                    {/* Fila Superior: Rutas y Estado */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 tracking-widest">
+                        <div className="flex flex-col">
+                          <span>DESDE</span>
+                          <span className="text-xs font-semibold text-gray-800 mt-1">
+                            {item.desde}
+                          </span>
+                        </div>
+                        <ArrowRight
+                          size={14}
+                          className="text-gray-400 mt-4 mx-1"
+                        />
+                        <div className="flex flex-col">
+                          <span>HASTA</span>
+                          <span className="text-xs font-semibold text-gray-800 mt-1">
+                            {item.hacia}
+                          </span>
+                        </div>
+                      </div>
+
+                      <span
+                        className={cn(
+                          'px-2.5 py-1 text-[9px] font-extrabold rounded-md tracking-wider',
+                          badgeColor
+                        )}
+                      >
+                        {item.status}
                       </span>
-                    ) : (
-                      <span className="px-3 py-1 text-xs font-medium bg-[#E5E7EB] text-[#4B5563] rounded-full">
-                        {item.retorno}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </div>
+
+                    {/* Fila Inferior: Icono, Cantidad y Tiempos */}
+                    <div className="flex items-end justify-between pt-2">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-0.5 shrink-0">
+                          {item.tipoIcono === 'animal' && (
+                            <span className="text-xl text-emerald-800">🐾</span>
+                          )}
+                          {item.tipoIcono === 'medica' && (
+                            <div className="w-[18px] h-[18px] rounded-full border-[2px] border-red-500 flex items-center justify-center text-red-500 font-extrabold text-[11px]">
+                              +
+                            </div>
+                          )}
+                          {item.tipoIcono === 'calendario' && (
+                            <Calendar size={18} className="text-emerald-800" />
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-bold text-gray-900">
+                            {item.cantidadTexto}
+                          </span>
+                          <span className="text-xs text-gray-400 font-medium">
+                            {item.motivo}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Tiempos / Alertas */}
+                      <div className="flex flex-col items-end text-right">
+                        <span className="text-[10px] font-bold text-gray-400 tracking-tight">
+                          {item.infoRetornoTexto}
+                        </span>
+                        <span
+                          className={cn(
+                            'text-[13px] font-black mt-0.5 flex items-center gap-1',
+                            isEnCurso && 'text-[#1D7952]',
+                            isVencimiento && 'text-[#DE2100]',
+                            item.status === 'PLANIFICADO' && 'text-gray-900'
+                          )}
+                        >
+                          {isVencimiento && (
+                            <AlertTriangle
+                              size={12}
+                              className="text-[#DE2100] stroke-[3]"
+                            />
+                          )}
+                          {item.infoRetornoValor}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>
