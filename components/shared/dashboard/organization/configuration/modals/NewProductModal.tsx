@@ -2,11 +2,11 @@
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useNewProduct } from '@/hooks/product/useNewProduct'
+import { Unidad } from '@/types/enums'
 
 const UNIDADES = [
-  { value: 'litros', label: 'Litros' },
-  { value: 'kilogramos', label: 'Kilogramos (kg)' },
-  { value: 'unidades', label: 'Unidades' },
+  { value: Unidad.LITROS, label: 'Litros' },
+  { value: Unidad.KG, label: 'Kilogramos (kg)' },
 ]
 
 interface NewProductModalProps {
@@ -76,7 +76,7 @@ export default function NewProductModal({
             <label className="text-sm text-[#374151]">Unidad de Medida</label>
             <select
               value={unidad}
-              onChange={(e) => setValue('unidad', e.target.value)}
+              onChange={(e) => setValue('unidad', e.target.value as Unidad)}
               className="h-10 w-full px-3 rounded-lg border border-[#D1D5DB] text-sm outline-none bg-[#F9FAFB] focus:border-[#29845A]"
             >
               {UNIDADES.map((u) => (

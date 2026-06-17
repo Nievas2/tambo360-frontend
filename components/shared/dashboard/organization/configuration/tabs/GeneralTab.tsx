@@ -41,7 +41,7 @@ export default function GeneralTab() {
   } = useEstablishmentForm()
 
   const cuencaLechera = watch('cuencaLechera')
-  const tipoOrdene = watch('tipoOrdene')
+  const tipoOrdene = watch('tipoOrdenie')
 
   if (isLoading) {
     return (
@@ -131,7 +131,7 @@ export default function GeneralTab() {
               <Select
                 value={tipoOrdene}
                 onValueChange={(val) =>
-                  setValue('tipoOrdene', val, { shouldValidate: true })
+                  setValue('tipoOrdenie', val, { shouldValidate: true })
                 }
               >
                 <SelectTrigger className="h-10 w-full bg-[#F1F3F5] text-sm text-black border-gray-200/80 shadow-none">

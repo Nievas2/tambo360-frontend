@@ -1,15 +1,9 @@
 'use client'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { newProductSchema, NewProductForm } from '@/types/product'
+import { Unidad } from '@/types/enums'
 import { toast } from 'sonner'
-
-const newProductSchema = z.object({
-  nombre: z.string().min(1, 'El nombre del producto es requerido'),
-  unidad: z.string().min(1, 'La unidad de medida es requerida'),
-})
-
-export type NewProductForm = z.infer<typeof newProductSchema>
 
 interface UseNewProductProps {
   onClose: () => void
@@ -27,7 +21,7 @@ export function useNewProduct({ onClose }: UseNewProductProps) {
     resolver: zodResolver(newProductSchema),
     defaultValues: {
       nombre: '',
-      unidad: 'litros',
+      unidad: Unidad.LITROS,
     },
   })
 
