@@ -3,6 +3,7 @@ import { CostosDirecto } from '@/types/cost'
 import { Merma } from '@/types/decrease'
 import { Unidad } from '@/types/enums'
 import { Establecimiento, Raza } from '@/types/establishment'
+import { Rodeo } from '@/types/establishment/herd'
 import { Product } from '@/types/product'
 import z from 'zod'
 
@@ -21,7 +22,7 @@ export const BatchSchema = z.object({
       })
       .positive('La cantidad debe ser mayor a 0')
   ),
-  idRaza: z.uuidv4().min(1, 'Debe seleccionar una raza valida'),
+  idRodeo: z.uuidv4().min(1, 'Debe seleccionar un rodeo válido'),
   unidad: z.enum(Unidad, 'Unidad inválida'),
 
   cantidad: z.preprocess(
@@ -98,6 +99,7 @@ export interface Lote {
   establecimiento?: Establecimiento
 
   raza: Raza
+  rodeo: Rodeo
   mermas: Merma[]
   costosDirectos?: CostosDirecto[]
   alertas?: Alert[]

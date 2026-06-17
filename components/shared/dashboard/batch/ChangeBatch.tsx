@@ -32,9 +32,9 @@ import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { ConnectionErrorModal } from '@/components/ConnectionErrorModal'
 import { Product } from '@/types/product'
 import { Unidad } from '@/types/enums'
-import { useBreeds } from '@/hooks/establishment/breeds/useBreeds'
-import { Breed } from '@/types/establishment/breed'
 import { usePathname } from 'next/navigation'
+import { useHerds } from '@/hooks/establishment/herd/useHerds'
+import { Rodeo } from '@/types/establishment/herd'
 
 interface ChangeBatchProps {
   open: boolean
@@ -55,7 +55,7 @@ const ChangeBatch = ({
   const { mutateAsync } = useCreateBatch()
   const { mutateAsync: mutateAsyncUpdate } = useUpdateBatch()
   const { data } = useProducts()
-  const { data: breeds } = useBreeds()
+  const { data: herds } = useHerds()
   const pathname = usePathname()
 
   const { showErrorMessage } = useErrorMessage()
@@ -83,7 +83,7 @@ const ChangeBatch = ({
       cantidad: '',
       fechaProduccion: '',
       unidad: Unidad.KG,
-      idRaza: '',
+      idRodeo: '',
       cantRaza: 0,
     },
     resolver: zodResolver(BatchSchema),
@@ -101,7 +101,7 @@ const ChangeBatch = ({
         cantidad: (batch.cantidad ?? '').toString(),
         fechaProduccion: fecha,
         unidad: batch.unidad ?? Unidad.KG,
-        idRaza: batch.idRaza ?? '',
+        idRodeo: batch.rodeo?.idRodeo ?? '',
         cantRaza: batch.cantRazas
           ? batch.cantRazas.toString()
           : cantRazas
@@ -120,7 +120,7 @@ const ChangeBatch = ({
         cantidad: '',
         fechaProduccion: '',
         unidad: Unidad.KG,
-        idRaza: '',
+        idRodeo: '',
         cantRaza: 0,
       })
     }
@@ -140,7 +140,7 @@ const ChangeBatch = ({
           idProducto: data.idProducto,
           cantidad: data.cantidad,
           unidad: data.unidad,
-          idRaza: data.idRaza,
+          idRodeo: data.idRodeo,
           cantRaza: data.cantRaza,
           fechaProduccion: fechaProduccion,
           idLote: idLote,
@@ -281,34 +281,34 @@ const ChangeBatch = ({
             <div className="flex items-center justify-between gap-2 w-full">
               {/* razas */}
               <div className="space-y-2 w-full mt-2">
-                <Label className="font-bold">Tipo de raza *</Label>
+                <Label className="font-bold">Tipo de rodeo *</Label>
                 <Select
-                  defaultValue={batch ? batch.idRaza : ''}
-                  onValueChange={(e) => setValue('idRaza', e)}
+                  defaultValue={batch ? batch.rodeo.idRodeo : ''}
+                  onValueChange={(e) => setValue('idRodeo', e)}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecciona raza..." />
+                    <SelectValue placeholder="Selecciona rodeo..." />
                   </SelectTrigger>
 
                   <SelectContent>
                     <SelectGroup>
-                      {breeds?.data.data.map((breed: Breed) => (
-                        <SelectItem key={breed.idRaza} value={breed.idRaza}>
-                          {breed.nombre}
+                      {herds?.data.data.map((rodeo: Rodeo) => (
+                        <SelectItem key={rodeo.idRodeo} value={rodeo.idRodeo}>
+                          {rodeo.label}
                         </SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
-                {errors.idRaza && (
+                {errors.idRodeo && (
                   <span className="text-xs text-red-600">
-                    {errors.idRaza.message}
+                    {errors.idRodeo.message}
                   </span>
                 )}
               </div>
 
-              {/* cantidad raza */}
+              {/* cantidad rodeo */}
               <div className="space-y-2 w-full h-full">
                 <Label className="font-bold">Cantidad de vacas *</Label>
                 <Input

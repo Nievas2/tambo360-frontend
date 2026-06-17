@@ -3,7 +3,7 @@ import {
   configurationSchema,
   ConfigurationData,
 } from '@/types/establishment/configuration'
-import { TipoOrdenie, VentaLeche } from '@/types/enums'
+import { TipoOrdenie, VentaLeche, TipoRodeo } from '@/types/enums'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight, Minus, Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -24,8 +24,6 @@ import { useDebounce } from 'use-debounce'
 import { useUpdateConfiguration } from '@/hooks/establishment/useUpdateConfiguration'
 import { usePathname } from 'next/navigation'
 import { useConfiguration } from '@/hooks/establishment/useConfiguration'
-import { useBreeds } from '@/hooks/establishment/breeds/useBreeds'
-import { Breed } from '@/types/establishment/breed'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -43,9 +41,7 @@ const Configuration = () => {
   const [searchProvince, setSearchProvince] = useState('')
   const [idProvince, setIdProvince] = useState<string | undefined>('')
   const [searchLocality, setSearchLocality] = useState('')
-  const [newRazaName, setNewRazaName] = useState('')
   const [selectedLocalityName, setSelectedLocalityName] = useState('')
-  const [confirmContinue, setConfirmContinue] = useState(false)
   const [searchP] = useDebounce(searchProvince, 300)
   const [searchL] = useDebounce(searchLocality, 300)
   const pathname = usePathname()
@@ -53,7 +49,6 @@ const Configuration = () => {
 
   const { data: province } = useProvince({ name: searchP })
   const { data: locality } = useLocality({ id: idProvince, search: searchL })
-  const { data: breeds } = useBreeds()
 
   const {
     mutateAsync: sendConfiguration,
@@ -71,8 +66,11 @@ const Configuration = () => {
     formState: { errors },
   } = useForm<ConfigurationData>({
     defaultValues: {
-      cantidadVacas: 100,
-      Razas: [],
+      rodeos: Object.values(TipoRodeo).map((tipo) => ({
+        tipoRodeo: tipo,
+        cantVacas: 1,
+        costoRacion: 1,
+      })),
       cantOrdenie: 2,
       tipoOrdenie: undefined,
       promLitros: undefined,
@@ -87,24 +85,27 @@ const Configuration = () => {
   })
 
   useEffect(() => {
-    if (!config?.data || !breeds?.data?.data) return
+    if (!config?.data) return
 
     const data = config.data
+    const savedRodeos = data.rodeos ?? []
 
     reset({
-      cantidadVacas: data.cantidad_vacas ?? 100,
-      Razas:
-        data.razas?.map((r: any) => ({
-          id: r.id,
-          nombre: r.nombre,
-        })) ?? [],
+      rodeos: Object.values(TipoRodeo).map((tipo) => {
+        const saved = savedRodeos.find((r: any) => r.tipoRodeo === tipo)
+        return {
+          tipoRodeo: tipo,
+          cantVacas: saved?.cantVacas ?? 1,
+          costoRacion: saved?.costoRacion ?? 1,
+        }
+      }),
       cantOrdenie: data.ordeñe_por_dia ?? 2,
       tipoOrdenie: data.tipo_ordeñe,
       ventaLeche: data.venta_leche,
       promLitros: data.litros_por_dia,
       empleados: data.empleados ?? false,
       cantEmpleados:
-        data.cantidad_empleados !== undefined ? data.cantidad_empleados : 1,
+        data.cantidad_empleados !== null ? data.cantidad_empleados : 1,
       ubicacion: {
         provincia: data.provincia ?? '',
         localidad: data.localidad ?? '',
@@ -112,33 +113,7 @@ const Configuration = () => {
     })
 
     setSearchProvince(data.provincia ?? '')
-
     setSearchLocality(data.localidad ?? '')
-    setSelectedLocalityName(data.localidad ?? '')
-
-    const breedsFromApi = breeds.data.data
-
-    const normalizedRazas =
-      config.data.razas?.map((r: any) => {
-        const match = breedsFromApi.find(
-          (b: Breed) => b.nombre.toLowerCase() === r.nombre.toLowerCase()
-        )
-        if (match) {
-          return {
-            idRaza: match.idRaza,
-            nombre: match.nombre,
-          }
-        }
-
-        return {
-          nombre: r.nombre,
-        }
-      }) ?? []
-
-    reset((prev) => ({
-      ...prev,
-      Razas: normalizedRazas,
-    }))
   }, [config, reset])
 
   useEffect(() => {
@@ -153,21 +128,15 @@ const Configuration = () => {
     }
   }, [config, province])
 
-  const cantidadVacas = watch('cantidadVacas')
   const cantEmpleados = watch('cantEmpleados') ?? 1
-  const razasSeleccionadas = watch('Razas')
   const tipoOrdenie = watch('tipoOrdenie')
   const cantOrdenie = watch('cantOrdenie')
   const ventaLeche = watch('ventaLeche')
   const empleados = watch('empleados')
 
-  const allValues = watch()
-
   const onSubmit = (data: ConfigurationData) => {
     sendConfiguration(data, {
       onSuccess: () => {
-        console.log('success')
-        setConfirmContinue(true)
         if (pathname.includes('/cuestionario')) {
           toast.success('Configuración guardada correctamente', {
             description:
@@ -181,11 +150,13 @@ const Configuration = () => {
             duration: 5000,
           })
         }
+
+        router.push(pathname.replace('cuestionario', 'invitar'))
       },
     })
   }
 
-  const toggleRaza = (nombre: string, id?: string) => {
+  /*   const toggleRaza = (nombre: string, id?: string) => {
     const current = razasSeleccionadas ?? []
     const exists = current.find((r) => r.nombre === nombre)
 
@@ -202,7 +173,7 @@ const Configuration = () => {
         shouldValidate: true,
       })
     }
-  }
+  } */
 
   return (
     <div
@@ -213,16 +184,6 @@ const Configuration = () => {
           <h1 className="text-4xl font-bold text-slate-900">
             Configura tu Perfil
           </h1>
-          <Link
-            href={
-              pathname.includes('cuestionario')
-                ? pathname.replace('cuestionario', 'invitar')
-                : pathname.replace('configuracion', 'invitar')
-            }
-            className="bg-[#29845A] text-white text-[10px] px-3 py-1 rounded-full"
-          >
-            Invitación
-          </Link>
         </div>
         <p className="text-slate-500 text-lg">
           Ayudanos a personalizar la experiencia de Tambo360 con los datos
@@ -231,127 +192,101 @@ const Configuration = () => {
       </header>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-12">
-        {/* 1. Cantidad de Vacas */}
+        {/* 1. Cantidad de Vacas 
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
             1. ¿Cuántas vacas tenés en ordeñe hoy?
           </Label>
-          <div className="grid grid-cols-[auto_1fr_auto] gap-2 items-center h-14">
-            <button
-              type="button"
-              onClick={() =>
-                setValue('cantidadVacas', Math.max(1, cantidadVacas - 1), {
-                  shouldValidate: true,
-                })
-              }
-              className="h-full px-4 bg-[#669213] text-white rounded-lg hover:bg-[#669213]/80 transition-colors"
-            >
-              <Minus size={20} />
-            </button>
-            <input
-              type="number"
-              {...register('cantidadVacas', { valueAsNumber: true })}
-              className={cn(
-                'h-full border-2 rounded-lg text-center font-bold text-xl outline-none transition-colors',
-                errors.cantidadVacas
-                  ? 'border-red-400 focus:border-red-500'
-                  : 'border-lime-200 focus:border-[#669213]'
-              )}
-            />
-            <button
-              type="button"
-              onClick={() =>
-                setValue('cantidadVacas', cantidadVacas + 1, {
-                  shouldValidate: true,
-                })
-              }
-              className="h-full px-4 bg-[#669213] text-white rounded-lg hover:bg-[#669213]/80 transition-colors"
-            >
-              <Plus size={20} />
-            </button>
-          </div>
-          {errors.cantidadVacas && (
-            <p className="text-xs text-red-500">
-              {errors.cantidadVacas.message}
+          <div className="grid grid-cols-[auto_1fr] gap-2 items-center h-14">
+            <span className="inline-flex h-14 items-center rounded-lg border border-slate-200 bg-slate-50 px-4 text-xl font-bold text-slate-900">
+              {watch('rodeos')?.reduce(
+                (total, rodeo) => total + (rodeo.cantVacas ?? 0),
+                0
+              ) ?? 0}
+            </span>
+            <p className="text-sm text-slate-500">
+              Este total se calcula a partir de los rodeos definidos abajo.
             </p>
-          )}
-        </section>
-        {/* 2. Raza Predominante */}
+          </div>
+        </section> */}
+
+        {/* 1. Rodeos */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            2. ¿Qué raza predominante manejás?
+            1. ¿Cómo está compuesto tu rodeo?
           </Label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {/* Razas desde la API */}
-            {breeds?.data.data.map((breed: Breed) => (
-              <button
-                key={breed.idRaza}
-                type="button"
-                onClick={() => toggleRaza(breed.nombre, breed.idRaza)}
-                className={cn(
-                  'p-4 rounded-xl border font-medium transition-all',
-                  razasSeleccionadas?.find((r) => r.nombre === breed.nombre)
-                    ? 'bg-emerald-200 border-emerald-300 text-[#29845A]'
-                    : 'bg-white border-slate-200 text-slate-500 shadow-sm'
-                )}
+          <div className="grid gap-4">
+            {Object.values(TipoRodeo).map((tipo, index) => (
+              <div
+                key={tipo}
+                className="p-4 rounded-xl border border-slate-200 bg-white shadow-sm"
               >
-                {breed.nombre}
-              </button>
+                <div className="flex items-center justify-between gap-4 mb-3">
+                  <span className="font-semibold text-slate-900">
+                    {tipo.replace('_', ' ')}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-2">
+                    <Label className="text-xs font-medium text-slate-700">
+                      Cantidad de vacas
+                    </Label>
+                    <input
+                      type="number"
+                      min={1}
+                      {...register(`rodeos.${index}.cantVacas` as const, {
+                        valueAsNumber: true,
+                      })}
+                      className={cn(
+                        'h-14 w-full border-2 rounded-xl px-4 outline-none transition-colors',
+                        errors.rodeos?.[index]?.cantVacas
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-slate-200 focus:border-[#29845A]'
+                      )}
+                    />
+                    {errors.rodeos?.[index]?.cantVacas && (
+                      <p className="text-xs text-red-500">
+                        {errors.rodeos?.[index]?.cantVacas?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label className="text-xs font-medium text-slate-700">
+                      Costo de ración
+                    </Label>
+                    <input
+                      type="number"
+                      min={0.1}
+                      step={0.1}
+                      {...register(`rodeos.${index}.costoRacion` as const, {
+                        valueAsNumber: true,
+                      })}
+                      className={cn(
+                        'h-14 w-full border-2 rounded-xl px-4 outline-none transition-colors',
+                        errors.rodeos?.[index]?.costoRacion
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-slate-200 focus:border-[#29845A]'
+                      )}
+                    />
+                    {errors.rodeos?.[index]?.costoRacion && (
+                      <p className="text-xs text-red-500">
+                        {errors.rodeos?.[index]?.costoRacion?.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             ))}
-
-            {razasSeleccionadas
-              ?.filter((r) => !r.idRaza)
-              .map((r) => (
-                <button
-                  key={crypto.randomUUID()}
-                  type="button"
-                  className="p-4 rounded-xl border font-medium transition-all bg-emerald-200 border-emerald-300 text-[#29845A] capitalize"
-                  onClick={() => toggleRaza(r.nombre)}
-                >
-                  {r.nombre}
-                </button>
-              ))}
-
-            <div className="flex gap-2 p-2 rounded-xl border-2 bg-white border-slate-200 text-slate-500 shadow-sm">
-              <input
-                type="text"
-                placeholder="Otra raza..."
-                value={newRazaName}
-                onChange={(e) => setNewRazaName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && newRazaName.trim()) {
-                    e.preventDefault()
-                    toggleRaza(newRazaName.trim())
-                    setNewRazaName('')
-                  }
-                }}
-                className="w-full bg-transparent outline-none px-2 text-sm text-[#29845A] placeholder:text-emerald-400"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  if (newRazaName.trim()) {
-                    toggleRaza(newRazaName.trim())
-                    setNewRazaName('')
-                  }
-                }}
-                className="p-2 bg-[#29845A] text-white rounded-lg hover:bg-emerald-700"
-              >
-                <Plus size={18} />
-              </button>
-            </div>
           </div>
-
-          {errors.Razas && (
-            <p className="text-xs text-red-500">
-              {errors.Razas.message ?? 'Seleccioná al menos una raza'}
-            </p>
+          {errors.rodeos && !Array.isArray(errors.rodeos) && (
+            <p className="text-xs text-red-500">{errors.rodeos.message}</p>
           )}
         </section>
-        {/* 3. Frecuencia de Ordeñe */}
+
+        {/* 2. Frecuencia de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            3. ¿Cuántas veces al día ordeñás?
+            2. ¿Cuántas veces al día ordeñás?
           </Label>
           <div className="flex gap-8">
             {[1, 2, 3].map((n) => (
@@ -376,10 +311,11 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.cantOrdenie.message}</p>
           )}
         </section>
-        {/* 4. Tipo de Ordeñe */}
+
+        {/* 3. Tipo de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            4. ¿Qué tipo de ordeñe usás?
+            3. ¿Qué tipo de ordeñe usás?
           </Label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {TIPO_ORDENIE_OPTIONS.map(({ value, Label }) => (
@@ -404,10 +340,10 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.tipoOrdenie.message}</p>
           )}
         </section>
-        {/* 5. Producción Diaria */}
+        {/* 4. Producción Diaria */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            5. ¿Cuántos litros producís en promedio por día?
+            4. ¿Cuántos litros producís en promedio por día?
           </Label>
           <div className="relative">
             <input
@@ -430,10 +366,10 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.promLitros.message}</p>
           )}
         </section>
-        {/* 6. Frecuencia de Ordeñe */}
+        {/* 5. Frecuencia de Ordeñe */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            6. ¿A quién le vendes la leche?
+            5. ¿A quién le vendes la leche?
           </Label>
           <div className="flex gap-8">
             {[
@@ -463,11 +399,11 @@ const Configuration = () => {
             <p className="text-xs text-red-500">{errors.ventaLeche.message}</p>
           )}
         </section>
-        {/* 7. Empleados y Plan */}
+        {/* 6. Empleados y Plan */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
           <div className="flex flex-col gap-4">
             <Label className="text-sm font-medium text-slate-700">
-              7. ¿Tenés empleados que cargarían datos?
+              6. ¿Tenés empleados que cargarían datos?
             </Label>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -557,11 +493,6 @@ const Configuration = () => {
                 </div>
               )}
             </div>
-            {empleados && (
-              <p className="text-[10px] text-emerald-700 text-right">
-                Número de empleados
-              </p>
-            )}
             {errors.cantEmpleados && (
               <p className="text-xs text-red-500">
                 {errors.cantEmpleados.message}
@@ -569,10 +500,10 @@ const Configuration = () => {
             )}
           </div>
         </section>
-        {/* 8. Ubicación */}
+        {/* 7. Ubicación */}
         <section className="flex flex-col gap-4">
           <Label className="text-sm font-medium text-slate-700">
-            8. ¿Dónde está tu tambo?
+            7. ¿Dónde está tu tambo?
           </Label>
 
           <div className="grid grid-cols-2 gap-4">
@@ -730,40 +661,18 @@ const Configuration = () => {
               >
                 <Link href="/organizaciones">Atrás</Link>
               </button>
-              <button
-                type="button"
-                className="px-12 py-4 bg-white border border-slate-200 text-emerald-800 font-bold rounded-xl hover:bg-slate-50 transition-all cursor-pointer"
-                disabled={isPending}
-              >
-                <Link href={pathname.replace('cuestionario', 'invitar')}>
-                  Omitir
-                </Link>
-              </button>
             </div>
           )}
 
           <div className="flex gap-4 w-full justify-end">
             <button
               type="submit"
-              className="px-12 py-4 bg-white border-2 border-lime-600 text-lime-700 font-bold rounded-xl hover:bg-lime-50 transition-all cursor-pointer"
               disabled={isPending}
+              className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isPending ? 'Guardando...' : 'Guardar'}{' '}
+              {isPending ? 'Guardando...' : 'Siguiente'}{' '}
+              <ChevronRight size={20} />
             </button>
-
-            {pathname.includes('cuestionario') && (
-              <button
-                type="button"
-                disabled={isPending || !confirmContinue}
-                onClick={() => {
-                  router.push(pathname.replace('cuestionario', 'invitar'))
-                }}
-                className="px-12 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800 flex items-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              >
-                Siguiente
-                <ChevronRight size={20} />
-              </button>
-            )}
           </div>
         </footer>
       </form>
