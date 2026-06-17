@@ -23,6 +23,12 @@ export enum TipoMerma {
   OTRO = 'OTRO',
 }
 
+export enum TipoRodeo {
+  ALTA_PRODUCCION = 'ALTA_PRODUCCION',
+  BAJA_PRODUCCION = 'BAJA_PRODUCCION',
+  VACAS_SECAS = 'VACAS_SECAS',
+}
+
 export type ConceptoCosto =
   | 'insumos_basicos'
   | 'leche_cruda'

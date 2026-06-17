@@ -148,6 +148,7 @@ function OrganizationStep({ onSuccess }: { onSuccess: (id: string) => void }) {
 
 function EstablishmentStep({ organizationId }: { organizationId: string }) {
   const { mutate, isPending, error, isSuccess } = useCreateEstablishment()
+  const [url, setUrl] = useState('')
   const navigate = useRouter()
 
   const {
@@ -160,7 +161,23 @@ function EstablishmentStep({ organizationId }: { organizationId: string }) {
   })
 
   const onSubmit = handleSubmit((data) => {
-    mutate({ nombre: data.nombre, organizacionId: organizationId })
+    mutate(
+      {
+        nombre: data.nombre,
+        organizacionId: organizationId,
+      },
+      {
+        onSuccess: (res) => {
+          setUrl(
+            '/organizaciones/' +
+              res.data.idOrganizacion +
+              '/' +
+              res.data.idEstablecimiento +
+              '/cuestionario'
+          )
+        },
+      }
+    )
   })
 
   if (isSuccess) {
@@ -178,7 +195,7 @@ function EstablishmentStep({ organizationId }: { organizationId: string }) {
         <Button
           variant="darkGreen"
           className="flex items-center gap-2 h-12 px-6"
-          onClick={() => navigate.push('/organizaciones')}
+          onClick={() => navigate.push(url)}
         >
           Ir al panel <ArrowRight className="size-4" />
         </Button>

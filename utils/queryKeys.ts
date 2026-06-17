@@ -15,6 +15,7 @@ export const baseKeys = {
   establishment: ['establishment'] as const,
   invitation: ['invitation'] as const,
   breed: ['breed'] as const,
+  herd: ['herd'] as const,
 } as const
 
 export const authKeys = {
@@ -107,6 +108,11 @@ export const breedKeys = {
   lists: () => [...baseKeys.breed, 'list'] as const,
 }
 
+export const herdKeys = {
+  all: baseKeys.herd,
+  lists: () => [...baseKeys.herd, 'list'] as const,
+}
+
 export const queryKeys = {
   auth: authKeys,
   batch: batchKeys,
@@ -121,4 +127,5 @@ export const queryKeys = {
   establishment: establishmentKeys,
   invitation: invitationsKeys,
   breed: breedKeys,
+  herd: herdKeys,
 } as const
