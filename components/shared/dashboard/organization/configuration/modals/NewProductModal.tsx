@@ -44,6 +44,7 @@ export default function NewProductModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Cerrar"
             className="p-1 hover:bg-[#F3F4F6] rounded-lg transition-colors"
           >
             <X size={18} className="text-[#6B7280]" />
@@ -77,6 +78,7 @@ export default function NewProductModal({
             <select
               value={unidad}
               onChange={(e) => setValue('unidad', e.target.value as Unidad)}
+              aria-label="Unidad de Medida"
               className="h-10 w-full px-3 rounded-lg border border-[#D1D5DB] text-sm outline-none bg-[#F9FAFB] focus:border-[#29845A]"
             >
               {UNIDADES.map((u) => (

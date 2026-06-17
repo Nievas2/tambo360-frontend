@@ -45,6 +45,7 @@ export default function InviteModal({
           </div>
           <button
             onClick={onClose}
+            aria-label="Cerrar"
             className="p-1 hover:bg-[#F3F4F6] rounded-lg transition-colors"
           >
             <X size={18} className="text-[#6B7280]" />
@@ -76,6 +77,7 @@ export default function InviteModal({
             <select
               value={rol}
               onChange={(e) => setValue('rol', e.target.value)}
+              aria-label="Asignar Rol"
               className="h-10 w-full px-3 rounded-lg border border-[#D1D5DB] text-sm outline-none bg-[#F9FAFB] focus:border-[#29845A]"
             >
               <option value={InvitationRole.EMPLOYEE}>Tambero</option>
