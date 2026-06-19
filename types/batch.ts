@@ -1,7 +1,7 @@
 import { Alert } from '@/types/alerts'
 import { CostosDirecto } from '@/types/cost'
 import { Merma } from '@/types/decrease'
-import { Unidad } from '@/types/enums'
+import { TipoDestino, Unidad } from '@/types/enums'
 import { Establecimiento, Raza } from '@/types/establishment'
 import { Rodeo } from '@/types/establishment/herd'
 import { Product } from '@/types/product'
@@ -24,7 +24,19 @@ export const BatchSchema = z.object({
   ),
   idRodeo: z.uuidv4().min(1, 'Debe seleccionar un rodeo válido'),
   unidad: z.enum(Unidad, 'Unidad inválida'),
+  tempTanque: z.coerce
+    .number()
+    .refine((v) => v !== undefined && v !== null, {
+      message: 'La temperatura del tanque es obligatoria',
+    })
+    .positive('La temperatura del tanque debe ser mayor a 0'),
 
+  destino: z
+    .enum(TipoDestino, 'Destino inválido')
+    .optional()
+    .refine((v) => v !== undefined, {
+      message: 'La cantidad es obligatoria',
+    }),
   cantidad: z.preprocess(
     (val) => {
       if (val === '' || val === null || val === undefined) return undefined
@@ -92,11 +104,14 @@ export interface Lote {
   unidad: Unidad
 
   idRaza: string
-  cantRazas?: number
+  cantAnimales?: number
 
   idEstablecimiento: string
   estado: boolean
   establecimiento?: Establecimiento
+
+  tempTanque: number
+  destino: TipoDestino
 
   raza: Raza
   rodeo: Rodeo
