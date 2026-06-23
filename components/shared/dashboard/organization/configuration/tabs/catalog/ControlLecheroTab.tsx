@@ -1,212 +1,199 @@
 'use client'
 import { useState } from 'react'
-import { Plus, Download, Eye, Info, Droplet } from 'lucide-react'
+import { Plus, Eye, Droplet, TrendingUp, Activity, Filter } from 'lucide-react'
 
-// Datos de la tabla extraídos idénticos a los de image_da3f64.png
 const REGISTROS_CONTROL = [
   {
-    fecha: '28/05/2026',
-    rodeo: 'Alta',
-    prodTotal: '2.976 L',
-    prodVaca: '24.8 L',
-    grasa: '3.72%',
-    proteina: '3.25%',
-    ccs: 185,
-    responsable: 'Sistema (Auto)',
+    fecha: '12 OCT 2025',
+    rodeo: 'Rodeo Alta',
+    prodTotal: '4,280 Lts',
+    prodVaca: '31.2 Lts',
+    grasa: '3.85%',
+    proteina: '3.22%',
+    ccs: 128,
+    responsable: 'M. Arrieta',
   },
   {
-    fecha: '28/05/2026',
-    rodeo: 'Baja',
-    prodTotal: '1.120 L',
-    prodVaca: '14.0 L',
-    grasa: '3.51%',
+    fecha: '11 OCT 2025',
+    rodeo: 'Rodeo Baja',
+    prodTotal: '2,840 Lts',
+    prodVaca: '22.4 Lts',
+    grasa: '3.91%',
+    proteina: '3.31%',
+    ccs: 215,
+    responsable: 'J. Castro',
+  },
+  {
+    fecha: '10 OCT 2025',
+    rodeo: 'Rodeo Alta',
+    prodTotal: '4,150 Lts',
+    prodVaca: '30.8 Lts',
+    grasa: '3.78%',
     proteina: '3.18%',
-    ccs: 248, // Alerta (> 200)
-    responsable: 'Juan (Dueño)',
-  },
-  {
-    fecha: '30/04/2026',
-    rodeo: 'Alta',
-    prodTotal: '3.100 L',
-    prodVaca: '25.8 L',
-    grasa: '3.58%',
-    proteina: '3.21%',
-    ccs: 178,
-    responsable: 'Sistema (Auto)',
+    ccs: 154,
+    responsable: 'L. Mendez',
   },
 ]
 
 export default function ControlLecheroTab() {
-  const [mesFiltro, setMesFiltro] = useState('2026-05')
-
   return (
-    <div className="w-full flex flex-col gap-6 pb-12">
-      {/* --- SECCIÓN 1: TARJETAS KPI (TOP RESUMEN) --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Promedio Producción / Vaca */}
-        <div className="bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-sm flex justify-between items-start">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-semibold text-[#6B7280]">
-              Promedio Producción / Vaca
+    <div className="w-full flex flex-col gap-6 text-left bg-[#F8FAFC] p-6 rounded-2xl">
+      {/* --- ENCABEZADO DE SECCIÓN --- */}
+      <div className="flex justify-between items-center w-full">
+        <h3 className="text-base font-bold text-[#111827]">
+          Control Lechero Mensual
+        </h3>
+        <button className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-[#257F57] hover:bg-[#1E6645] rounded-lg shadow-xs transition-colors">
+          <Plus size={14} strokeWidth={3} /> Agregar Registro
+        </button>
+      </div>
+
+      {/* --- SECCIÓN 1: TARJETAS KPI CON UN MEJOR SHADOW (Fiel a image_454ac1.png) --- */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Tarjeta 1: Promedio Producción/Vaca */}
+        <div className="bg-white border border-[#E5E7EB]/70 rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow flex justify-between items-start h-32">
+          <div className="flex flex-col justify-between h-full">
+            <span className="text-xs font-bold text-[#111827] max-w-[150px] leading-tight">
+              Promedio Producción/Vaca
             </span>
-            <span className="text-2xl font-bold text-[#2563EB]">24.8 L</span>
-            <span className="text-xs text-[#4B5563] mt-1">
-              Mayo 2026 · 220 vacas en ordeñe
+            <span className="text-sm font-bold text-[#111827]">
+              26.4 Lts/día
+            </span>
+            <span className="text-[11px] text-[#257F57] font-semibold flex items-center gap-1">
+              <TrendingUp size={12} strokeWidth={2.5} /> + 1.2% este mes
             </span>
           </div>
-          <div className="p-2 bg-[#EFF6FF] text-[#2563EB] rounded-lg">
-            <Droplet size={18} fill="currentColor" />
-          </div>
+          <Droplet size={16} className="text-[#257F57] fill-[#257F57]/20" />
         </div>
 
-        {/* % Grasa Promedio */}
-        <div className="bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-sm">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-semibold text-[#6B7280]">
+        {/* Tarjeta 2: % Grasa Promedio */}
+        <div className="bg-white border border-[#E5E7EB]/70 rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow flex justify-between items-start h-32">
+          <div className="flex flex-col justify-between h-full">
+            <span className="text-xs font-bold text-[#111827]">
               % Grasa Promedio
             </span>
-            <span className="text-2xl font-bold text-[#D97706]">3.62%</span>
-            <div className="flex items-center gap-1 text-xs text-[#16A34A] font-medium mt-1">
-              <span>↑ +0.12%</span>
-              <span className="text-[#6B7280] font-normal">
-                vs mes anterior
-              </span>
-            </div>
+            <span className="text-sm font-bold text-[#111827]">3.82 %</span>
+            <span className="text-[11px] text-[#257F57] font-semibold flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#257F57]"></span>
+              Estable: Meta (3.80)
+            </span>
           </div>
+          <Droplet size={16} className="text-[#257F57]" />
         </div>
 
-        {/* CCS Promedio del Rodeo (Con Alerta de Umbral) */}
-        <div className="bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-sm border-l-4 border-l-[#EF4444]">
-          <div className="flex flex-col gap-1">
-            <span className="text-xs font-semibold text-[#6B7280]">
-              CCS Promedio del Rodeo
+        {/* Tarjeta 3: CCS Promedio */}
+        <div className="bg-white border border-[#E5E7EB]/70 rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow flex justify-between items-start h-32">
+          <div className="flex flex-col justify-between h-full">
+            <span className="text-xs font-bold text-[#111827]">
+              CCS Promedio
             </span>
-            <span className="text-2xl font-bold text-[#DC2626]">
-              210 mil/mL
-            </span>
-            <div className="flex items-center gap-1 text-xs text-[#D97706] font-semibold mt-1">
-              <span className="bg-[#FEF3C7] px-1.5 py-0.5 rounded text-[#B45309]">
-                ⚠️ Atención
+            <div className="flex items-baseline gap-0.5">
+              <span className="text-sm font-bold text-[#111827]">142 x 10</span>
+              <span className="text-[10px] font-bold text-[#111827] align-super -mt-1">
+                3
               </span>
-              <span className="text-[#6B7280] font-normal">
-                — umbral: &lt;200
-              </span>
+              <span className="text-sm font-bold text-[#111827]">/ml</span>
             </div>
+            <span className="text-[11px] text-[#257F57] font-semibold flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#257F57]"></span>
+              Status: Óptimo
+            </span>
           </div>
+          <Activity size={16} className="text-[#257F57]" />
         </div>
       </div>
 
       {/* --- SECCIÓN 2: TABLA DE REGISTROS --- */}
-      <div className="border border-[#E5E7EB] bg-white rounded-xl shadow-sm overflow-hidden">
-        {/* Encabezado con filtros y acciones combinadas de las capturas */}
-        <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E7EB] bg-white">
-          <div className="flex items-baseline gap-2">
-            <h3 className="text-base font-bold text-[#111827]">
-              Registros de Control Lechero
-            </h3>
-            <span className="text-xs text-[#6B7280]">Mayo 2026</span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Selector de Fecha - Basado en image_da3f43.png */}
-            <select
-              value={mesFiltro}
-              onChange={(e) => setMesFiltro(e.target.value)}
-              className="px-3 py-1.5 text-xs font-semibold bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#22C55E]"
-            >
-              <option value="2026-05">Mayo 2026</option>
-              <option value="2026-04">Abril 2026</option>
-              <option value="2026-03">Marzo 2026</option>
-            </select>
-
-            {/* Botón Nuevo Registro */}
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-[#22C55E] hover:bg-[#16A34A] rounded-lg shadow-sm transition-colors">
-              <Plus size={14} /> Nuevo Registro
-            </button>
-
-            {/* Botón Exportar */}
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#374151] border border-[#E5E7EB] rounded-lg hover:bg-[#F9FAFB] transition-colors shadow-sm">
-              <Download size={14} /> Exportar
-            </button>
-          </div>
+      <div className="border border-[#E5E7EB] bg-white rounded-xl shadow-xs overflow-hidden">
+        {/* Sub-encabezado de la Tabla con Botón de Filtro */}
+        <div className="px-5 py-4 flex justify-between items-center bg-white border-b border-[#E5E7EB]">
+          <h4 className="text-xs font-bold text-[#111827]">
+            Registro Control Lechero
+          </h4>
+          <button className="p-1.5 border border-[#E5E7EB] rounded-lg hover:bg-gray-50 text-[#6B7280] transition-colors">
+            <Filter size={14} />
+          </button>
         </div>
 
         {/* Contenedor de la Tabla */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
+          <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  FECHA
+              <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB]">
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  Fecha
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  RODEO
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  Rodeo
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  PROD. TOTAL (L)
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  Producción Total
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  PROD. / VACA (L)
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  Prod /Vaca
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  % GRASA
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  % Grasa
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  % PROTEÍNA
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  %Proteína
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  CCS (MIL/ML)
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  CCS
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280]">
-                  RESPONSABLE
+                <th className="py-3 px-5 text-[11px] font-bold text-[#4B5563]">
+                  Responsable
                 </th>
-                <th className="py-3 px-5 text-xs font-bold text-[#6B7280] text-center w-12"></th>
+                <th className="py-3 px-5 w-10"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E5E7EB]">
               {REGISTROS_CONTROL.map((row, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-[#F9FAFB] transition-colors"
+                  className="hover:bg-gray-50/50 transition-colors"
                 >
-                  <td className="py-3.5 px-5 text-[#374151] font-medium whitespace-nowrap">
+                  <td className="py-3.5 px-5 text-xs text-[#4B5563] font-medium whitespace-nowrap">
                     {row.fecha}
                   </td>
-                  <td className="py-3.5 px-5">
+                  <td className="py-3.5 px-5 whitespace-nowrap">
                     <span
-                      className={`px-2 py-0.5 text-xs font-bold rounded-full ${
-                        row.rodeo === 'Alta'
-                          ? 'bg-[#F0FDF4] text-[#16A34A]'
-                          : 'bg-[#FFFBEB] text-[#D97706]'
+                      className={`px-3 py-1 text-[10px] font-bold rounded-md text-white tracking-wide ${
+                        row.rodeo === 'Rodeo Alta'
+                          ? 'bg-[#1E7F53]'
+                          : 'bg-[#6E8A3D]'
                       }`}
                     >
                       {row.rodeo}
                     </span>
                   </td>
-                  <td className="py-3.5 px-5 text-[#111827] font-bold">
+                  <td className="py-3.5 px-5 text-xs text-[#111827] font-medium">
                     {row.prodTotal}
                   </td>
-                  <td className="py-3.5 px-5 text-[#374151] font-medium">
+                  <td className="py-3.5 px-5 text-xs text-[#257F57] font-semibold">
                     {row.prodVaca}
                   </td>
-                  <td className="py-3.5 px-5 text-[#4B5563]">{row.grasa}</td>
-                  <td className="py-3.5 px-5 text-[#4B5563]">{row.proteina}</td>
-                  <td className="py-3.5 px-5 font-bold">
-                    {/* Color dinámico condicional basado en el umbral crítico de 200 */}
+                  <td className="py-3.5 px-5 text-xs text-[#4B5563]">
+                    {row.grasa}
+                  </td>
+                  <td className="py-3.5 px-5 text-xs text-[#4B5563]">
+                    {row.proteina}
+                  </td>
+                  <td className="py-3.5 px-5 text-xs font-bold">
                     <span
                       className={
-                        row.ccs > 200 ? 'text-[#DC2626]' : 'text-[#16A34A]'
+                        row.ccs > 200 ? 'text-[#DC2626]' : 'text-[#257F57]'
                       }
                     >
                       {row.ccs}
                     </span>
                   </td>
-                  <td className="py-3.5 px-5 text-[#4B5563] whitespace-nowrap">
+                  <td className="py-3.5 px-5 text-xs text-[#4B5563] whitespace-nowrap">
                     {row.responsable}
                   </td>
                   <td className="py-3.5 px-5 text-center">
-                    <button className="text-[#9CA3AF] hover:text-[#4B5563] transition-colors">
-                      <Eye size={16} />
+                    <button className="text-[#9CA3AF] hover:text-[#4B5563] transition-colors p-1">
+                      <Eye size={14} />
                     </button>
                   </td>
                 </tr>
@@ -214,18 +201,24 @@ export default function ControlLecheroTab() {
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* --- SECCIÓN 3: BLOQUE INFORMATIVO INFERIOR (image_da3f64.png) --- */}
-      <div className="flex gap-3 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl p-4">
-        <Info size={18} className="text-[#2563EB] shrink-0 mt-0.5" />
-        <p className="text-xs text-[#1E40AF] leading-relaxed">
-          El <strong className="font-bold">Control Lechero Mensual</strong>{' '}
-          permite registrar y comparar la calidad de la leche producida (grasa,
-          proteína, CCS) por rodeo y período. Los datos de CCS por encima de 200
-          mil/mL disparan una alerta automática del TamboEngine para revisión
-          sanitaria.
-        </p>
+        {/* Paginador Inferior */}
+        <div className="px-5 py-3.5 bg-white border-t border-[#E5E7EB] flex justify-between items-center text-xs text-[#6B7280]">
+          <span className="font-medium text-gray-500">
+            Mostrando 3 de 15 registros
+          </span>
+          <div className="flex gap-1.5">
+            <button
+              className="px-2 py-1 border border-[#E5E7EB] rounded bg-white text-[#9CA3AF] cursor-not-allowed text-[11px]"
+              disabled
+            >
+              &lt;
+            </button>
+            <button className="px-2 py-1 border border-[#E5E7EB] rounded bg-white text-gray-600 hover:bg-gray-50 text-[11px] font-medium">
+              &gt;
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )

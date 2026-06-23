@@ -1,178 +1,204 @@
 'use client'
 import { useState } from 'react'
-import { Save } from 'lucide-react'
 
 export default function ParametrosTamboTab() {
-  // Estados alineados con las opciones exactas de las nuevas capturas
-  const [tipoOrdeñe, setTipoOrdeñe] = useState('mecanico_herringbone')
-  const [frecuenciaOrdeñe, setFrecuenciaOrdeñe] = useState('2_veces')
-  const [produccionDiaria, setProduccionDiaria] = useState('3500')
-  const [cuencaVenta, setCuencaVenta] = useState('Cuenca Oeste')
+  const [tipoOrdeñe, setTipoOrdeñe] = useState('espina_pescado')
+  const [frecuenciaOrdeñe, setFrecuenciaOrdeñe] = useState('2')
+  const [produccionDiaria, setProduccionDiaria] = useState('0.00')
+  const [cuencaVenta, setCuencaVenta] = useState('Cuenca Abasto Sur')
 
-  const [costoAlta, setCostoAlta] = useState('4,50')
-  const [costoCaja, setCostoCaja] = useState('2,80') // Rodeo Baja
-  const [costoSecas, setCostoSecas] = useState('1,50')
-  const [delPromedio, setDelPromedio] = useState('150')
+  const [costoAlta, setCostoAlta] = useState('450,50')
+  const [costoBaja, setCostoBaja] = useState('320,75')
+  const [costoSecas, setCostoSecas] = useState('185,00')
+  const [delPromedio, setDelPromedio] = useState('0')
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Guardando parámetros actualizados...', {
-      tipoOrdeñe,
-      frecuenciaOrdeñe,
-      produccionDiaria,
-      cuencaVenta,
-      costoAlta,
-      costoCaja,
-      costoSecas,
-      delPromedio,
-    })
   }
 
   return (
-    <div className="w-full pb-12">
-      <div className="border border-[#E5E7EB] bg-white rounded-xl shadow-sm overflow-hidden">
-        {/* Encabezado de la Sección */}
-        <div className="p-5 border-b border-[#E5E7EB] bg-white">
-          <h3 className="text-base font-bold text-[#111827]">
-            Parámetros del Tambo
-          </h3>
-        </div>
+    <div className="w-full bg-white px-4 py-8">
+      {/* Contenedor con el ancho máximo exacto visual del Figma */}
+      <div className="max-w-[640px] mx-auto text-left">
+        {/* Título idéntico en tipografía y margen */}
+        <h3 className="text-sm font-bold text-[#111827] mb-9">
+          Configuración de Parámetros de Tambo
+        </h3>
 
-        {/* Formulario en dos columnas */}
-        <form onSubmit={handleSave} className="p-6 flex flex-col gap-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-            {/* --- COLUMNA IZQUIERDA --- */}
-            <div className="flex flex-col gap-5">
-              {/* Tipo de Ordeñe - CORREGIDO CON TEXTOS EXACTOS (image_da475f.png) */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Tipo de Ordeñe
-                </label>
-                <select
-                  value={tipoOrdeñe}
-                  onChange={(e) => setTipoOrdeñe(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
+        <form onSubmit={handleSave} className="space-y-6">
+          {/* Tipo de Ordeñe */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-[#374151]">
+              Tipo de Ordeñe
+            </label>
+            <div className="relative">
+              <select
+                value={tipoOrdeñe}
+                onChange={(e) => setTipoOrdeñe(e.target.value)}
+                className="w-full px-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] appearance-none cursor-pointer shadow-sm"
+              >
+                <option value="espina_pescado">Espina de Pescado</option>
+                <option value="manual">Manual</option>
+                <option value="rotativo">Mecánico (Rotativo)</option>
+                <option value="robotico">Robótico (AMS)</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#6B7280]">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
                 >
-                  <option value="manual">Manual</option>
-                  <option value="mecanico_herringbone">
-                    Mecánico (Herringbone)
-                  </option>
-                  <option value="mecanico_rotativo">Mecánico (Rotativo)</option>
-                  <option value="robotico_ams">Robótico (AMS)</option>
-                </select>
-              </div>
-
-              {/* Frecuencia de Ordeñe por Día - ORDEN CORREGIDO (image_da473d.png) */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Frecuencia de Ordeñe por Día
-                </label>
-                <select
-                  value={frecuenciaOrdeñe}
-                  onChange={(e) => setFrecuenciaOrdeñe(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                >
-                  <option value="1_vez">1 vez al día</option>
-                  <option value="2_veces">2 veces al día</option>
-                  <option value="3_veces">3 veces al día</option>
-                </select>
-              </div>
-
-              {/* Producción Diaria Estimada (Lts) */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Producción Diaria Estimada (Lts)
-                </label>
-                <input
-                  type="number"
-                  value={produccionDiaria}
-                  onChange={(e) => setProduccionDiaria(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                />
-              </div>
-
-              {/* Cuenca de Venta */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Cuenca de Venta
-                </label>
-                <input
-                  type="text"
-                  value={cuencaVenta}
-                  onChange={(e) => setCuencaVenta(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                />
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
               </div>
             </div>
+          </div>
 
-            {/* --- COLUMNA DERECHA --- */}
-            <div className="flex flex-col gap-5">
-              {/* Costo Ración — Rodeo Alta */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Costo Ración — Rodeo Alta ($/cab/día)
-                </label>
+          {/* Frecuencia de Ordeñe y Producción Diaria (Fila doble perfecta) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-[#374151]">
+                Frecuencia de Ordeñe por Día
+              </label>
+              <input
+                type="text"
+                value={frecuenciaOrdeñe}
+                onChange={(e) => setFrecuenciaOrdeñe(e.target.value)}
+                className="w-full px-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] shadow-sm"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-[#374151]">
+                Producción Diaria Estimada
+              </label>
+              <div className="relative flex items-center">
                 <input
                   type="text"
-                  value={costoAlta}
-                  onChange={(e) => setCostoAlta(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
+                  value={produccionDiaria}
+                  onChange={(e) => setProduccionDiaria(e.target.value)}
+                  className="w-full px-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] pr-12 shadow-sm"
                 />
-              </div>
-
-              {/* Costo Ración — Rodeo Baja */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Costo Ración — Rodeo Baja ($/cab/día)
-                </label>
-                <input
-                  type="text"
-                  value={costoCaja}
-                  onChange={(e) => setCostoCaja(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                />
-              </div>
-
-              {/* Costo Ración — Secas */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  Costo Ración — Secas ($/cab/día)
-                </label>
-                <input
-                  type="text"
-                  value={costoSecas}
-                  onChange={(e) => setCostoSecas(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                />
-              </div>
-
-              {/* DEL Promedio Estimado (días) */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#4B5563]">
-                  DEL Promedio Estimado (días)
-                </label>
-                <input
-                  type="number"
-                  value={delPromedio}
-                  onChange={(e) => setDelPromedio(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#D1D5DB] text-[#111827] rounded-lg focus:outline-none focus:border-[#22C55E] transition-colors"
-                />
-                <span className="text-[11px] text-[#6B7280] leading-normal mt-0.5">
-                  Días en Leche promedio del rodeo. Default: 150. Afecta la
-                  curva de lactancia esperada por la IA.
+                <span className="absolute right-4 text-[10px] font-bold text-[#9CA3AF] tracking-wider">
+                  LTS
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Botón de Guardado */}
-          <div className="pt-4 border-t border-[#E5E7EB] mt-2">
+          {/* Cuenca de Venta */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-[#374151]">
+              Cuenca de Venta
+            </label>
+            <input
+              type="text"
+              value={cuencaVenta}
+              onChange={(e) => setCuencaVenta(e.target.value)}
+              className="w-full px-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] shadow-sm"
+            />
+          </div>
+
+          {/* Rodeo Alta Producción */}
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between items-end w-full">
+              <label className="text-xs font-semibold text-[#374151]">
+                Rodeo Alta Producción
+              </label>
+              <span className="text-[10px] font-bold text-[#4B5563] mb-0.5">
+                $/cab/día
+              </span>
+            </div>
+            <div className="relative flex items-center">
+              <span className="absolute left-3.5 text-xs text-[#374151] font-medium">
+                $
+              </span>
+              <input
+                type="text"
+                value={costoAlta}
+                onChange={(e) => setCostoAlta(e.target.value)}
+                className="w-full pl-8 pr-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] shadow-sm"
+              />
+            </div>
+          </div>
+
+          {/* Rodeo Baja Producción */}
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between items-end w-full">
+              <label className="text-xs font-semibold text-[#374151]">
+                Rodeo Baja Producción
+              </label>
+              <span className="text-[10px] font-bold text-[#4B5563] mb-0.5">
+                $/cab/día
+              </span>
+            </div>
+            <div className="relative flex items-center">
+              <span className="absolute left-3.5 text-xs text-[#374151] font-medium">
+                $
+              </span>
+              <input
+                type="text"
+                value={costoBaja}
+                onChange={(e) => setCostoBaja(e.target.value)}
+                className="w-full pl-8 pr-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] shadow-sm"
+              />
+            </div>
+          </div>
+
+          {/* Rodeo Vacas Secas */}
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between items-end w-full">
+              <label className="text-xs font-semibold text-[#374151]">
+                Rodeo Vacas Secas
+              </label>
+              <span className="text-[10px] font-bold text-[#4B5563] mb-0.5">
+                $/cab/día
+              </span>
+            </div>
+            <div className="relative flex items-center">
+              <span className="absolute left-3.5 text-xs text-[#374151] font-medium">
+                $
+              </span>
+              <input
+                type="text"
+                value={costoSecas}
+                onChange={(e) => setCostoSecas(e.target.value)}
+                className="w-full pl-8 pr-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] shadow-sm"
+              />
+            </div>
+          </div>
+
+          {/* DEL Promedio Estimado */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-semibold text-[#374151]">
+              DEL Promedio Estimado (Días de Lactancia)
+            </label>
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={delPromedio}
+                onChange={(e) => setDelPromedio(e.target.value)}
+                className="w-full px-3 py-2.5 text-xs bg-white border border-[#D1D5DB] text-[#374151] rounded-lg focus:outline-none focus:border-[#65A30D] pr-12 shadow-sm"
+              />
+              <span className="absolute right-4 text-[10px] font-bold text-[#9CA3AF] tracking-wider">
+                DÍAS
+              </span>
+            </div>
+          </div>
+
+          {/* Botones de Acción exactamente igual a la paleta e interletrado del Figma */}
+          <div className="flex items-center justify-center gap-4 pt-8">
+            <button
+              type="button"
+              className="px-8 py-2.5 bg-[#8B9BB4] hover:bg-[#76869E] text-white text-xs font-extrabold rounded-md transition-colors tracking-wider uppercase"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
-              className="bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold py-2 px-5 rounded-xl shadow-sm transition-colors text-sm flex items-center gap-2"
+              className="px-8 py-2.5 bg-[#65A30D] hover:bg-[#52840A] text-white text-xs font-extrabold rounded-md transition-colors tracking-wider uppercase shadow-sm"
             >
-              <Save size={16} />
-              Guardar Parámetros
+              Guardar Cambios
             </button>
           </div>
         </form>
