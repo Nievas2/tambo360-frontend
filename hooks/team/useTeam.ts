@@ -36,13 +36,11 @@ export function useTeam() {
     },
   })
 
-  // Combina invitaciones de organización y establecimiento
   const allInvitations: Invitacion[] = [
     ...(invitationsData?.invitaciones_organizacion ?? []),
     ...(invitationsData?.invitaciones_establecimiento ?? []),
   ]
 
-  // Filtra por búsqueda
   const filtered = allInvitations.filter((inv) => {
     const q = search.toLowerCase()
     return (
@@ -75,23 +73,18 @@ export function useTeam() {
   const closeDeleteModal = () => setDeleteTarget(null)
 
   return {
-    // Data
     invitations: filtered,
     isLoading,
-    // Search
     search,
     setSearch,
-    // Invite modal
     isInviteModalOpen,
     openInviteModal,
     closeInviteModal,
     onSubmitInvite,
     isPending,
-    // Delete modal
     deleteTarget,
     openDeleteModal,
     closeDeleteModal,
-    // Form
     register,
     handleSubmit,
     errors,
