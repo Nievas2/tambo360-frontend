@@ -2,27 +2,15 @@
 import { useEstablishment } from '@/hooks/establishment/useEstablishment'
 import { useUpdateEstablishmentName } from '@/hooks/establishment/useUpdateEstablishmentName'
 import { useConfiguration } from '@/hooks/establishment/useConfiguration'
+import {
+  establishmentFormSchema,
+  EstablishmentFormData,
+} from '@/types/establishment'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { toast } from 'sonner'
-
-const establishmentFormSchema = z.object({
-  nombre: z
-    .string()
-    .min(5, 'El nombre del establecimiento debe tener al menos 5 caracteres')
-    .max(
-      100,
-      'El nombre del establecimiento no puede tener más de 100 caracteres'
-    ),
-  cuencaLechera: z.string().min(1, 'La cuenca lechera es requerida'),
-  tipoOrdenie: z.string().min(1, 'El tipo de ordeñe es requerido'),
-  geolocalizacion: z.string().optional(),
-})
-
-export type EstablishmentFormData = z.infer<typeof establishmentFormSchema>
 
 export function useEstablishmentForm() {
   const params = useParams()
@@ -31,7 +19,6 @@ export function useEstablishmentForm() {
   const { data: establishmentData, isLoading: isLoadingEstablishment } =
     useEstablishment({ id })
   const { data: config, isLoading: isLoadingConfig } = useConfiguration()
-  // mutateAsync recibe un string directamente (ver useUpdateEstablishmentName)
   const { mutateAsync: updateName, isPending } = useUpdateEstablishmentName()
 
   const [geoError, setGeoError] = useState<string | null>(null)
@@ -56,11 +43,7 @@ export function useEstablishmentForm() {
 
   useEffect(() => {
     if (!establishmentData?.data) return
-
-    // data es Establecimiento_OrganiacionUsuario
-    // el establecimiento real está en .establecimiento
     const est = establishmentData.data?.establecimiento
-
     reset({
       nombre: est?.nombre ?? '',
       cuencaLechera: est?.provincia ?? '',
@@ -97,7 +80,6 @@ export function useEstablishmentForm() {
 
   const onSubmit = async (data: EstablishmentFormData) => {
     try {
-      // mutateAsync espera string directamente
       await updateName(data.nombre)
       toast.success('Cambios guardados correctamente', {
         position: 'top-center',

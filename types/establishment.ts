@@ -23,11 +23,24 @@ export const UpdateEstablishmentSchema = z.object({
     ),
 })
 
-export type EstablishmentName = z.infer<typeof UpdateEstablishmentSchema>
+export const establishmentFormSchema = z.object({
+  nombre: z
+    .string()
+    .min(5, 'El nombre del establecimiento debe tener al menos 5 caracteres')
+    .max(
+      100,
+      'El nombre del establecimiento no puede tener más de 100 caracteres'
+    ),
+  cuencaLechera: z.string().min(1, 'La cuenca lechera es requerida'),
+  tipoOrdenie: z.string().min(1, 'El tipo de ordeñe es requerido'),
+  geolocalizacion: z.string().optional(),
+})
 
+export type EstablishmentName = z.infer<typeof UpdateEstablishmentSchema>
 export type EstablishmentData = z.infer<typeof EstablishmentSchema> & {
   organizacionId: string
 }
+export type EstablishmentFormData = z.infer<typeof establishmentFormSchema>
 
 export interface Establecimiento {
   idEstablecimiento: string
@@ -35,10 +48,8 @@ export interface Establecimiento {
   localidad?: string
   provincia?: string
   fechaCreacion: Date
-
   idOrganizacion: string
   organizacion?: Organizacion
-
   loteProducciones?: Lote[]
   establecimientoOrganizacionUsuarios?: Establecimiento_OrganiacionUsuario[]
   configuracions?: Configuracion[]
@@ -47,13 +58,10 @@ export interface Establecimiento {
 
 export interface Establecimiento_OrganiacionUsuario {
   idEstablecimientoOrganizacionUsuario: string
-
   idEstablecimiento: string
   establecimiento?: Establecimiento
-
   idOrganizacionUsuario: string
   organizacionUsuario?: OrganizacionUsuario
-
   rol: RolEstablecimiento
   estado: boolean
   fechaCreacion: Date
@@ -61,10 +69,8 @@ export interface Establecimiento_OrganiacionUsuario {
 
 export interface Configuracion {
   idConfiguracion: string
-
   idEstablecimiento: string
   establecimiento?: Establecimiento
-
   cantVacas?: number
   cantOrdenies?: number
   promLitros?: number
@@ -72,16 +78,13 @@ export interface Configuracion {
   ventaLeche?: VentaLeche
   empleados?: boolean
   cantEmpleados?: number
-
   modificadoEn?: Date
 }
 
 export interface EstablecimientoRaza {
   idEstablecimientoRaza: string
-
   idEstablecimiento: string
   establecimiento?: Establecimiento
-
   idRaza: string
   raza?: Raza
 }
@@ -89,6 +92,5 @@ export interface EstablecimientoRaza {
 export interface Raza {
   idRaza: string
   nombre: string
-
   establecimientoRazas?: EstablecimientoRaza[]
 }
