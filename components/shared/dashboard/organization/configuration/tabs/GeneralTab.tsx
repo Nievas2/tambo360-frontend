@@ -1,5 +1,5 @@
 'use client'
-import { Info, AlertTriangle } from 'lucide-react'
+import { Info, AlertTriangle, Crosshair } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEstablishmentForm } from '@/hooks/establishment/useEstablishmentForm'
 import { Label } from '@/components/ui/label'
@@ -159,27 +159,12 @@ export default function GeneralTab() {
                   disabled={isGettingLocation}
                   className="flex items-center gap-2 text-sm font-medium text-white bg-[#6A9412] hover:bg-[#587B0E] px-4 py-2 rounded-xl transition-colors shrink-0 font-sans shadow-none"
                 >
-                  {/* Icono de mira telescópica estilizado exacto a la imagen_3663aa.png */}
-                  <svg
+                  <Crosshair
                     className={cn(
                       'w-4 h-4 text-white',
                       isGettingLocation && 'animate-spin'
                     )}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="6" />
-                    <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                    <line x1="12" y1="2" x2="12" y2="5" />
-                    <line x1="12" y1="19" x2="12" y2="22" />
-                    <line x1="2" y1="12" x2="5" y2="12" />
-                    <line x1="19" y1="12" x2="22" y2="12" />
-                  </svg>
-
+                  />
                   <span className="tracking-wide text-[14px]">
                     {isGettingLocation ? 'Obteniendo...' : 'Usar mi ubicación'}
                   </span>
