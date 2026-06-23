@@ -2,16 +2,24 @@
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { InvitationRole } from '@/types/enums'
+import { SendInviteForm } from '@/hooks/team/useTeam'
+import {
+  UseFormRegister,
+  UseFormHandleSubmit,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 
 interface InviteModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: any) => void
-  register: any
-  handleSubmit: any
-  errors: any
-  setValue: any
-  watch: any
+  onSubmit: (data: SendInviteForm) => void
+  register: UseFormRegister<SendInviteForm>
+  handleSubmit: UseFormHandleSubmit<SendInviteForm>
+  errors: FieldErrors<SendInviteForm>
+  setValue: UseFormSetValue<SendInviteForm>
+  watch: UseFormWatch<SendInviteForm>
   isPending: boolean
 }
 
@@ -76,7 +84,9 @@ export default function InviteModal({
             <label className="text-sm text-[#374151]">Asignar Rol</label>
             <select
               value={rol}
-              onChange={(e) => setValue('rol', e.target.value)}
+              onChange={(e) =>
+                setValue('rol', e.target.value as InvitationRole)
+              }
               aria-label="Asignar Rol"
               className="h-10 w-full px-3 rounded-lg border border-[#D1D5DB] text-sm outline-none bg-[#F9FAFB] focus:border-[#29845A]"
             >
