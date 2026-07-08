@@ -31,7 +31,7 @@ import { useErrorMessage } from '@/hooks/useErrorMessage'
 import { useConnectionError } from '@/hooks/connection/useConnectionError'
 import { ConnectionErrorModal } from '@/components/ConnectionErrorModal'
 import { Product } from '@/types/product'
-import { Unidad } from '@/types/enums'
+import { TipoDestino, Unidad } from '@/types/enums'
 import { usePathname } from 'next/navigation'
 import { useHerds } from '@/hooks/establishment/herd/useHerds'
 import { Rodeo } from '@/types/establishment/herd'
@@ -41,14 +41,14 @@ interface ChangeBatchProps {
   onClose: () => void
   onOpen?: () => void
   batch?: Lote
-  cantRazas?: number
+  cantAnimales?: number
 }
 const ChangeBatch = ({
   open,
   onClose,
   onOpen,
   batch,
-  cantRazas,
+  cantAnimales,
 }: ChangeBatchProps) => {
   const [id, setId] = useState('')
   const [finished, setFinished] = useState(false)
@@ -85,6 +85,8 @@ const ChangeBatch = ({
       unidad: Unidad.KG,
       idRodeo: '',
       cantRaza: 0,
+      destino: undefined,
+      tempTanque: '',
     },
     resolver: zodResolver(BatchSchema),
   })
@@ -102,10 +104,12 @@ const ChangeBatch = ({
         fechaProduccion: fecha,
         unidad: batch.unidad ?? Unidad.KG,
         idRodeo: batch.rodeo?.idRodeo ?? '',
-        cantRaza: batch.cantRazas
-          ? batch.cantRazas.toString()
-          : cantRazas
-            ? cantRazas.toString()
+        tempTanque: batch.tempTanque ?? '',
+        destino: batch.destino,
+        cantRaza: batch.cantAnimales
+          ? batch.cantAnimales.toString()
+          : cantAnimales
+            ? cantAnimales.toString()
             : '0',
       })
 
@@ -122,6 +126,8 @@ const ChangeBatch = ({
         unidad: Unidad.KG,
         idRodeo: '',
         cantRaza: 0,
+        tempTanque: '',
+        destino: undefined,
       })
     }
   }, [batch, reset, setValue])
@@ -144,6 +150,8 @@ const ChangeBatch = ({
           cantRaza: data.cantRaza,
           fechaProduccion: fechaProduccion,
           idLote: idLote,
+          tempTanque: data.tempTanque,
+          destino: data.destino,
         }
 
         await mutateAsync(batch)
@@ -260,27 +268,46 @@ const ChangeBatch = ({
             </DialogDescription>
           </DialogHeader>
 
-          <form className="space-y-3" onSubmit={onSubmit}>
-            {/* Fecha */}
-            <div className="space-y-2">
-              <Label className="font-bold">Fecha de producción *</Label>
-              <Input
-                type="date"
-                placeholder="dd/mm/aaaa"
-                {...register('fechaProduccion')}
-              />
+          <form className="space-y-2" onSubmit={onSubmit}>
+            <div className="flex items-center justify-between gap-2 w-full">
+              {/* Fecha */}
+              <div className="space-y-2 w-full">
+                <Label className="font-bold">Fecha de producción *</Label>
+                <Input
+                  type="date"
+                  placeholder="dd/mm/aaaa"
+                  {...register('fechaProduccion')}
+                />
 
-              {errors.fechaProduccion && (
-                <span className="text-xs text-red-600">
-                  {errors.fechaProduccion.message}
-                </span>
-              )}
+                {errors.fechaProduccion && (
+                  <span className="text-xs text-red-600">
+                    {errors.fechaProduccion.message}
+                  </span>
+                )}
+              </div>
+
+              {/* cantidad rodeo */}
+              <div className="space-y-2 w-full h-full">
+                <Label className="font-bold">Cantidad de vacas *</Label>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0.00"
+                  {...register('cantRaza')}
+                />
+
+                {errors.cantRaza && (
+                  <span className="text-xs text-red-600">
+                    {errors.cantRaza.message}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Razas y cantidades de la raza */}
             <div className="flex items-center justify-between gap-2 w-full">
               {/* razas */}
-              <div className="space-y-2 w-full mt-2">
+              <div className="space-y-2 w-full">
                 <Label className="font-bold">Tipo de rodeo *</Label>
                 <Select
                   defaultValue={batch ? batch.rodeo.idRodeo : ''}
@@ -308,19 +335,34 @@ const ChangeBatch = ({
                 )}
               </div>
 
-              {/* cantidad rodeo */}
-              <div className="space-y-2 w-full h-full">
-                <Label className="font-bold">Cantidad de vacas *</Label>
-                <Input
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="0.00"
-                  {...register('cantRaza')}
-                />
+              {/* Destino */}
+              <div className="space-y-2 w-full">
+                <Label className="font-bold">Destino *</Label>
+                <Select
+                  value={watch('destino')}
+                  onValueChange={(e) => setValue('destino', e as TipoDestino)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona destino..." />
+                  </SelectTrigger>
 
-                {errors.cantRaza && (
+                  <SelectContent>
+                    <SelectGroup>
+                      {Object.values(TipoDestino).map((destino) => (
+                        <SelectItem key={destino} value={destino}>
+                          {destino
+                            .replace('_', ' ')
+                            .toLowerCase()
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                {errors.destino && (
                   <span className="text-xs text-red-600">
-                    {errors.cantRaza.message}
+                    {errors.destino.message}
                   </span>
                 )}
               </div>
@@ -401,23 +443,44 @@ const ChangeBatch = ({
               </div>
             </div>
 
-            {/* Cantidad producida */}
-            <div className="space-y-2">
-              <Label className="font-bold">
-                Cantidad producida (Kg / Litros) *
-              </Label>
-              <Input
-                type="text"
-                inputMode="decimal"
-                placeholder="0.00"
-                {...register('cantidad')}
-              />
+            <div className="flex items-center justify-between gap-2 w-full">
+              {/* Cantidad producida */}
+              <div className="space-y-2">
+                <Label className="font-bold">
+                  Cant producida (Kg / Litros) *
+                </Label>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0.00"
+                  {...register('cantidad')}
+                />
 
-              {errors.cantidad && (
-                <span className="text-xs text-red-600">
-                  {errors.cantidad.message}
-                </span>
-              )}
+                {errors.cantidad && (
+                  <span className="text-xs text-red-600">
+                    {errors.cantidad.message}
+                  </span>
+                )}
+              </div>
+
+              {/* Temperatura del tanque */}
+              <div className="space-y-2">
+                <Label className="font-bold">
+                  Temperatura del tanque (°C) *
+                </Label>
+                <Input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="4.2"
+                  {...register('tempTanque')}
+                />
+
+                {errors.tempTanque && (
+                  <span className="text-xs text-red-600">
+                    {errors.tempTanque.message}
+                  </span>
+                )}
+              </div>
             </div>
             <span className="flex items-center gap-2 text-xs">
               <AlertCircle className="size-5" /> Verifica que los datos sean

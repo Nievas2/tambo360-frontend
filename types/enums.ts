@@ -23,6 +23,12 @@ export enum TipoMerma {
   OTRO = 'OTRO',
 }
 
+export enum TipoDestino {
+  TANQUE_FRIO = 'TANQUE_FRIO',
+  VENTA = 'VENTA',
+  FABRICA_QUESOS = 'FABRICA_QUESOS',
+}
+
 export enum TipoRodeo {
   ALTA_PRODUCCION = 'ALTA_PRODUCCION',
   BAJA_PRODUCCION = 'BAJA_PRODUCCION',

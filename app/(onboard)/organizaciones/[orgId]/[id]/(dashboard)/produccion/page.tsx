@@ -204,7 +204,7 @@ const Produccion: React.FC = () => {
                   Cantidad
                 </TableHead>
                 <TableHead className="w-[13%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
-                  Raza
+                  Rodeo
                 </TableHead>
                 <TableHead className="w-[13%] text-left font-bold text-gray-400 uppercase text-xs tracking-wider">
                   N° Animales
@@ -308,12 +308,12 @@ const Produccion: React.FC = () => {
                           {batch.unidad}
                         </TableCell>
 
-                        <TableCell className="truncate">
-                          {batch.raza?.nombre || 'Raza desconocida'}
-                        </TableCell>
+                        {/*   <TableCell className="truncate">
+                          {batch.rodeo.label || 'Rodeo desconocido'}
+                        </TableCell> */}
 
                         <TableCell className="truncate">
-                          {batch.cantRazas ? batch.cantRazas : 'N/A'}
+                          {batch.cantAnimales ? batch.cantAnimales : 'N/A'}
                         </TableCell>
 
                         <TableCell className="truncate">
