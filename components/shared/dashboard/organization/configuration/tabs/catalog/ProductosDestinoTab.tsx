@@ -1,21 +1,46 @@
 'use client'
-import { Plus } from 'lucide-react'
+import { useState } from 'react'
+import {
+  Droplet,
+  SquarePen,
+  CirclePlus,
+  FileSpreadsheet,
+  Sparkles,
+  Milk,
+} from 'lucide-react'
 
-// Datos extraídos con total fidelidad de la imagen image_d9e0ef.png
-const PRODUCTOS_DESTINO = [
+interface ProductoDestino {
+  id: number
+  nombre: string
+  destinos?: string[]
+  sinDestinos?: boolean
+  tipoIcono: 'leche' | 'queso' | 'crema' | 'suero'
+}
+
+const PRODUCTOS_DESTINO_DATA: ProductoDestino[] = [
   {
     id: 1,
-    producto: 'Leche Entera Cruda',
-    unidad: 'Litros (L)',
-    comprador: 'Danone Argentina',
-    activo: true,
+    nombre: 'Leche fluida',
+    destinos: ['Planta Industrial', 'Consumo Interno', 'Venta a Terceros'],
+    tipoIcono: 'leche',
   },
   {
     id: 2,
-    producto: 'Queso Pategrás',
-    unidad: 'Kilos (Kg)',
-    comprador: 'Quesería Local',
-    activo: true,
+    nombre: 'Queso Cremoso',
+    destinos: ['Planta Industrial', 'Venta a Terceros'],
+    tipoIcono: 'queso',
+  },
+  {
+    id: 3,
+    nombre: 'Crema',
+    sinDestinos: true,
+    tipoIcono: 'crema',
+  },
+  {
+    id: 4,
+    nombre: 'Suero de Quesería',
+    destinos: ['Consumo Interno'],
+    tipoIcono: 'suero',
   },
 ]
 
@@ -24,70 +49,102 @@ export default function ProductosDestinoTab() {
     console.log('Abriendo modal para agregar un nuevo producto destino...')
   }
 
-  return (
-    <div className="w-full pb-12">
-      {/* Contenedor principal estilo Light Theme */}
-      <div className="border border-[#E5E7EB] bg-white rounded-xl shadow-sm overflow-hidden">
-        {/* Encabezado con título y botón de acción */}
-        <div className="p-5 flex items-center justify-between border-b border-[#E5E7EB] bg-white">
-          <h3 className="text-base font-bold text-[#111827]">
-            Productos de Destino
-          </h3>
-          <button
-            onClick={handleAddProduct}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-[#374151] border border-[#E5E7EB] rounded-lg hover:bg-[#F9FAFB] transition-colors shadow-sm"
-          >
-            <Plus size={14} /> Nuevo Producto
-          </button>
-        </div>
+  const handleEditProduct = (id: number) => {
+    console.log(`Editando producto con ID: ${id}`)
+  }
 
-        {/* Tabla de Productos */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                <th className="py-3.5 px-6 text-xs font-bold text-[#6B7280]">
-                  PRODUCTO
-                </th>
-                <th className="py-3.5 px-6 text-xs font-bold text-[#6B7280]">
-                  UNIDAD
-                </th>
-                <th className="py-3.5 px-6 text-xs font-bold text-[#6B7280]">
-                  COMPRADOR
-                </th>
-                <th className="py-3.5 px-6 text-xs font-bold text-[#6B7280] text-center w-24">
-                  ACTIVO
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#E5E7EB]">
-              {PRODUCTOS_DESTINO.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hover:bg-[#F9FAFB] transition-colors"
+  return (
+    <div className="w-full bg-[#FAFAFA] antialiased min-h-screen pt-4 pb-12">
+      <div className="max-w-[1200px] mx-auto px-4">
+        {/* Título de la Sección */}
+        <h2 className="text-[15px] font-bold text-gray-800 mb-6 tracking-tight">
+          Productos Destino
+        </h2>
+
+        {/* Rejilla de Tarjetas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {PRODUCTOS_DESTINO_DATA.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white border border-gray-100 rounded-xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.02)] flex flex-col justify-between min-h-[180px] relative transition-all hover:shadow-[0_4px_20px_rgba(0,0,0,0.05)]"
+            >
+              {/* Fila Superior: Icono de Categoría y Botón Editar */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                  {item.tipoIcono === 'leche' && (
+                    <Droplet
+                      className="text-[#217B53] fill-[#217B53]"
+                      size={22}
+                    />
+                  )}
+                  {item.tipoIcono === 'queso' && (
+                    <FileSpreadsheet className="text-gray-400" size={20} />
+                  )}
+                  {item.tipoIcono === 'crema' && (
+                    <Sparkles className="text-gray-400" size={20} />
+                  )}
+                  {item.tipoIcono === 'suero' && (
+                    <Milk className="text-[#217B53]" size={20} />
+                  )}
+                </div>
+
+                <button
+                  onClick={() => handleEditProduct(item.id)}
+                  className="text-gray-400 hover:text-gray-700 transition-colors"
                 >
-                  <td className="py-4 px-6 text-[#374151] font-medium">
-                    {item.producto}
-                  </td>
-                  <td className="py-4 px-6 text-[#4B5563]">{item.unidad}</td>
-                  <td className="py-4 px-6 text-[#374151] font-medium">
-                    {item.comprador}
-                  </td>
-                  <td className="py-4 px-6 text-center">
-                    {item.activo ? (
-                      <span className="inline-block px-2.5 py-0.5 text-xs font-bold bg-[#F0FDF4] text-[#16A34A] rounded-full">
-                        Sí
+                  <SquarePen size={16} />
+                </button>
+              </div>
+
+              {/* Información del Producto */}
+              <div className="flex-1 flex flex-col justify-start">
+                <h3 className="text-[15px] font-bold text-gray-900 mb-2">
+                  {item.nombre}
+                </h3>
+
+                <p className="text-[11px] text-gray-400 font-semibold uppercase tracking-wider mb-2">
+                  {item.sinDestinos
+                    ? 'Sin destinos asignados'
+                    : 'Destinos Asignados'}
+                </p>
+
+                {/* Renderizado Condicional de Destinos o Configuración */}
+                {item.sinDestinos ? (
+                  <button className="text-xs text-gray-700 font-medium underline text-left mt-1 hover:text-black transition-colors">
+                    Configurar destino
+                  </button>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {item.destinos?.map((destino, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-0.5 bg-[#E8F5E9] text-[#2E7D32] text-[10px] font-bold rounded"
+                      >
+                        {destino}
                       </span>
-                    ) : (
-                      <span className="inline-block px-2.5 py-0.5 text-xs font-bold bg-[#FEF2F2] text-[#DC2626] rounded-full">
-                        No
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* Tarjeta de Acción: Nuevo Producto */}
+          <div
+            onClick={handleAddProduct}
+            className="bg-white border-2 border-dashed border-gray-200 rounded-xl p-5 flex flex-col items-center justify-center min-h-[180px] cursor-pointer hover:border-[#217B53] transition-all group"
+          >
+            <CirclePlus
+              className="text-gray-800 mb-2 group-hover:text-[#217B53] transition-colors"
+              size={32}
+            />
+            <span className="text-[14px] font-bold text-gray-900">
+              Nuevo Producto
+            </span>
+            <span className="text-xs text-gray-400 mt-1 font-medium">
+              Añadir catálogo de producción
+            </span>
+          </div>
         </div>
       </div>
     </div>

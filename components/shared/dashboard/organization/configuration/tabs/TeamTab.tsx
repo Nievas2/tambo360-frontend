@@ -12,49 +12,49 @@ import { Invitacion } from '@/types/invite'
 import InviteModal from '@/components/shared/dashboard/organization/configuration/modals/InviteModal'
 import DeleteModal from '@/components/shared/dashboard/organization/configuration/modals/DeleteModal'
 
-// Badge de rol
+// Badges de Rol con la paleta exacta de verdes de Figma
 const ROL_STYLES: Record<string, string> = {
-  OWNER: 'bg-[#DCFCE7] text-[#15803D]',
-  ADMIN: 'bg-[#DBEAFE] text-[#1D4ED8]',
-  EMPLOYEE: 'bg-[#FEF9C3] text-[#854D0E]',
-  default: 'bg-[#F3F4F6] text-[#374151]',
+  OWNER: 'bg-[#A3E635]/20 text-[#3F6212] border border-[#A3E635]/30',
+  ADMIN: 'bg-[#84CC16] text-white',
+  EMPLOYEE: 'bg-[#217B53] text-white',
+  default: 'bg-gray-100 text-gray-700',
 }
 
 const ROL_LABELS: Record<string, string> = {
-  OWNER: 'Dueño',
-  ADMIN: 'Admin',
-  EMPLOYEE: 'Tambero',
+  OWNER: 'DUEÑO',
+  ADMIN: 'ADMIN',
+  EMPLOYEE: 'TAMBERO',
 }
 
 function RolBadge({ rol }: { rol: string }) {
   return (
     <span
       className={cn(
-        'text-xs px-2.5 py-1 rounded-full font-semibold',
+        'text-[10px] px-3 py-0.5 rounded-md font-extrabold tracking-wide inline-block text-center min-w-[75px]',
         ROL_STYLES[rol] ?? ROL_STYLES.default
       )}
     >
-      {ROL_LABELS[rol] ?? rol}
+      {ROL_LABELS[rol] ?? rol.toUpperCase()}
     </span>
   )
 }
 
 function EstadoBadge({ estado }: { estado: string }) {
-  const isActivo = estado === 'aceptada'
+  const isActivo = estado === 'aceptada' || estado === 'activo'
   const isPendiente = estado === 'pendiente'
   return (
-    <span className="flex items-center gap-1.5 text-sm">
+    <span className="flex items-center gap-2 text-xs font-medium">
       <span
         className={cn(
-          'w-2 h-2 rounded-full',
+          'w-2 h-2 rounded-full shrink-0',
           isActivo
-            ? 'bg-[#22C55E]'
+            ? 'bg-[#217B53]'
             : isPendiente
-              ? 'bg-[#F59E0B]'
-              : 'bg-[#D1D5DB]'
+              ? 'bg-[#94A3B8]'
+              : 'bg-gray-300'
         )}
       />
-      <span className="text-[#374151]">
+      <span className="text-gray-700 font-semibold">
         {isActivo ? 'Activo' : isPendiente ? 'Pendiente' : 'Inactivo'}
       </span>
     </span>
@@ -84,110 +84,123 @@ export default function TeamTab() {
 
   return (
     <>
-      <div className="flex flex-col gap-5">
-        {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-[#0B1001]">
+      <div className="w-full max-w-[1000px] mx-auto flex flex-col gap-4 font-sans antialiased">
+        {/* Encabezado Principal */}
+        <div className="mb-2">
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
             Gestión de Equipo
           </h1>
-          <p className="text-sm text-[#6B7280] mt-1">
+          <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-2xl leading-relaxed">
             Administra los accesos de tus colaboradores, asigna roles
             específicos y controla la seguridad de tu tambo.
           </p>
         </div>
 
-        {/* Botón invitar */}
+        {/* Fila del Botón Invitar (Justo arriba del contenedor de la tabla) */}
         <div className="flex justify-end">
           <button
             type="button"
             onClick={openInviteModal}
-            className="flex items-center gap-2 text-sm font-medium text-white bg-[#29845A] px-4 py-2.5 rounded-lg hover:bg-[#29845A]/90 transition-colors"
+            className="flex items-center gap-2 text-xs font-bold text-white bg-[#217B53] hover:bg-[#195F40] px-4 h-9 rounded-lg transition-colors shadow-none"
           >
-            <UserPlus size={16} />
+            <UserPlus size={14} />
             Invitar Colaborador
           </button>
         </div>
 
-        {/* Buscador */}
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <Search
-              size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
-            />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar"
-              className="h-9 w-full pl-8 pr-3 rounded-lg border border-[#D1D5DB] text-sm outline-none bg-[#F9FAFB] focus:border-[#29845A]"
-            />
-          </div>
-          <button className="h-9 w-9 flex items-center justify-center border border-[#D1D5DB] rounded-lg hover:bg-[#F3F4F6] transition-colors">
-            <SlidersHorizontal size={14} className="text-[#6B7280]" />
-          </button>
-        </div>
-
-        {/* Tabla */}
-        <div className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-white">
-          <div className="grid grid-cols-[1.5fr_2fr_1fr_1fr_auto] bg-[#F9FAFB] px-4 py-3 border-b border-[#E5E7EB]">
-            <p className="text-xs font-semibold text-[#374151]">Nombre</p>
-            <p className="text-xs font-semibold text-[#374151]">Email</p>
-            <p className="text-xs font-semibold text-[#374151]">Rol</p>
-            <p className="text-xs font-semibold text-[#374151]">Estado</p>
-            <p className="text-xs font-semibold text-[#374151]">Acciones</p>
+        {/* Contenedor Principal de la Tabla con Barra de Búsqueda Integrada */}
+        <div className="border border-gray-100 rounded-xl overflow-hidden bg-white shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
+          {/* Fila de Filtros y Búsqueda superior interna */}
+          <div className="p-4 flex justify-end gap-2 border-b border-gray-50">
+            <div className="relative w-64">
+              <Search
+                size={13}
+                className="absolute left-3 inset-y-0 my-auto text-gray-400"
+              />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Buscar"
+                className="h-8 w-full pl-8 pr-3 rounded-md border border-gray-200 text-xs outline-none bg-white focus:border-[#217B53] transition-colors text-gray-700"
+              />
+            </div>
+            <button className="h-8 w-8 flex items-center justify-center border border-gray-200 rounded-md bg-white hover:bg-gray-50 text-gray-400 transition-colors">
+              <SlidersHorizontal size={13} />
+            </button>
           </div>
 
+          {/* Encabezados de la Tabla */}
+          <div className="grid grid-cols-[1.5fr_2fr_1fr_1fr_0.5fr] bg-[#EDF1F3] px-6 py-2.5 border-b border-gray-100">
+            <p className="text-[11px] font-bold text-gray-800">Nombre</p>
+            <p className="text-[11px] font-bold text-gray-800">Email</p>
+            <p className="text-[11px] font-bold text-gray-800">Rol</p>
+            <p className="text-[11px] font-bold text-gray-800">Estado</p>
+            <p className="text-[11px] font-bold text-gray-800 text-center">
+              Acciones
+            </p>
+          </div>
+
+          {/* Cuerpo de la Tabla */}
           {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="w-5 h-5 border-2 border-[#29845A] border-t-transparent rounded-full animate-spin" />
+            <div className="flex items-center justify-center py-16">
+              <div className="w-5 h-5 border-2 border-[#217B53] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : invitations.length === 0 ? (
-            <div className="flex items-center justify-center py-12">
-              <p className="text-sm text-[#6B7280]">
+            <div className="flex items-center justify-center py-16">
+              <p className="text-xs font-medium text-gray-400">
                 No hay colaboradores registrados.
               </p>
             </div>
           ) : (
-            invitations.map((inv: Invitacion) => (
-              <div
-                key={inv.id}
-                className="grid grid-cols-[1.5fr_2fr_1fr_1fr_auto] px-4 py-3 border-b border-[#E5E7EB] last:border-0 items-center gap-2"
-              >
-                <p className="text-sm font-medium text-[#0B1001] truncate">
-                  {inv.usuario?.nombre ?? '—'}
-                </p>
-                <p className="text-sm text-[#6B7280] truncate">{inv.correo}</p>
-                <RolBadge rol={inv.rol?.rol ?? 'EMPLOYEE'} />
-                <EstadoBadge estado={inv.estado} />
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    className="p-1.5 hover:bg-[#F3F4F6] rounded-lg transition-colors"
-                  >
-                    <Pencil size={14} className="text-[#6B7280]" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => openDeleteModal(inv)}
-                    className="p-1.5 hover:bg-[#FEF2F2] rounded-lg transition-colors"
-                  >
-                    <Trash2 size={14} className="text-[#EF4444]" />
-                  </button>
+            <div className="divide-y divide-gray-50">
+              {invitations.map((inv: Invitacion) => (
+                <div
+                  key={inv.id}
+                  className="grid grid-cols-[1.5fr_2fr_1fr_1fr_0.5fr] px-6 py-3.5 items-center gap-2 hover:bg-gray-50/50 transition-colors"
+                >
+                  <p className="text-[13px] font-bold text-gray-900 truncate">
+                    {inv.usuario?.nombre ?? '—'}
+                  </p>
+                  <p className="text-[13px] font-medium text-gray-500 truncate">
+                    {inv.correo}
+                  </p>
+                  <div>
+                    <RolBadge rol={inv.rol?.rol ?? 'EMPLOYEE'} />
+                  </div>
+                  <div>
+                    <EstadoBadge estado={inv.estado} />
+                  </div>
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-gray-700 transition-colors p-1"
+                    >
+                      <Pencil size={15} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => openDeleteModal(inv)}
+                      className="text-gray-400 hover:text-red-600 transition-colors p-1"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           )}
 
+          {/* Footer / Paginado */}
           {invitations.length > 0 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-[#E5E7EB]">
-              <p className="text-xs text-[#6B7280]">
-                Mostrando {invitations.length} colaboradores
+            <div className="flex items-center justify-between px-6 py-3 border-t border-gray-100 bg-white">
+              <p className="text-xs font-semibold text-gray-400">
+                Mostrando {invitations.length} de 12 colaboradores
               </p>
               <div className="flex gap-1">
-                <button className="w-7 h-7 flex items-center justify-center border border-[#D1D5DB] rounded-lg hover:bg-[#F3F4F6] transition-colors text-[#6B7280] text-xs">
+                <button className="w-6 h-6 flex items-center justify-center border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors text-gray-400 text-xs font-bold">
                   ‹
                 </button>
-                <button className="w-7 h-7 flex items-center justify-center border border-[#D1D5DB] rounded-lg hover:bg-[#F3F4F6] transition-colors text-[#6B7280] text-xs">
+                <button className="w-6 h-6 flex items-center justify-center border border-gray-200 rounded bg-white hover:bg-gray-50 transition-colors text-gray-400 text-xs font-bold">
                   ›
                 </button>
               </div>
