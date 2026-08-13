@@ -52,6 +52,14 @@ const rodeoUnicoSchema = z.object({
   costoRacion: z.number().positive(),
 })
 
+const animalSchema = z.object({
+  codigo: z.string().nonempty('El código es requerido'),
+  nombre: z.string().optional(),
+  categoria: z.string().nonempty('La categoría es requerida'),
+  estado: z.string().nonempty('El estado es requerido'),
+  fechaNacimiento: z.string().optional(),
+})
+
 const schemaRodeo = baseSchema.extend({
   TipoSeguimiento: z.literal(TipoSeguimiento.RODEO),
   rodeos: z.array(rodeoSchema).min(1),
@@ -66,6 +74,7 @@ const schemaRodeoUnico = baseSchema.extend({
 const schemaIndividual = baseSchema.extend({
   TipoSeguimiento: z.literal(TipoSeguimiento.INDIVIDUAL),
   rodeos: z.undefined().optional(),
+  animales: z.array(animalSchema).min(1),
 })
 
 export const configurationSchema = z

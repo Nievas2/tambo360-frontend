@@ -14,6 +14,19 @@ export enum TipoSeguimiento {
   RODEO_UNICO = 'RODEO_UNICO',
 }
 
+enum CategoriaAnimal {
+  ORDENE = 'ORDENE',
+  SECAS = 'SECAS',
+  PREPARTO = 'PREPARTO',
+}
+
+enum EstadoAnimal {
+  MATITIS = 'MASTITIS',
+  TRATAMIENTO = 'TRATAMIENTO',
+  PREPARTO = 'PREPARTO',
+  DESCARTE = 'DESCARTE',
+}
+
 export enum TipoMerma {
   MASTITIS = 'MASTITIS',
   ESTRES_CALORICO = 'ESTRES_CALORICO',
