@@ -1,8 +1,13 @@
-import { TipoOrdenie, VentaLeche, TipoRodeo } from '@/types/enums'
+import {
+  TipoOrdenie,
+  TipoRodeo,
+  TipoSeguimiento,
+  VentaLeche,
+} from '@/types/enums'
 import z from 'zod'
 
 const rodeoSchema = z.object({
-  tipoRodeo: z.enum(TipoRodeo, 'El tipo de rodeo debe ser un valor válido'),
+  tipoRodeo: z.nativeEnum(TipoRodeo),
   cantVacas: z
     .number('La cantidad de vacas debe ser un número')
     .int('La cantidad de vacas debe ser un número entero')
@@ -14,33 +19,21 @@ const rodeoSchema = z.object({
 
 export const configurationSchema = z
   .object({
-    rodeos: z.array(rodeoSchema).refine(
-      (rodeos) => {
-        const tiposPresentes = new Set(rodeos.map((r) => r.tipoRodeo))
-        const todosLosTipos = Object.values(TipoRodeo)
-        return todosLosTipos.every((tipo) => tiposPresentes.has(tipo))
-      },
-      {
-        message: 'Debe existir al menos un rodeo de cada tipo',
-      }
-    ),
+    cantVacas: z
+      .number('La cantidad de vacas debe ser un número')
+      .int('La cantidad de vacas debe ser un número entero')
+      .positive('La cantidad de vacas debe ser un número entero positivo'),
     cantOrdenie: z
       .number()
       .int('La cantidad de ordeñes debe ser un número entero')
       .positive(
         'La cantidad de ordeñes por día debe ser un número entero positivo'
       ),
-    tipoOrdenie: z.enum(
-      TipoOrdenie,
-      'El tipo de ordeñe debe ser un valor válido'
-    ),
+    tipoOrdenie: z.nativeEnum(TipoOrdenie),
     promLitros: z
-      .number('El promedio de litros por vaca debe ser un número')
-      .positive('El promedio de litros por vaca debe ser un número positivo'),
-    ventaLeche: z.enum(
-      VentaLeche,
-      'El tipo de venta de leche debe ser un valor válido'
-    ),
+      .number('El promedio de litros debe ser un número')
+      .positive('El promedio de litros debe ser un número positivo'),
+    ventaLeche: z.nativeEnum(VentaLeche),
     empleados: z.boolean('El campo de empleados debe ser un booleano'),
     cantEmpleados: z
       .number()
@@ -51,6 +44,8 @@ export const configurationSchema = z
       provincia: z.string('La provincia es requerida'),
       localidad: z.string('La localidad es requerida'),
     }),
+    TipoSeguimiento: z.nativeEnum(TipoSeguimiento),
+    rodeos: z.array(rodeoSchema).optional(),
   })
   .refine(
     (data) => {
@@ -65,4 +60,37 @@ export const configurationSchema = z
     }
   )
 
+  // Si el tipo de seguimiento es RODEO, los rodeos son obligatorios y debe existir al menos
+  // un rodeo de cada tipo
+  .refine(
+    (data) => {
+      if (data.TipoSeguimiento === TipoSeguimiento.RODEO) {
+        const rodeos = data.rodeos
+        if (!rodeos || rodeos.length === 0) return false
+        const tiposPresentes = new Set(rodeos.map((r) => r.tipoRodeo))
+        const todosLosTipos = Object.values(TipoRodeo)
+        return todosLosTipos.every((tipo) => tiposPresentes.has(tipo))
+      }
+      return true
+    },
+    {
+      message:
+        'Debe existir al menos un rodeo de cada tipo cuando el seguimiento es RODEO',
+    }
+  )
+
 export type ConfigurationData = z.infer<typeof configurationSchema>
+
+export type ConfigurationRequest = Omit<
+  ConfigurationData,
+  'registrarRodeo' | 'costoRacion'
+> & {
+  TipoSeguimiento: 'RODEO'
+  tipoSeguimiento?: 'RODEO'
+  idEstablecimiento: string
+  rodeos: Array<{
+    tipoRodeo: string
+    cantVacas: number
+    costoRacion: number
+  }>
+}
