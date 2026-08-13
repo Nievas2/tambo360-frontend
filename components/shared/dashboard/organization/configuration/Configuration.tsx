@@ -89,16 +89,36 @@ const Configuration = () => {
 
     const data = config.data
     const savedRodeos = data.rodeos ?? []
+    // Seteamos `rodeos` según el tipo de seguimiento guardado
+    const initialRodeos =
+      data.TipoSeguimiento === TipoSeguimiento.RODEO_UNICO
+        ? // Si es RODEO_UNICO mantenemos un único rodeo con tipo 'UNICO' (schema lo acepta)
+          savedRodeos.length
+          ? savedRodeos.map((r: any) => ({
+              tipoRodeo: r.tipoRodeo || 'UNICO',
+              cantVacas: r.cantVacas ?? 1,
+              costoRacion: r.costoRacion ?? 1,
+            }))
+          : [
+              {
+                tipoRodeo: 'UNICO',
+                cantVacas: 1,
+                costoRacion: 1,
+              },
+            ]
+        : // Si es RODEO o no está definido, mapear los tipos estándar
+          Object.values(TipoRodeo).map((tipo) => {
+            const saved = savedRodeos.find((r: any) => r.tipoRodeo === tipo)
+            return {
+              tipoRodeo: tipo,
+              cantVacas: saved?.cantVacas ?? 1,
+              costoRacion: saved?.costoRacion ?? 1,
+            }
+          })
 
     reset({
-      rodeos: Object.values(TipoRodeo).map((tipo) => {
-        const saved = savedRodeos.find((r: any) => r.tipoRodeo === tipo)
-        return {
-          tipoRodeo: tipo,
-          cantVacas: saved?.cantVacas ?? 1,
-          costoRacion: saved?.costoRacion ?? 1,
-        }
-      }),
+      TipoSeguimiento: data.TipoSeguimiento,
+      rodeos: initialRodeos,
       cantOrdenie: data.ordeñe_por_dia ?? 2,
       tipoOrdenie: data.tipo_ordeñe,
       ventaLeche: data.venta_leche,
@@ -153,16 +173,36 @@ const Configuration = () => {
         )
       }
     }
+
+    if (tipoSeguimiento === TipoSeguimiento.RODEO_UNICO) {
+      const current = watch('rodeos')
+      if (!current || current.length !== 1) {
+        setValue(
+          'rodeos',
+          [{ tipoRodeo: 'UNICO', cantVacas: 1, costoRacion: 1 }],
+          {
+            shouldValidate: true,
+          }
+        )
+      }
+    }
   }, [tipoSeguimiento])
 
   const onSubmit = (data: ConfigurationData) => {
     // `data` here contains a nested `data` property (ConfigurationData -> { data: {...} })
     // spread the inner object to match the expected ConfigurationRequest shape
+    const inner = (data as any).data ?? data
+    const selectedTipo =
+      inner.TipoSeguimiento ??
+      inner.tipoSeguimiento ??
+      tipoSeguimiento ??
+      TipoSeguimiento.RODEO
+
     const payload = {
-      TipoSeguimiento: 'RODEO',
-      tipoSeguimiento: 'RODEO',
+      TipoSeguimiento: selectedTipo,
+      tipoSeguimiento: selectedTipo,
       idEstablecimiento: config?.data?.idEstablecimiento ?? '',
-      ...((data as any).data ?? data),
+      ...inner,
     }
     sendConfiguration(payload, {
       onSuccess: () => {
@@ -600,8 +640,9 @@ const Configuration = () => {
               <Label className="text-sm font-medium text-slate-700">
                 8. ¿Cómo querés registrar tu rodeo?
               </Label>
+
+              {/* Unico */}
               <div className="grid grid-cols-3 gap-3">
-                {/* Unico */}
                 <button
                   type="button"
                   onClick={() =>
@@ -699,9 +740,67 @@ const Configuration = () => {
             <p className="text-sm text-slate-500">
               Vas a poder registrar tu rodeo como un único grupo de vacas.
             </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              {(
+                rodeos ?? [
+                  {
+                    tipoRodeo: 'UNICO',
+                    cantVacas: 1,
+                    costoRacion: 1,
+                  },
+                ]
+              )
+                .slice(0, 1)
+                .map((r: any, idx: number) => (
+                  <div
+                    key={`UNICO-${idx}`}
+                    className="p-4 rounded-xl border bg-white shadow-sm flex flex-col gap-3"
+                  >
+                    <Label className="text-sm font-semibold text-slate-700">
+                      {String(r.tipoRodeo).replace('_', ' ')}
+                    </Label>
+
+                    <input
+                      type="hidden"
+                      {...register(`rodeos.${idx}.tipoRodeo` as const)}
+                      defaultValue={r.tipoRodeo}
+                    />
+
+                    <div className="flex flex-col gap-2">
+                      <Label className="text-xs text-slate-600">
+                        Cantidad de vacas
+                      </Label>
+                      <input
+                        type="number"
+                        min={0}
+                        {...register(`rodeos.${idx}.cantVacas` as const, {
+                          valueAsNumber: true,
+                        })}
+                        className="h-12 w-full border rounded-lg px-3"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <Label className="text-xs text-slate-600">
+                        Costo de ración
+                      </Label>
+                      <input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        {...register(`rodeos.${idx}.costoRacion` as const, {
+                          valueAsNumber: true,
+                        })}
+                        className="h-12 w-full border rounded-lg px-3"
+                      />
+                    </div>
+                  </div>
+                ))}
+            </div>
           </div>
         )}
 
+        {/* Muestra los rodeos por alta baja y seca */}
         {tipoSeguimiento === TipoSeguimiento.RODEO && (
           <div className="flex flex-col gap-4">
             <Label className="text-sm font-medium text-slate-700">
@@ -766,6 +865,8 @@ const Configuration = () => {
             </div>
           </div>
         )}
+
+        {/* Muestra para cargar rodeo unico */}
 
         {error?.response?.data?.message && (
           <p className="text-xs text-red-500 text-center">
